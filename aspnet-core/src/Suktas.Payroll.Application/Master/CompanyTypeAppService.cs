@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Master.Dtos;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -41,7 +37,6 @@ namespace Suktas.Payroll.Master
             var companyType = from o in pagedAndFilteredCompanyType
                               select new
                               {
-
                                   o.Name,
                                   o.Description,
                                   Id = o.Id
@@ -56,13 +51,9 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetCompanyTypeForViewDto()
                 {
-                    CompanyType = new CompanyTypeDto
-                    {
-
-                        Name = o.Name,
-                        Description = o.Description,
-                        Id = o.Id,
-                    }
+                    Name = o.Name,
+                    Description = o.Description,
+                    Id = o.Id,
                 };
 
                 results.Add(res);
@@ -79,8 +70,12 @@ namespace Suktas.Payroll.Master
         {
             var companyType = await _companyTypeRepository.GetAsync(id);
 
-            var output = new GetCompanyTypeForViewDto { CompanyType = ObjectMapper.Map<CompanyTypeDto>(companyType) };
-
+            var output = new GetCompanyTypeForViewDto
+            {
+                Id = id,
+                Name = companyType.Name,
+                Description = companyType.Description,
+            };
             return output;
         }
 
@@ -89,7 +84,12 @@ namespace Suktas.Payroll.Master
         {
             var companyType = await _companyTypeRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetCompanyTypeForEditOutput { CompanyType = ObjectMapper.Map<CreateOrEditCompanyTypeDto>(companyType) };
+            var output = new GetCompanyTypeForEditOutput
+            { 
+                Id = companyType.Id,
+                Name = companyType.Name,
+                Description = companyType.Description,
+            };
 
             return output;
         }
@@ -109,7 +109,11 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_CompanyType_Create)]
         protected virtual async Task Create(CreateOrEditCompanyTypeDto input)
         {
-            var companyType = ObjectMapper.Map<CompanyType>(input);
+            var companyType = new CompanyType
+            {
+                Name = input.Name,
+                Description = input.Description,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -124,6 +128,11 @@ namespace Suktas.Payroll.Master
         protected virtual async Task Update(CreateOrEditCompanyTypeDto input)
         {
             var companyType = await _companyTypeRepository.FirstOrDefaultAsync((Guid)input.Id);
+            if(companyType != null)
+            {
+                companyType.Name = input.Name;
+                companyType.Description = input.Description;
+            }
             ObjectMapper.Map(input, companyType);
 
         }

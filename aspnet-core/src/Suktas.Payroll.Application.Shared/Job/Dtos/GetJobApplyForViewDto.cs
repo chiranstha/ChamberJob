@@ -1,8 +1,17 @@
-﻿namespace Suktas.Payroll.Job.Dtos
+﻿using Abp.Application.Services.Dto;
+using System;
+
+namespace Suktas.Payroll.Job.Dtos
 {
-    public class GetJobApplyForViewDto
+    public class GetJobApplyForViewDto : EntityDto<Guid>
     {
-        public JobApplyDto JobApply { get; set; }
+        public DateTime Date { get; set; }
+
+        public int CompanyId { get; set; }
+
+        public Guid JobDemandId { get; set; }
+
+        public Guid EmployeeId { get; set; }
 
         public string CompanyName { get; set; }
 

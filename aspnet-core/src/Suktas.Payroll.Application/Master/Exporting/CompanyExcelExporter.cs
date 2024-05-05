@@ -47,12 +47,12 @@ namespace Suktas.Payroll.Master.Exporting
 
                         AddObjects(
                             sheet,  company,
-                        _ => _.Company.Name,
-                        _ => _.Company.Address,
-                        _ => _.Company.AuthorizedPerson,
-                        _ => _.Company.ContactNo,
-                        _ => _.Company.BusinessNature,
-                        _ => _.Company.EstablishedYear,
+                        _ => _.Name,
+                        _ => _.Address,
+                        _ => _.AuthorizedPerson,
+                        _ => _.ContactNo,
+                        _ => _.BusinessNature,
+                        _ => _.EstablishedYear,
                         _ => _.CompanyCategoryName,
                         _ => _.CompanyTypeName
                             );

@@ -1,8 +1,13 @@
-﻿namespace Suktas.Payroll.Master.Dtos
+﻿using Abp.Application.Services.Dto;
+
+namespace Suktas.Payroll.Master.Dtos
 {
-    public class GetCompanyCategoryForViewDto
+    public class GetCompanyCategoryForViewDto : EntityDto
     {
-        public CompanyCategoryDto CompanyCategory { get; set; }
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
 
     }
 }

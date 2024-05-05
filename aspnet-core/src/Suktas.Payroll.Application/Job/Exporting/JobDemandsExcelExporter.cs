@@ -46,11 +46,11 @@ namespace Suktas.Payroll.Job.Exporting
 
                         AddObjects(
                             sheet,  jobDemands,
-                        _ => _.JobDemand.Name,
-                        _ => _.JobDemand.Address,
-                        _ => _timeZoneConverter.Convert(_.JobDemand.Date, _abpSession.TenantId, _abpSession.GetUserId()),
-                        _ => _.JobDemand.Salary,
-                        _ => _timeZoneConverter.Convert(_.JobDemand.ExpiredDate, _abpSession.TenantId, _abpSession.GetUserId()),
+                        _ => _.Name,
+                        _ => _.Address,
+                        _ => _timeZoneConverter.Convert(_.Date, _abpSession.TenantId, _abpSession.GetUserId()),
+                        _ => _.Salary,
+                        _ => _timeZoneConverter.Convert(_.ExpiredDate, _abpSession.TenantId, _abpSession.GetUserId()),
                         _ => _.CompanyName,
                         _ => _.JobSkillName
                             );

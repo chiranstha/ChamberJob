@@ -1,22 +1,18 @@
-﻿using Suktas.Payroll.Master;
-
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Dto;
+using Suktas.Payroll.Job.Dtos;
+using Suktas.Payroll.Job.Exporting;
+using Suktas.Payroll.Master;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Job.Exporting;
-using Suktas.Payroll.Job.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Job
 {
@@ -80,16 +76,12 @@ namespace Suktas.Payroll.Job
             {
                 var res = new GetJobDemandForViewDto()
                 {
-                    JobDemand = new JobDemandDto
-                    {
-
-                        Name = o.Name,
-                        Address = o.Address,
-                        Date = o.Date,
-                        Salary = o.Salary,
-                        ExpiredDate = o.ExpiredDate,
-                        Id = o.Id,
-                    },
+                    Name = o.Name,
+                    Address = o.Address,
+                    Date = o.Date,
+                    Salary = o.Salary,
+                    ExpiredDate = o.ExpiredDate,
+                    Id = o.Id,
                     CompanyName = o.CompanyName,
                     JobSkillName = o.JobSkillName
                 };
@@ -108,17 +100,27 @@ namespace Suktas.Payroll.Job
         {
             var jobDemand = await _jobDemandRepository.GetAsync(id);
 
-            var output = new GetJobDemandForViewDto { JobDemand = ObjectMapper.Map<JobDemandDto>(jobDemand) };
-
-            if (output.JobDemand.CompanyId != null)
+            var output = new GetJobDemandForViewDto 
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.JobDemand.CompanyId);
+                Name = jobDemand.Name,
+                Address = jobDemand.Address,
+                Date = jobDemand.Date,
+                Salary = jobDemand.Salary,
+                ExpiredDate = jobDemand.ExpiredDate,
+                Id = jobDemand.Id,
+                CompanyId = jobDemand.CompanyId,
+
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
-            if (output.JobDemand.JobSkillId != null)
+            if (output.JobSkillId != null)
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobDemand.JobSkillId);
+                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
                 output.JobSkillName = _lookupJobSkill?.Name?.ToString();
             }
 
@@ -130,17 +132,30 @@ namespace Suktas.Payroll.Job
         {
             var jobDemand = await _jobDemandRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetJobDemandForEditOutput { JobDemand = ObjectMapper.Map<CreateOrEditJobDemandDto>(jobDemand) };
-
-            if (output.JobDemand.CompanyId != null)
+            var output = new GetJobDemandForEditOutput 
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.JobDemand.CompanyId);
+                Name = jobDemand?.Name,
+                Address = jobDemand?.Address,
+                Date = jobDemand.Date,
+                Salary = jobDemand?.Salary,
+                InterviewDate = jobDemand.InterviewDate,
+                ExperienceLevel = jobDemand.ExperienceLevel,
+                ExpiredDate = jobDemand.ExpiredDate,
+                JobSpecification = jobDemand.JobSpecification,
+                Description = jobDemand.Description,
+                CompanyId = jobDemand.CompanyId,
+                JobSkillId = jobDemand.JobSkillId,
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
-            if (output.JobDemand.JobSkillId != null)
+            if (output.JobSkillId != null)
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobDemand.JobSkillId);
+                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
                 output.JobSkillName = _lookupJobSkill?.Name?.ToString();
             }
 
@@ -162,7 +177,20 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobDemands_Create)]
         protected virtual async Task Create(CreateOrEditJobDemandDto input)
         {
-            var jobDemand = ObjectMapper.Map<JobDemand>(input);
+            var jobDemand = new JobDemand
+            {
+                Name = input.Name,
+                Description = input.Description,
+                Address = input.Address,
+                Date = input.Date,
+                Salary = input.Salary,
+                InterviewDate = input.InterviewDate,
+                ExperienceLevel = input.ExperienceLevel,
+                ExpiredDate = input.ExpiredDate,
+                JobSpecification = input.JobSpecification,
+                CompanyId = input.CompanyId,
+                JobSkillId = input.JobSkillId
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -177,6 +205,20 @@ namespace Suktas.Payroll.Job
         protected virtual async Task Update(CreateOrEditJobDemandDto input)
         {
             var jobDemand = await _jobDemandRepository.FirstOrDefaultAsync((Guid)input.Id);
+            if(jobDemand != null)
+            {
+                jobDemand.Name = input.Name;
+                jobDemand.Description = input.Description;
+                jobDemand.Address = input.Address;
+                jobDemand.Date = input.Date;
+                jobDemand.Salary = input.Salary;
+                jobDemand.InterviewDate = input.InterviewDate;
+                jobDemand.ExperienceLevel = input.ExperienceLevel;
+                jobDemand.JobSpecification = input.JobSpecification;
+                jobDemand.CompanyId = input.CompanyId;
+                jobDemand.JobSkillId = input.JobSkillId;
+                await _jobDemandRepository.UpdateAsync(jobDemand);
+            }
             ObjectMapper.Map(input, jobDemand);
 
         }
@@ -206,15 +248,12 @@ namespace Suktas.Payroll.Job
 
                          select new GetJobDemandForViewDto()
                          {
-                             JobDemand = new JobDemandDto
-                             {
                                  Name = o.Name,
                                  Address = o.Address,
                                  Date = o.Date,
                                  Salary = o.Salary,
                                  ExpiredDate = o.ExpiredDate,
-                                 Id = o.Id
-                             },
+                                 Id = o.Id,
                              CompanyName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                              JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name.ToString()
                          });

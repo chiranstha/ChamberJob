@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Master.Dtos;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -57,14 +53,11 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetFinancialYearForViewDto()
                 {
-                    FinancialYear = new FinancialYearDto
-                    {
 
-                        Name = o.Name,
-                        FromMiti = o.FromMiti,
-                        ToMiti = o.ToMiti,
-                        Id = o.Id,
-                    }
+                    Name = o.Name,
+                    FromMiti = o.FromMiti,
+                    ToMiti = o.ToMiti,
+                    Id = o.Id,
                 };
 
                 results.Add(res);
@@ -81,7 +74,13 @@ namespace Suktas.Payroll.Master
         {
             var financialYear = await _financialYearRepository.GetAsync(id);
 
-            var output = new GetFinancialYearForViewDto { FinancialYear = ObjectMapper.Map<FinancialYearDto>(financialYear) };
+            var output = new GetFinancialYearForViewDto
+            { 
+                Id = financialYear.Id,
+                Name = financialYear.Name,
+                FromMiti = financialYear.FromMiti,
+                ToMiti = financialYear.ToMiti,
+            };
 
             return output;
         }
@@ -91,7 +90,14 @@ namespace Suktas.Payroll.Master
         {
             var financialYear = await _financialYearRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetFinancialYearForEditOutput { FinancialYear = ObjectMapper.Map<CreateOrEditFinancialYearDto>(financialYear) };
+            var output = new GetFinancialYearForEditOutput 
+            {
+                Name = financialYear.Name,
+                FromMiti = financialYear.FromMiti,
+                ToMiti = financialYear.ToMiti,
+                IsOldYear = financialYear.IsOldYear,
+                Id = input.Id
+            };
 
             return output;
         }
@@ -111,7 +117,13 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_FinancialYears_Create)]
         protected virtual async Task Create(CreateOrEditFinancialYearDto input)
         {
-            var financialYear = ObjectMapper.Map<FinancialYear>(input);
+            var financialYear = new FinancialYear
+            {
+                Name = input.Name,
+                FromMiti = input.FromMiti,
+                ToMiti = input.ToMiti,
+                IsOldYear = input.IsOldYear,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -125,8 +137,15 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_FinancialYears_Edit)]
         protected virtual async Task Update(CreateOrEditFinancialYearDto input)
         {
-            var financialYear = await _financialYearRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
-            ObjectMapper.Map(input, financialYear);
+            var financialYear = await _financialYearRepository.FirstOrDefaultAsync(e => e.Id == input.Id);
+            if(financialYear != null)
+            {
+                financialYear.Name = input.Name;
+                financialYear.FromMiti = input.FromMiti;
+                financialYear.ToMiti = input.ToMiti;
+                financialYear.IsOldYear = input.IsOldYear;
+                await _financialYearRepository.UpdateAsync(financialYear);
+            }
 
         }
 

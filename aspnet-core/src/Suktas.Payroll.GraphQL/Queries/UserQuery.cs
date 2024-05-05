@@ -20,6 +20,7 @@ using Suktas.Payroll.Dto;
 using Suktas.Payroll.Types;
 using Suktas.Payroll.Core.Extensions;
 using GraphQL;
+using UserType = Suktas.Payroll.Types.UserType;
 
 namespace Suktas.Payroll.Queries
 {

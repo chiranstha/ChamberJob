@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Master.Dtos;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -56,13 +51,10 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetCompanyCategoryForViewDto()
                 {
-                    CompanyCategory = new CompanyCategoryDto
-                    {
 
-                        Name = o.Name,
-                        Description = o.Description,
-                        Id = o.Id,
-                    }
+                    Name = o.Name,
+                    Description = o.Description,
+                    Id = o.Id
                 };
 
                 results.Add(res);
@@ -79,7 +71,12 @@ namespace Suktas.Payroll.Master
         {
             var companyCategory = await _companyCategoryRepository.GetAsync(id);
 
-            var output = new GetCompanyCategoryForViewDto { CompanyCategory = ObjectMapper.Map<CompanyCategoryDto>(companyCategory) };
+            var output = new GetCompanyCategoryForViewDto
+            {
+                Id = companyCategory.Id,
+                Name = companyCategory.Name,
+                Description = companyCategory.Description
+            };
 
             return output;
         }
@@ -89,7 +86,12 @@ namespace Suktas.Payroll.Master
         {
             var companyCategory = await _companyCategoryRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetCompanyCategoryForEditOutput { CompanyCategory = ObjectMapper.Map<CreateOrEditCompanyCategoryDto>(companyCategory) };
+            var output = new GetCompanyCategoryForEditOutput 
+            {
+                Id = companyCategory.Id,
+                Name = companyCategory.Name,
+                Description = companyCategory.Description
+            };
 
             return output;
         }
@@ -109,7 +111,11 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_CompanyCategory_Create)]
         protected virtual async Task Create(CreateOrEditCompanyCategoryDto input)
         {
-            var companyCategory = ObjectMapper.Map<CompanyCategory>(input);
+            var companyCategory = new CompanyCategory
+            {
+                Name = input.Name,
+                Description = input.Description
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -124,7 +130,12 @@ namespace Suktas.Payroll.Master
         protected virtual async Task Update(CreateOrEditCompanyCategoryDto input)
         {
             var companyCategory = await _companyCategoryRepository.FirstOrDefaultAsync((int)input.Id);
-            ObjectMapper.Map(input, companyCategory);
+            if(companyCategory != null)
+            {
+                companyCategory.Name = input.Name;
+                companyCategory.Description = input.Description;
+            }
+            await _companyCategoryRepository.UpdateAsync(companyCategory);
 
         }
 

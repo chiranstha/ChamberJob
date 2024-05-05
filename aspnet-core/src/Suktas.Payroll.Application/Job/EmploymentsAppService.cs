@@ -1,21 +1,16 @@
-﻿using Suktas.Payroll.Master;
-
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Job.Dtos;
+using Suktas.Payroll.Master;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
-using Suktas.Payroll.Job.Dtos;
 
 namespace Suktas.Payroll.Job
 {
@@ -79,24 +74,21 @@ namespace Suktas.Payroll.Job
             {
                 var res = new GetEmploymentForViewDto()
                 {
-                    Employment = new EmploymentDto
-                    {
 
-                        Total = o.Total,
-                        Male = o.Male,
-                        Female = o.Female,
-                        Foreign = o.Foreign,
-                        Impairment = o.Impairment,
-                        SalaryStart = o.SalaryStart,
-                        SalaryEnd = o.SalaryEnd,
-                        AgeStart = o.AgeStart,
-                        AgeEnd = o.AgeEnd,
-                        Parment = o.Parment,
-                        Temporary = o.Temporary,
-                        Trainer = o.Trainer,
-                        DailyWages = o.DailyWages,
-                        Id = o.Id,
-                    },
+                    Total = o.Total,
+                    Male = o.Male,
+                    Female = o.Female,
+                    Foreign = o.Foreign,
+                    Impairment = o.Impairment,
+                    SalaryStart = o.SalaryStart,
+                    SalaryEnd = o.SalaryEnd,
+                    AgeStart = o.AgeStart,
+                    AgeEnd = o.AgeEnd,
+                    Parment = o.Parment,
+                    Temporary = o.Temporary,
+                    Trainer = o.Trainer,
+                    DailyWages = o.DailyWages,
+                    Id = o.Id,
                     CompanyName = o.CompanyName
                 };
 
@@ -114,11 +106,27 @@ namespace Suktas.Payroll.Job
         {
             var employment = await _employmentRepository.GetAsync(id);
 
-            var output = new GetEmploymentForViewDto { Employment = ObjectMapper.Map<EmploymentDto>(employment) };
-
-            if (output.Employment.CompanyId != null)
+            var output = new GetEmploymentForViewDto
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.Employment.CompanyId);
+                Total = employment.Total,
+                Male = employment.Male,
+                Female = employment.Female,
+                Foreign = employment.Foreign,
+                Impairment = employment.Impairment,
+                SalaryEnd = employment.SalaryEnd,
+                SalaryStart = employment.AgeStart,
+                AgeStart = employment.AgeStart,
+                AgeEnd = employment.AgeEnd,
+                Parment = employment.Parment,
+                Temporary = employment.Temporary,
+                Trainer = employment.Trainer,
+                DailyWages = employment.DailyWages,
+                CompanyId = employment.CompanyId,
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
@@ -130,11 +138,27 @@ namespace Suktas.Payroll.Job
         {
             var employment = await _employmentRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetEmploymentForEditOutput { Employment = ObjectMapper.Map<CreateOrEditEmploymentDto>(employment) };
-
-            if (output.Employment.CompanyId != null)
+            var output = new GetEmploymentForEditOutput
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.Employment.CompanyId);
+                Total = employment.Total,
+                Male = employment.Male,
+                Female = employment.Female,
+                Foreign = employment.Foreign,
+                Impairment = employment.Impairment,
+                SalaryEnd = employment.SalaryEnd,
+                SalaryStart = employment.SalaryStart,
+                AgeEnd = employment.AgeEnd,
+                AgeStart = employment.AgeStart,
+                Parment = employment.Parment,
+                Temporary = employment.Temporary,
+                Trainer = employment.Trainer,
+                DailyWages = employment.DailyWages,
+                CompanyId = employment.CompanyId
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
@@ -156,7 +180,23 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employments_Create)]
         protected virtual async Task Create(CreateOrEditEmploymentDto input)
         {
-            var employment = ObjectMapper.Map<Employment>(input);
+            var employment = new Employment
+            {
+                Total = input.Total,
+                Male = input.Male,
+                Female = input.Female,
+                Foreign = input.Foreign,
+                Impairment = input.Impairment,
+                SalaryEnd = input.SalaryEnd,
+                SalaryStart = input.SalaryStart,
+                AgeEnd = input.AgeEnd,
+                AgeStart = input.AgeStart,
+                Parment = input.Parment,
+                Temporary = input.Temporary,
+                Trainer = input.Trainer,
+                DailyWages = input.DailyWages,
+                CompanyId = input.CompanyId,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -171,6 +211,24 @@ namespace Suktas.Payroll.Job
         protected virtual async Task Update(CreateOrEditEmploymentDto input)
         {
             var employment = await _employmentRepository.FirstOrDefaultAsync((Guid)input.Id);
+            if(employment != null)
+            {
+                employment.Total = input.Total;
+                employment.Male = input.Male;
+                employment.Female = input.Female;
+                employment.Foreign = input.Foreign;
+                employment.Impairment = input.Impairment;
+                employment.SalaryEnd = input.SalaryEnd;
+                employment.SalaryStart = input.SalaryStart;
+                employment.AgeEnd = input.AgeEnd;
+                employment.AgeStart = input.AgeStart;
+                employment.Parment = input.Parment;
+                employment.Temporary = input.Temporary;
+                employment.Trainer = input.Trainer;
+                employment.DailyWages = input.DailyWages;
+                employment.CompanyId = input.CompanyId;
+                await _employmentRepository.UpdateAsync(employment);
+            }
             ObjectMapper.Map(input, employment);
 
         }

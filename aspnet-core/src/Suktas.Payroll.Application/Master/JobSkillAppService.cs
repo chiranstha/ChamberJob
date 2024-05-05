@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Master.Dtos;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -56,13 +52,9 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetJobSkillForViewDto()
                 {
-                    JobSkill = new JobSkillDto
-                    {
-
-                        Name = o.Name,
-                        Description = o.Description,
-                        Id = o.Id,
-                    }
+                    Name = o.Name,
+                    Description = o.Description,
+                    Id = o.Id,
                 };
 
                 results.Add(res);
@@ -79,8 +71,12 @@ namespace Suktas.Payroll.Master
         {
             var jobSkill = await _jobSkillRepository.GetAsync(id);
 
-            var output = new GetJobSkillForViewDto { JobSkill = ObjectMapper.Map<JobSkillDto>(jobSkill) };
-
+            var output = new GetJobSkillForViewDto
+            {
+                Id = jobSkill.Id,
+                Name = jobSkill.Name,
+                Description = jobSkill.Description,
+            };
             return output;
         }
 
@@ -89,8 +85,12 @@ namespace Suktas.Payroll.Master
         {
             var jobSkill = await _jobSkillRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetJobSkillForEditOutput { JobSkill = ObjectMapper.Map<CreateOrEditJobSkillDto>(jobSkill) };
-
+            var output = new GetJobSkillForEditOutput
+            {
+                Description = jobSkill.Description,
+                Id = jobSkill.Id,
+                Name = jobSkill.Name,
+            };
             return output;
         }
 
@@ -109,7 +109,11 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_JobSkill_Create)]
         protected virtual async Task Create(CreateOrEditJobSkillDto input)
         {
-            var jobSkill = ObjectMapper.Map<JobSkill>(input);
+            var jobSkill = new JobSkill 
+            {
+                Name = input.Name,
+                Description= input.Description,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -124,6 +128,11 @@ namespace Suktas.Payroll.Master
         protected virtual async Task Update(CreateOrEditJobSkillDto input)
         {
             var jobSkill = await _jobSkillRepository.FirstOrDefaultAsync((Guid)input.Id);
+            if (jobSkill != null)
+            {
+                jobSkill.Name = input.Name;
+                jobSkill.Description = input.Description;
+            }
             ObjectMapper.Map(input, jobSkill);
 
         }

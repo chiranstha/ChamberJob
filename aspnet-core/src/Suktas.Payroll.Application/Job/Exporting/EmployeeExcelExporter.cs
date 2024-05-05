@@ -46,12 +46,12 @@ namespace Suktas.Payroll.Job.Exporting
 
                         AddObjects(
                             sheet,  employee,
-                        _ => _.Employee.Name,
-                        _ => _.Employee.PhoneNo,
-                        _ => _.Employee.Gender,
-                        _ => _timeZoneConverter.Convert(_.Employee.Dbo, _abpSession.TenantId, _abpSession.GetUserId()),
-                        _ => _.Employee.Qualification,
-                        _ => _.Employee.ExpectedSalary,
+                        _ => _.Name,
+                        _ => _.PhoneNo,
+                        _ => _.Gender,
+                        _ => _timeZoneConverter.Convert(_.Dbo, _abpSession.TenantId, _abpSession.GetUserId()),
+                        _ => _.Qualification,
+                        _ => _.ExpectedSalary,
                         _ => _.JobSkillName
                             );
 

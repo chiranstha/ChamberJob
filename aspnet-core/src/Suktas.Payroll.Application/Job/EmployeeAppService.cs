@@ -1,22 +1,21 @@
-﻿using Suktas.Payroll.Master;
-
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Dto;
+using Suktas.Payroll.Job.Dtos;
+using Suktas.Payroll.Job.Exporting;
+using Suktas.Payroll.Master;
+using Suktas.Payroll.Storage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Job.Exporting;
-using Suktas.Payroll.Job.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Job
 {
@@ -59,7 +58,6 @@ namespace Suktas.Payroll.Job
 
                            select new
                            {
-
                                o.Name,
                                o.PhoneNo,
                                o.Gender,
@@ -79,17 +77,13 @@ namespace Suktas.Payroll.Job
             {
                 var res = new GetEmployeeForViewDto()
                 {
-                    Employee = new EmployeeDto
-                    {
-
-                        Name = o.Name,
-                        PhoneNo = o.PhoneNo,
-                        Gender = o.Gender,
-                        Dbo = o.Dbo,
-                        Qualification = o.Qualification,
-                        ExpectedSalary = o.ExpectedSalary,
-                        Id = o.Id,
-                    },
+                    Name = o.Name,
+                    PhoneNo = o.PhoneNo,
+                    Gender = o.Gender,
+                    Dbo = o.Dbo,
+                    Qualification = o.Qualification,
+                    ExpectedSalary = o.ExpectedSalary,
+                    Id = o.Id,
                     JobSkillName = o.JobSkillName
                 };
 
@@ -107,11 +101,21 @@ namespace Suktas.Payroll.Job
         {
             var employee = await _employeeRepository.GetAsync(id);
 
-            var output = new GetEmployeeForViewDto { Employee = ObjectMapper.Map<EmployeeDto>(employee) };
-
-            if (output.Employee.JobSkillId != null)
+            var output = new GetEmployeeForViewDto
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.Employee.JobSkillId);
+                Name = employee.Name,
+                PhoneNo = employee.PhoneNo,
+                Gender = employee.Gender,
+                Dbo = employee.Dbo,
+                Qualification = employee.Qualification,
+                ExpectedSalary = employee.ExpectedSalary,
+                Id = employee.Id,
+                JobSkillId = employee.JobSkillId
+            };
+
+            if (output.JobSkillId != null)
+            {
+                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
                 output.JobSkillName = _lookupJobSkill?.Name?.ToString();
             }
 
@@ -123,11 +127,23 @@ namespace Suktas.Payroll.Job
         {
             var employee = await _employeeRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetEmployeeForEditOutput { Employee = ObjectMapper.Map<CreateOrEditEmployeeDto>(employee) };
-
-            if (output.Employee.JobSkillId != null)
+            var output = new GetEmployeeForEditOutput
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.Employee.JobSkillId);
+                Name = employee.Name,
+                PhoneNo = employee.PhoneNo,
+                Gender = employee.Gender,
+                Dbo = employee.Dbo,
+                Qualification = employee.Qualification,
+                Experience = employee.Experience,
+                ExpectedSalary = employee.ExpectedSalary,
+                CommitmentYear = employee.CommitmentYear,
+                Photo = employee.Photo,
+                JobSkillId = employee.JobSkillId
+            };
+
+            if (output.JobSkillId != null)
+            {
+                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
                 output.JobSkillName = _lookupJobSkill?.Name?.ToString();
             }
 
@@ -149,7 +165,19 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employee_Create)]
         protected virtual async Task Create(CreateOrEditEmployeeDto input)
         {
-            var employee = ObjectMapper.Map<Employee>(input);
+            var employee = new Employee
+            {
+                Name = input.Name,
+                PhoneNo = input.PhoneNo,
+                Gender = input.Gender,
+                Dbo = input.Dbo,
+                Experience = input.Experience,
+                Qualification = input.Qualification,
+                ExpectedSalary = input.ExpectedSalary,
+                CommitmentYear = input.CommitmentYear,
+                Photo = input.Photo,
+                JobSkillId = input.JobSkillId
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -165,7 +193,20 @@ namespace Suktas.Payroll.Job
         protected virtual async Task Update(CreateOrEditEmployeeDto input)
         {
             var employee = await _employeeRepository.FirstOrDefaultAsync((Guid)input.Id);
-            ObjectMapper.Map(input, employee);
+            if (employee != null)
+            {
+                employee.Name = input.Name;
+                employee.PhoneNo = input.PhoneNo;
+                employee.Gender = input.Gender;
+                employee.Dbo = input.Dbo;
+                employee.Experience = input.Experience;
+                employee.Qualification = input.Qualification;
+                employee.ExpectedSalary = input.ExpectedSalary;
+                employee.CommitmentYear = input.CommitmentYear;
+                employee.Photo = input.Photo;
+                employee.JobSkillId = input.JobSkillId;
+                await _employeeRepository.UpdateAsync(employee);
+            }
             employee.Photo = await GetBinaryObjectFromCache(input.PhotoToken);
 
         }
@@ -190,16 +231,13 @@ namespace Suktas.Payroll.Job
 
                          select new GetEmployeeForViewDto()
                          {
-                             Employee = new EmployeeDto
-                             {
-                                 Name = o.Name,
-                                 PhoneNo = o.PhoneNo,
-                                 Gender = o.Gender,
-                                 Dbo = o.Dbo,
-                                 Qualification = o.Qualification,
-                                 ExpectedSalary = o.ExpectedSalary,
-                                 Id = o.Id
-                             },
+                             Name = o.Name,
+                             PhoneNo = o.PhoneNo,
+                             Gender = o.Gender,
+                             Dbo = o.Dbo,
+                             Qualification = o.Qualification,
+                             ExpectedSalary = o.ExpectedSalary,
+                             Id = o.Id,
                              JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name.ToString()
                          });
 

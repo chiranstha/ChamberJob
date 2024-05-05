@@ -1,8 +1,15 @@
-﻿namespace Suktas.Payroll.Master.Dtos
+﻿using Abp.Application.Services.Dto;
+using System;
+
+namespace Suktas.Payroll.Master.Dtos
 {
-    public class GetFinancialYearForViewDto
+    public class GetFinancialYearForViewDto : EntityDto<Guid>
     {
-        public FinancialYearDto FinancialYear { get; set; }
+        public string Name { get; set; }
+
+        public string FromMiti { get; set; }
+
+        public string ToMiti { get; set; }
 
     }
 }

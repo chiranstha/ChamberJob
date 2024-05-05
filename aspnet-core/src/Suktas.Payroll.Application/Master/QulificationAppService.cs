@@ -1,19 +1,15 @@
-﻿using System;
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Linq.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Master.Dtos;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -39,13 +35,13 @@ namespace Suktas.Payroll.Master
                 .PageBy(input);
 
             var qualification = from o in pagedAndFilteredQualification
-                               select new
-                               {
+                                select new
+                                {
 
-                                   o.Name,
-                                   o.Description,
-                                   Id = o.Id
-                               };
+                                    o.Name,
+                                    o.Description,
+                                    Id = o.Id
+                                };
 
             var totalCount = await filteredQualification.CountAsync();
 
@@ -56,13 +52,9 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetQualificationForViewDto()
                 {
-                    Qualification = new QualificationDto
-                    {
-
-                        Name = o.Name,
-                        Description = o.Description,
-                        Id = o.Id,
-                    }
+                    Name = o.Name,
+                    Description = o.Description,
+                    Id = o.Id
                 };
 
                 results.Add(res);
@@ -79,7 +71,12 @@ namespace Suktas.Payroll.Master
         {
             var qualification = await _qualificationRepository.GetAsync(id);
 
-            var output = new GetQualificationForViewDto { Qualification = ObjectMapper.Map<QualificationDto>(qualification) };
+            var output = new GetQualificationForViewDto
+            {
+                Id = qualification.Id,
+                Name = qualification.Name,
+                Description = qualification.Description,
+            };
 
             return output;
         }
@@ -89,7 +86,12 @@ namespace Suktas.Payroll.Master
         {
             var qualification = await _qualificationRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetQualificationForEditOutput { Qualification = ObjectMapper.Map<CreateOrEditQualificationDto>(qualification) };
+            var output = new GetQualificationForEditOutput
+            {
+                Id = qualification.Id,
+                Name = qualification.Name,
+                Description = qualification.Description
+            };
 
             return output;
         }
@@ -109,7 +111,12 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Qualification_Create)]
         protected virtual async Task Create(CreateOrEditQualificationDto input)
         {
-            var qualification = ObjectMapper.Map<Qualification>(input);
+            var qualification = new Qualification
+            {
+                Name = input.Name,
+                Description = input.Description,
+            };
+
 
             if (AbpSession.TenantId != null)
             {
@@ -124,7 +131,12 @@ namespace Suktas.Payroll.Master
         protected virtual async Task Update(CreateOrEditQualificationDto input)
         {
             var qualification = await _qualificationRepository.FirstOrDefaultAsync((Guid)input.Id);
-            ObjectMapper.Map(input, qualification);
+            if(qualification != null)
+            {
+                qualification.Name = input.Name;
+                qualification.Description = input.Description;
+                await _qualificationRepository.UpdateAsync(qualification);
+            }
 
         }
 

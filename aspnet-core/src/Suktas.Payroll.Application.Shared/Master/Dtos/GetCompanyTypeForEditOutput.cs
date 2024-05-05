@@ -4,9 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Suktas.Payroll.Master.Dtos
 {
-    public class GetCompanyTypeForEditOutput
+    public class GetCompanyTypeForEditOutput : EntityDto<Guid?>
     {
-        public CreateOrEditCompanyTypeDto CompanyType { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 }

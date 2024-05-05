@@ -1,22 +1,19 @@
-﻿using Suktas.Payroll.Master;
-using Suktas.Payroll.Job;
-
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Job.Dtos;
+using Suktas.Payroll.Master;
+using Suktas.Payroll.Storage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Job.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Job
 {
@@ -88,12 +85,8 @@ namespace Suktas.Payroll.Job
             {
                 var res = new GetJobApplyForViewDto()
                 {
-                    JobApply = new JobApplyDto
-                    {
-
-                        Date = o.Date,
-                        Id = o.Id,
-                    },
+                    Date = o.Date,
+                    Id = o.Id,
                     CompanyName = o.CompanyName,
                     JobDemandName = o.JobDemandName,
                     EmployeeName = o.EmployeeName
@@ -113,23 +106,29 @@ namespace Suktas.Payroll.Job
         {
             var jobApply = await _jobApplyRepository.GetAsync(id);
 
-            var output = new GetJobApplyForViewDto { JobApply = ObjectMapper.Map<JobApplyDto>(jobApply) };
-
-            if (output.JobApply.CompanyId != null)
+            var output = new GetJobApplyForViewDto 
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.JobApply.CompanyId);
+                Date = jobApply.Date,
+                CompanyId = jobApply.CompanyId,
+                JobDemandId = jobApply.JobDemandId,
+                EmployeeId = jobApply.EmployeeId
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
-            if (output.JobApply.JobDemandId != null)
+            if (output.JobDemandId != null)
             {
-                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobApply.JobDemandId);
+                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
                 output.JobDemandName = _lookupJobDemand?.Name?.ToString();
             }
 
-            if (output.JobApply.EmployeeId != null)
+            if (output.EmployeeId != null)
             {
-                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.JobApply.EmployeeId);
+                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
                 output.EmployeeName = _lookupEmployee?.Name?.ToString();
             }
 
@@ -141,23 +140,31 @@ namespace Suktas.Payroll.Job
         {
             var jobApply = await _jobApplyRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetJobApplyForEditOutput { JobApply = ObjectMapper.Map<CreateOrEditJobApplyDto>(jobApply) };
-
-            if (output.JobApply.CompanyId != null)
+            var output = new GetJobApplyForEditOutput 
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.JobApply.CompanyId);
+                Date = jobApply.Date,
+                Document = jobApply.Document,
+                Remark = jobApply.Remark,
+                CompanyId = jobApply.CompanyId,
+                JobDemandId = jobApply.JobDemandId,
+                EmployeeId = jobApply.EmployeeId,
+            };
+
+            if (output.CompanyId != null)
+            {
+                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
                 output.CompanyName = _lookupCompany?.Name?.ToString();
             }
 
-            if (output.JobApply.JobDemandId != null)
+            if (output.JobDemandId != null)
             {
-                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobApply.JobDemandId);
+                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
                 output.JobDemandName = _lookupJobDemand?.Name?.ToString();
             }
 
-            if (output.JobApply.EmployeeId != null)
+            if (output.EmployeeId != null)
             {
-                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.JobApply.EmployeeId);
+                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
                 output.EmployeeName = _lookupEmployee?.Name?.ToString();
             }
 
@@ -179,7 +186,15 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobApply_Create)]
         protected virtual async Task Create(CreateOrEditJobApplyDto input)
         {
-            var jobApply = ObjectMapper.Map<JobApply>(input);
+            var jobApply = new JobApply
+            {
+                Date = input.Date,
+                Document = input.Document,
+                Remark = input.Remark,
+                CompanyId = input.CompanyId,
+                JobDemandId = input.JobDemandId,
+                EmployeeId = input.EmployeeId,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -195,7 +210,16 @@ namespace Suktas.Payroll.Job
         protected virtual async Task Update(CreateOrEditJobApplyDto input)
         {
             var jobApply = await _jobApplyRepository.FirstOrDefaultAsync((Guid)input.Id);
-            ObjectMapper.Map(input, jobApply);
+            if(jobApply != null)
+            {
+                jobApply.Date = input.Date;
+                jobApply.Document = input.Document;
+                jobApply.Remark = input.Remark;
+                jobApply.CompanyId = input.CompanyId;
+                jobApply.JobDemandId = input.JobDemandId;
+                jobApply.EmployeeId = input.EmployeeId;
+                await _jobApplyRepository.UpdateAsync(jobApply);
+            }
             jobApply.Document = await GetBinaryObjectFromCache(input.DocumentToken);
 
         }

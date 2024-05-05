@@ -1,22 +1,20 @@
-﻿using Suktas.Payroll.Master;
-
+﻿using Abp.Application.Services.Dto;
+using Abp.Authorization;
+using Abp.Domain.Repositories;
+using Abp.Extensions;
+using Abp.Linq.Extensions;
+using Abp.UI;
+using Microsoft.EntityFrameworkCore;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.Dto;
+using Suktas.Payroll.Master.Dtos;
+using Suktas.Payroll.Master.Exporting;
+using Suktas.Payroll.Storage;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Abp.Linq.Extensions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abp.Domain.Repositories;
-using Suktas.Payroll.Master.Exporting;
-using Suktas.Payroll.Master.Dtos;
-using Suktas.Payroll.Dto;
-using Abp.Application.Services.Dto;
-using Suktas.Payroll.Authorization;
-using Abp.Extensions;
-using Abp.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Abp.UI;
-using Suktas.Payroll.Storage;
 
 namespace Suktas.Payroll.Master
 {
@@ -87,17 +85,14 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetCompanyForViewDto()
                 {
-                    Company = new CompanyDto
-                    {
 
-                        Name = o.Name,
-                        Address = o.Address,
-                        AuthorizedPerson = o.AuthorizedPerson,
-                        ContactNo = o.ContactNo,
-                        BusinessNature = o.BusinessNature,
-                        EstablishedYear = o.EstablishedYear,
-                        Id = o.Id,
-                    },
+                    Name = o.Name,
+                    Address = o.Address,
+                    AuthorizedPerson = o.AuthorizedPerson,
+                    ContactNo = o.ContactNo,
+                    BusinessNature = o.BusinessNature,
+                    EstablishedYear = o.EstablishedYear,
+                    Id = o.Id,
                     CompanyCategoryName = o.CompanyCategoryName,
                     CompanyTypeName = o.CompanyTypeName
                 };
@@ -116,17 +111,27 @@ namespace Suktas.Payroll.Master
         {
             var company = await _companyRepository.GetAsync(id);
 
-            var output = new GetCompanyForViewDto { Company = ObjectMapper.Map<CompanyDto>(company) };
-
-            if (output.Company.CompanyCategoryId != null)
+            var output = new GetCompanyForViewDto
             {
-                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.Company.CompanyCategoryId);
+                Name = company.Name,
+                Address = company.Address,
+                AuthorizedPerson = company.AuthorizedPerson,
+                ContactNo = company.ContactNo,
+                BusinessNature = company.BusinessNature,
+                EstablishedYear = company.EstablishedYear,
+                CompanyCategoryId = company.CompanyCategoryId,
+                CompanyTypeId = company.CompanyTypeId,
+            };
+
+            if (output.CompanyCategoryId != null)
+            {
+                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
                 output.CompanyCategoryName = _lookupCompanyCategory?.Name?.ToString();
             }
 
-            if (output.Company.CompanyTypeId != null)
+            if (output.CompanyTypeId != null)
             {
-                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.Company.CompanyTypeId);
+                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
                 output.CompanyTypeName = _lookupCompanyType?.Name?.ToString();
             }
 
@@ -138,17 +143,30 @@ namespace Suktas.Payroll.Master
         {
             var company = await _companyRepository.FirstOrDefaultAsync(input.Id);
 
-            var output = new GetCompanyForEditOutput { Company = ObjectMapper.Map<CreateOrEditCompanyDto>(company) };
-
-            if (output.Company.CompanyCategoryId != null)
+            var output = new GetCompanyForEditOutput
             {
-                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.Company.CompanyCategoryId);
+                Name = company?.Name,
+                Address = company?.Address,
+                AuthorizedPerson = company?.AuthorizedPerson,
+                ContactNo = company.ContactNo,
+                BusinessNature = company.BusinessNature,
+                EstablishedYear = company.EstablishedYear,
+                Website = company?.Website,
+                VatNo = company.VatNo,
+                Logo = company?.Logo,
+                CompanyCategoryId = company.CompanyCategoryId,
+                CompanyTypeId = company.CompanyTypeId
+            };
+
+            if (output.CompanyCategoryId != null)
+            {
+                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
                 output.CompanyCategoryName = _lookupCompanyCategory?.Name?.ToString();
             }
 
-            if (output.Company.CompanyTypeId != null)
+            if (output.CompanyTypeId != null)
             {
-                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.Company.CompanyTypeId);
+                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
                 output.CompanyTypeName = _lookupCompanyType?.Name?.ToString();
             }
 
@@ -170,7 +188,20 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Company_Create)]
         protected virtual async Task Create(CreateOrEditCompanyDto input)
         {
-            var company = ObjectMapper.Map<Company>(input);
+            var company = new Company
+            {
+                Name = input.Name,
+                Address = input.Address,
+                AuthorizedPerson = input.AuthorizedPerson,
+                CompanyTypeId = input.CompanyTypeId,
+                ContactNo = input.ContactNo,
+                BusinessNature = input.BusinessNature,
+                EstablishedYear = input.EstablishedYear,
+                Website = input.Website,
+                VatNo = input.VatNo,
+                Logo = input.Logo,
+                CompanyCategoryId = input.CompanyCategoryId,
+            };
 
             if (AbpSession.TenantId != null)
             {
@@ -186,7 +217,21 @@ namespace Suktas.Payroll.Master
         protected virtual async Task Update(CreateOrEditCompanyDto input)
         {
             var company = await _companyRepository.FirstOrDefaultAsync((int)input.Id);
-            ObjectMapper.Map(input, company);
+            if(company != null)
+            {
+                company.Name = input.Name;
+                company.Address = input.Address;
+                company.AuthorizedPerson = input.AuthorizedPerson;
+                company.CompanyTypeId = input.CompanyTypeId;
+                company.ContactNo = input.ContactNo;
+                company.BusinessNature = input.BusinessNature;
+                company.EstablishedYear = input.EstablishedYear;
+                company.Website = input.Website;
+                company.VatNo = input.VatNo;
+                company.Logo = input.Logo;
+                company.CompanyCategoryId = input.CompanyCategoryId;
+                await _companyRepository.UpdateAsync(company);
+            }
             company.Logo = await GetBinaryObjectFromCache(input.LogoToken);
 
         }
@@ -216,16 +261,13 @@ namespace Suktas.Payroll.Master
 
                          select new GetCompanyForViewDto()
                          {
-                             Company = new CompanyDto
-                             {
-                                 Name = o.Name,
-                                 Address = o.Address,
-                                 AuthorizedPerson = o.AuthorizedPerson,
-                                 ContactNo = o.ContactNo,
-                                 BusinessNature = o.BusinessNature,
-                                 EstablishedYear = o.EstablishedYear,
-                                 Id = o.Id
-                             },
+                             Name = o.Name,
+                             Address = o.Address,
+                             AuthorizedPerson = o.AuthorizedPerson,
+                             ContactNo = o.ContactNo,
+                             BusinessNature = o.BusinessNature,
+                             EstablishedYear = o.EstablishedYear,
+                             Id = o.Id,
                              CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
                              CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name.ToString()
                          });
