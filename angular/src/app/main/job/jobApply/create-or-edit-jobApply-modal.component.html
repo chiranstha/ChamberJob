@@ -1,0 +1,152 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #jobApplyForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="jobApply.id">{{ l('EditJobApply') }}</span>
+                        <span *ngIf="!jobApply.id">{{ l('CreateNewJobApply') }}</span>
+                    </h4>
+
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="CompanyName">{{ l('Company') }}</label>
+                        <select name="jobApply.companyId" [(ngModel)]="jobApply.companyId" class="form-select" required>
+                            <option value="">{{ l('SelectACompany') }}</option>
+                            <option *ngFor="let item of allCompanys" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group m-form__group">
+                        <label for="JobDemandName">{{ l('JobDemand') }}</label>
+                        <select
+                            name="jobApply.jobDemandId"
+                            [(ngModel)]="jobApply.jobDemandId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectAJobDemand') }}</option>
+                            <option *ngFor="let item of allJobDemands" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group m-form__group">
+                        <label for="EmployeeName">{{ l('Employee') }}</label>
+                        <select
+                            name="jobApply.employeeId"
+                            [(ngModel)]="jobApply.employeeId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectAEmployee') }}</option>
+                            <option *ngFor="let item of allEmployees" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobApply_Date">{{ l('Date') }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #JobApply_Date
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="jobApply.date"
+                            id="JobApply_Date"
+                            name="JobApply_Date"
+                        />
+                        <validation-messages [formCtrl]="JobApply_Date"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupFileAddon01">{{ l('Document') }}</span>
+                            </div>
+                            <div class="custom-file">
+                                <input
+                                    type="file"
+                                    class="custom-file-input"
+                                    id="JobApply_Document"
+                                    name="JobApply_Document"
+                                    aria-describedby="inputGroupFileAddon01"
+                                    (change)="onSelectDocumentFile($event)"
+                                    [accept]="documentFileAcceptedTypes"
+                                />
+                                <label class="custom-file-label" #JobApply_DocumentLabel for="JobApply_Document">
+                                    {{ l('ChooseAFile') }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div *ngIf="documentFileName" style="background-color: #e5e5e5; padding: 5px">
+                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                            <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                <div class="alert-text">
+                                    <a href="{{ getDownloadUrl(jobApply.document) }}" target="_blank">
+                                        {{ documentFileName }}
+                                    </a>
+                                </div>
+                                <div class="alert-close">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true" (click)="removeDocumentFile()">
+                                            <i class="la la-close fa-1x"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobApply_Remark">{{ l('Remark') }}</label>
+                        <input
+                            type="text"
+                            #JobApply_Remark="ngModel"
+                            id="JobApply_Remark"
+                            class="form-control"
+                            [(ngModel)]="jobApply.remark"
+                            name="Remark"
+                        />
+                        <validation-messages [formCtrl]="JobApply_Remark"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!jobApplyForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #jobDemandForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="jobDemand.id">{{ l('EditJobDemand') }}</span>
+                        <span *ngIf="!jobDemand.id">{{ l('CreateNewJobDemand') }}</span>
+                    </h4>
+
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="CompanyName">{{ l('Company') }}</label>
+                        <select
+                            name="jobDemand.companyId"
+                            [(ngModel)]="jobDemand.companyId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectACompany') }}</option>
+                            <option *ngFor="let item of allCompanys" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group m-form__group">
+                        <label for="JobSkillName">{{ l('JobSkill') }}</label>
+                        <select
+                            name="jobDemand.jobSkillId"
+                            [(ngModel)]="jobDemand.jobSkillId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectAJobSkill') }}</option>
+                            <option *ngFor="let item of allJobSkills" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Name">{{ l('Name') }}</label>
+                        <input
+                            type="text"
+                            #JobDemand_Name="ngModel"
+                            id="JobDemand_Name"
+                            class="form-control"
+                            [(ngModel)]="jobDemand.name"
+                            name="Name"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_Name"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Address">{{ l('Address') }}</label>
+                        <input
+                            type="text"
+                            #JobDemand_Address="ngModel"
+                            id="JobDemand_Address"
+                            class="form-control"
+                            [(ngModel)]="jobDemand.address"
+                            name="Address"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_Address"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Date">{{ l('Date') }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #JobDemand_Date
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="jobDemand.date"
+                            id="JobDemand_Date"
+                            name="JobDemand_Date"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_Date"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Salary">{{ l('Salary') }}</label>
+                        <input
+                            type="text"
+                            #JobDemand_Salary="ngModel"
+                            id="JobDemand_Salary"
+                            class="form-control"
+                            [(ngModel)]="jobDemand.salary"
+                            name="Salary"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_Salary"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_InterviewDate">{{ l('InterviewDate') }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #JobDemand_InterviewDate
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="jobDemand.interviewDate"
+                            id="JobDemand_InterviewDate"
+                            name="JobDemand_InterviewDate"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_InterviewDate"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_ExperienceLevel">{{ l('ExperienceLevel') }}</label>
+                        <select
+                            class="form-select"
+                            #JobDemand_ExperienceLevel="ngModel"
+                            name="ExperienceLevel"
+                            id="JobDemand_ExperienceLevel"
+                            [(ngModel)]="jobDemand.experienceLevel"
+                        >
+                            <option value="0">{{ l('EntryLevel') }}</option>
+
+                            <option value="1">{{ l('Intermediate') }}</option>
+
+                            <option value="3">{{ l('MidLevel') }}</option>
+
+                            <option value="4">{{ l('Senior') }}</option>
+                        </select>
+                        <validation-messages [formCtrl]="JobDemand_ExperienceLevel"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_ExpiredDate">{{ l('ExpiredDate') }}</label>
+                        <input
+                            required
+                            class="form-control m-input"
+                            #JobDemand_ExpiredDate
+                            type="datetime"
+                            bsDatepicker
+                            datePickerLuxonModifier
+                            [(date)]="jobDemand.expiredDate"
+                            id="JobDemand_ExpiredDate"
+                            name="JobDemand_ExpiredDate"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_ExpiredDate"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_JobSpecification">{{ l('JobSpecification') }}</label>
+                        <input
+                            type="text"
+                            #JobDemand_JobSpecification="ngModel"
+                            id="JobDemand_JobSpecification"
+                            class="form-control"
+                            [(ngModel)]="jobDemand.jobSpecification"
+                            name="JobSpecification"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_JobSpecification"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Description">{{ l('Description') }}</label>
+                        <input
+                            type="text"
+                            #JobDemand_Description="ngModel"
+                            id="JobDemand_Description"
+                            class="form-control"
+                            [(ngModel)]="jobDemand.description"
+                            name="Description"
+                        />
+                        <validation-messages [formCtrl]="JobDemand_Description"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!jobDemandForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

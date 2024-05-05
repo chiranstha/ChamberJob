@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'ProximaNova';
+    font-style: normal;
+    font-weight: 800;
+    src: local('ProximaNova'), url('./fonts/OakSans-Bold.woff2') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'ProximaNova';
+    font-style: normal;
+    font-weight: 700;
+    src: local('ProximaNova'), url('./fonts/OakSans-Medium.woff2') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'ProximaNova';
+    font-style: normal;
+    font-weight: 500;
+    src: local('ProximaNova'), url('./fonts/OakSans-Regular.woff2') format('opentype');
+  }
+  
+  
+  @font-face {
+    font-family: 'ProximaNova';
+    font-style: normal;
+    font-weight: 300;
+    src: local('ProximaNov'), url('./fonts/OakSans-Light.woff2') format('opentype');
+  }
+  

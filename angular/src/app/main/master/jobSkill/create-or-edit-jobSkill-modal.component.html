@@ -1,0 +1,69 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #jobSkillForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="jobSkill.id">{{ l('EditJobSkill') }}</span>
+                        <span *ngIf="!jobSkill.id">{{ l('CreateNewJobSkill') }}</span>
+                    </h4>
+
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="JobSkill_Name">{{ l('Name') }}</label>
+                        <input
+                            type="text"
+                            #JobSkill_Name="ngModel"
+                            id="JobSkill_Name"
+                            class="form-control"
+                            [(ngModel)]="jobSkill.name"
+                            name="Name"
+                        />
+                        <validation-messages [formCtrl]="JobSkill_Name"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobSkill_Description">{{ l('Description') }}</label>
+                        <input
+                            type="text"
+                            #JobSkill_Description="ngModel"
+                            id="JobSkill_Description"
+                            class="form-control"
+                            [(ngModel)]="jobSkill.description"
+                            name="Description"
+                        />
+                        <validation-messages [formCtrl]="JobSkill_Description"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!jobSkillForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

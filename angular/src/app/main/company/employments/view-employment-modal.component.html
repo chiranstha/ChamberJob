@@ -1,0 +1,90 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    <span>{{ l('Details') }}</span>
+                </h4>
+
+                <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Total') }} :</h6>
+                        {{ item.employment.total }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Male') }} :</h6>
+                        {{ item.employment.male }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Female') }} :</h6>
+                        {{ item.employment.female }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Foreign') }} :</h6>
+                        {{ item.employment.foreign }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Impairment') }} :</h6>
+                        {{ item.employment.impairment }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('SalaryStart') }} :</h6>
+                        {{ item.employment.salaryStart }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('SalaryEnd') }} :</h6>
+                        {{ item.employment.salaryEnd }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('AgeStart') }} :</h6>
+                        {{ item.employment.ageStart }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('AgeEnd') }} :</h6>
+                        {{ item.employment.ageEnd }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Parment') }} :</h6>
+                        {{ item.employment.parment }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Temporary') }} :</h6>
+                        {{ item.employment.temporary }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Trainer') }} :</h6>
+                        {{ item.employment.trainer }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('DailyWages') }} :</h6>
+                        {{ item.employment.dailyWages }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <h6>({{ l('Company') }}) {{ l('Name') }} :</h6>
+                        {{ item.companyName }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="saving" type="button" class="btn btn-primary blue" (click)="close()">
+                    {{ l('Close') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

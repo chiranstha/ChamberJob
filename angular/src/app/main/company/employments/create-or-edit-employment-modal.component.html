@@ -1,0 +1,222 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #employmentForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="employment.id">{{ l('EditEmployment') }}</span>
+                        <span *ngIf="!employment.id">{{ l('CreateNewEmployment') }}</span>
+                    </h4>
+
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="CompanyName">{{ l('Company') }}</label>
+                        <select name="employment.companyId" [(ngModel)]="employment.companyId" class="form-select">
+                            <option value="">{{ l('SelectACompany') }}</option>
+                            <option *ngFor="let item of allCompanys" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Total">{{ l('Total') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Total="ngModel"
+                            id="Employment_Total"
+                            class="form-control"
+                            [(ngModel)]="employment.total"
+                            name="Total"
+                        />
+                        <validation-messages [formCtrl]="Employment_Total"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Male">{{ l('Male') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Male="ngModel"
+                            id="Employment_Male"
+                            class="form-control"
+                            [(ngModel)]="employment.male"
+                            name="Male"
+                        />
+                        <validation-messages [formCtrl]="Employment_Male"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Female">{{ l('Female') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Female="ngModel"
+                            id="Employment_Female"
+                            class="form-control"
+                            [(ngModel)]="employment.female"
+                            name="Female"
+                        />
+                        <validation-messages [formCtrl]="Employment_Female"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Foreign">{{ l('Foreign') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Foreign="ngModel"
+                            id="Employment_Foreign"
+                            class="form-control"
+                            [(ngModel)]="employment.foreign"
+                            name="Foreign"
+                        />
+                        <validation-messages [formCtrl]="Employment_Foreign"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Impairment">{{ l('Impairment') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Impairment="ngModel"
+                            id="Employment_Impairment"
+                            class="form-control"
+                            [(ngModel)]="employment.impairment"
+                            name="Impairment"
+                        />
+                        <validation-messages [formCtrl]="Employment_Impairment"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_SalaryStart">{{ l('SalaryStart') }}</label>
+                        <input
+                            type="number"
+                            #Employment_SalaryStart="ngModel"
+                            id="Employment_SalaryStart"
+                            class="form-control"
+                            [(ngModel)]="employment.salaryStart"
+                            name="SalaryStart"
+                        />
+                        <validation-messages [formCtrl]="Employment_SalaryStart"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_SalaryEnd">{{ l('SalaryEnd') }}</label>
+                        <input
+                            type="number"
+                            #Employment_SalaryEnd="ngModel"
+                            id="Employment_SalaryEnd"
+                            class="form-control"
+                            [(ngModel)]="employment.salaryEnd"
+                            name="SalaryEnd"
+                        />
+                        <validation-messages [formCtrl]="Employment_SalaryEnd"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_AgeStart">{{ l('AgeStart') }}</label>
+                        <input
+                            type="number"
+                            #Employment_AgeStart="ngModel"
+                            id="Employment_AgeStart"
+                            class="form-control"
+                            [(ngModel)]="employment.ageStart"
+                            name="AgeStart"
+                        />
+                        <validation-messages [formCtrl]="Employment_AgeStart"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_AgeEnd">{{ l('AgeEnd') }}</label>
+                        <input
+                            type="number"
+                            #Employment_AgeEnd="ngModel"
+                            id="Employment_AgeEnd"
+                            class="form-control"
+                            [(ngModel)]="employment.ageEnd"
+                            name="AgeEnd"
+                        />
+                        <validation-messages [formCtrl]="Employment_AgeEnd"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Parment">{{ l('Parment') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Parment="ngModel"
+                            id="Employment_Parment"
+                            class="form-control"
+                            [(ngModel)]="employment.parment"
+                            name="Parment"
+                        />
+                        <validation-messages [formCtrl]="Employment_Parment"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Temporary">{{ l('Temporary') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Temporary="ngModel"
+                            id="Employment_Temporary"
+                            class="form-control"
+                            [(ngModel)]="employment.temporary"
+                            name="Temporary"
+                        />
+                        <validation-messages [formCtrl]="Employment_Temporary"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_Trainer">{{ l('Trainer') }}</label>
+                        <input
+                            type="number"
+                            #Employment_Trainer="ngModel"
+                            id="Employment_Trainer"
+                            class="form-control"
+                            [(ngModel)]="employment.trainer"
+                            name="Trainer"
+                        />
+                        <validation-messages [formCtrl]="Employment_Trainer"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Employment_DailyWages">{{ l('DailyWages') }}</label>
+                        <input
+                            type="number"
+                            #Employment_DailyWages="ngModel"
+                            id="Employment_DailyWages"
+                            class="form-control"
+                            [(ngModel)]="employment.dailyWages"
+                            name="DailyWages"
+                        />
+                        <validation-messages [formCtrl]="Employment_DailyWages"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!employmentForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

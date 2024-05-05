@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props"></Import>
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+    <AssemblyName>Suktas.Payroll.Application</AssemblyName>
+    <PackageId>Suktas.Payroll.Application</PackageId>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <RootNamespace>Suktas.Payroll</RootNamespace>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abp.EntityFrameworkCore.EFPlus" Version="8.2.0" />
+    <PackageReference Include="MiniExcel" Version="1.30.2" />
+    <PackageReference Include="NPOI" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Suktas.Payroll.Application.Shared\Suktas.Payroll.Application.Shared.csproj" />
+    <ProjectReference Include="..\Suktas.Payroll.Core\Suktas.Payroll.Core.csproj" />
+    <ProjectReference Include="..\Suktas.Payroll.EntityFrameworkCore\Suktas.Payroll.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>

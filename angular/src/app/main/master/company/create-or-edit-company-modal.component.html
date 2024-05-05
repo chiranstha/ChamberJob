@@ -1,0 +1,225 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #companyForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="company.id">{{ l('EditCompany') }}</span>
+                        <span *ngIf="!company.id">{{ l('CreateNewCompany') }}</span>
+                    </h4>
+
+                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="CompanyCategoryName">{{ l('CompanyCategory') }}</label>
+                        <select
+                            name="company.companyCategoryId"
+                            [(ngModel)]="company.companyCategoryId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectACompanyCategory') }}</option>
+                            <option *ngFor="let item of allCompanyCategorys" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group m-form__group">
+                        <label for="CompanyTypeName">{{ l('CompanyType') }}</label>
+                        <select
+                            name="company.companyTypeId"
+                            [(ngModel)]="company.companyTypeId"
+                            class="form-select"
+                            required
+                        >
+                            <option value="">{{ l('SelectACompanyType') }}</option>
+                            <option *ngFor="let item of allCompanyTypes" value="{{ item.id }}">
+                                {{ item.displayName }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_Name">{{ l('Name') }} *</label>
+                        <input
+                            type="text"
+                            #Company_Name="ngModel"
+                            id="Company_Name"
+                            class="form-control"
+                            [(ngModel)]="company.name"
+                            name="Name"
+                            required
+                        />
+                        <validation-messages [formCtrl]="Company_Name"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_Address">{{ l('Address') }} *</label>
+                        <input
+                            type="text"
+                            #Company_Address="ngModel"
+                            id="Company_Address"
+                            class="form-control"
+                            [(ngModel)]="company.address"
+                            name="Address"
+                            required
+                        />
+                        <validation-messages [formCtrl]="Company_Address"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_AuthorizedPerson">{{ l('AuthorizedPerson') }}</label>
+                        <input
+                            type="text"
+                            #Company_AuthorizedPerson="ngModel"
+                            id="Company_AuthorizedPerson"
+                            class="form-control"
+                            [(ngModel)]="company.authorizedPerson"
+                            name="AuthorizedPerson"
+                        />
+                        <validation-messages [formCtrl]="Company_AuthorizedPerson"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_ContactNo">{{ l('ContactNo') }} *</label>
+                        <input
+                            type="text"
+                            #Company_ContactNo="ngModel"
+                            id="Company_ContactNo"
+                            class="form-control"
+                            [(ngModel)]="company.contactNo"
+                            name="ContactNo"
+                            required
+                        />
+                        <validation-messages [formCtrl]="Company_ContactNo"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_BusinessNature">{{ l('BusinessNature') }}</label>
+                        <select
+                            class="form-select"
+                            #Company_BusinessNature="ngModel"
+                            name="BusinessNature"
+                            id="Company_BusinessNature"
+                            [(ngModel)]="company.businessNature"
+                        >
+                            <option value="1">{{ l('Manufacturing') }}</option>
+
+                            <option value="2">{{ l('Trading') }}</option>
+
+                            <option value="3">{{ l('Service') }}</option>
+
+                            <option value="4">{{ l('Others') }}</option>
+                        </select>
+                        <validation-messages [formCtrl]="Company_BusinessNature"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_EstablishedYear">{{ l('EstablishedYear') }}</label>
+                        <input
+                            type="text"
+                            #Company_EstablishedYear="ngModel"
+                            id="Company_EstablishedYear"
+                            class="form-control"
+                            [(ngModel)]="company.establishedYear"
+                            name="EstablishedYear"
+                        />
+                        <validation-messages [formCtrl]="Company_EstablishedYear"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_Website">{{ l('Website') }}</label>
+                        <input
+                            type="text"
+                            #Company_Website="ngModel"
+                            id="Company_Website"
+                            class="form-control"
+                            [(ngModel)]="company.website"
+                            name="Website"
+                        />
+                        <validation-messages [formCtrl]="Company_Website"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Company_VatNo">{{ l('VatNo') }}</label>
+                        <input
+                            type="text"
+                            #Company_VatNo="ngModel"
+                            id="Company_VatNo"
+                            class="form-control"
+                            [(ngModel)]="company.vatNo"
+                            name="VatNo"
+                        />
+                        <validation-messages [formCtrl]="Company_VatNo"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupFileAddon01">{{ l('Logo') }}</span>
+                            </div>
+                            <div class="custom-file">
+                                <input
+                                    type="file"
+                                    class="custom-file-input"
+                                    id="Company_Logo"
+                                    name="Company_Logo"
+                                    aria-describedby="inputGroupFileAddon01"
+                                    (change)="onSelectLogoFile($event)"
+                                    [accept]="logoFileAcceptedTypes"
+                                />
+                                <label class="custom-file-label" #Company_LogoLabel for="Company_Logo">
+                                    {{ l('ChooseAFile') }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div *ngIf="logoFileName" style="background-color: #e5e5e5; padding: 5px">
+                            <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
+                            <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
+                                <div class="alert-text">
+                                    <a href="{{ getDownloadUrl(company.logo) }}" target="_blank">{{ logoFileName }}</a>
+                                </div>
+                                <div class="alert-close">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true" (click)="removeLogoFile()">
+                                            <i class="la la-close fa-1x"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!companyForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

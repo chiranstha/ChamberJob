@@ -1,0 +1,99 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #financialYearForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="financialYear.id">{{ l('EditFinancialYear') }}</span>
+                        <span *ngIf="!financialYear.id">{{ l('CreateNewFinancialYear') }}</span>
+                    </h4>
+
+                    <button type="button"class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="FinancialYear_Name">{{ l('Name') }} *</label>
+                        <input
+                            type="text"
+                            #FinancialYear_Name="ngModel"
+                            id="FinancialYear_Name"
+                            class="form-control"
+                            [(ngModel)]="financialYear.name"
+                            name="Name"
+                            required
+                        />
+                        <validation-messages [formCtrl]="FinancialYear_Name"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FinancialYear_FromMiti">{{ l('FromMiti') }}</label>
+                        <input
+                            type="text"
+                            #FinancialYear_FromMiti="ngModel"
+                            id="FinancialYear_FromMiti"
+                            class="form-control"
+                            [(ngModel)]="financialYear.fromMiti"
+                            name="FromMiti"
+                        />
+                        <validation-messages [formCtrl]="FinancialYear_FromMiti"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FinancialYear_ToMiti">{{ l('ToMiti') }}</label>
+                        <input
+                            type="text"
+                            #FinancialYear_ToMiti="ngModel"
+                            id="FinancialYear_ToMiti"
+                            class="form-control"
+                            [(ngModel)]="financialYear.toMiti"
+                            name="ToMiti"
+                        />
+                        <validation-messages [formCtrl]="FinancialYear_ToMiti"></validation-messages>
+                    </div>
+
+                    <br />
+                    <div class="m-checkbox-list">
+                        <label for="FinancialYear_IsOldYear" class="kt-checkbox">
+                            <input
+                                id="FinancialYear_IsOldYear"
+                                #FinancialYear_IsOldYear="ngModel"
+                                type="checkbox"
+                                name="IsOldYear"
+                                [(ngModel)]="financialYear.isOldYear"
+                            />
+                            {{ l('IsOldYear') }}
+                            <span></span>
+                        </label>
+                        <validation-messages [formCtrl]="FinancialYear_IsOldYear"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!financialYearForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

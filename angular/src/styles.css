@@ -1,0 +1,363 @@
+/* You can add global styles to this file, and also import other style files */
+.margin-left-5 {
+    margin-left: 5px !important;
+}
+
+.margin-right-5 {
+    margin-right: 5px !important;
+}
+
+.margin-top-5 {
+    margin-top: 5px !important;
+}
+
+.margin-top-15 {
+    margin-top: 15px !important;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px !important;
+}
+
+.margin-bottom-5 {
+    margin-bottom: 5px !important;
+}
+
+.margin-bottom-15 {
+    margin-bottom: 15px !important;
+}
+
+.padding-left-5 {
+    padding-left: 5px !important;
+}
+
+.padding-right-5 {
+    padding-right: 5px !important;
+}
+
+.padding-top-5 {
+    padding-top: 5px !important;
+}
+
+.padding-bottom-5 {
+    padding-bottom: 5px !important;
+}
+
+.width-percent-5 {
+    width: 5%;
+}
+
+.width-percent-10 {
+    width: 10%;
+}
+
+.width-percent-15 {
+    width: 15%;
+}
+
+.width-percent-20 {
+    width: 20%;
+}
+
+.width-percent-30 {
+    width: 30%;
+}
+
+.width-percent-40 {
+    width: 40%;
+}
+
+.width-percent-50 {
+    width: 50%;
+}
+
+.width-percent-100 {
+    width: 100%;
+}
+
+/* Sweet alert */
+
+body.swal2-height-auto {
+    height: inherit !important;
+}
+
+.swal2-popup.swal2-toast {
+    padding: 10px 12px !important;
+    display: block !important;
+}
+
+.swal2-popup.swal2-toast .swal2-header,
+.swal2-popup.swal2-toast .swal2-title,
+.swal2-popup.swal2-toast .swal2-content {
+    text-align: left !important;
+    margin: 0 !important;
+}
+
+.swal2-popup.swal2-toast .swal2-title {
+    margin-bottom: 4px !important;
+}
+
+.swal2-icon.swal2-info::before,
+.swal2-icon.swal2-warning::before,
+.swal2-icon.swal2-success::before,
+.swal2-icon.swal2-error::before {
+    content: "";
+}
+
+@keyframes glowing {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.glowing {
+    animation: glowing 2s infinite;
+}
+
+.root-initial-loader .overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(51, 51, 51, 0.8);
+    z-index: 99999 !important;
+    width: 100%;
+    height: 100%;
+}
+
+.root-initial-loader i {
+    position: absolute;
+    color: rgb(91, 167, 234);
+    z-index: 100000 !important;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.root-initial-loader .fa-spin-2x {
+    -webkit-animation: fa-spin 1s infinite linear;
+    animation: fa-spin 1s infinite linear;
+}
+ngx-spinner .loading-text {
+    font-weight: bold;
+    color: white;
+    font-size: 1.3em;
+}
+
+bs-days-calendar-view + bs-days-calendar-view {
+    margin-left: 10px;
+}
+
+bs-days-calendar-view {
+    display: inline-block;
+    border-radius: 4px 0 0 4px;
+}
+
+@media (max-width: 768px) {
+    .btn-md-icon {
+        margin-right: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+
+html[data-theme=dark] {
+    --kt-text-muted: #9D9DA6;
+}
+
+[data-kt-app-sidebar-hoverable=true][data-kt-app-sidebar-minimize=on] .app-sidebar:not(.animating) .menuSearchBarInput {
+    opacity: 0;
+}
+
+[data-kt-app-sidebar-hoverable=true][data-kt-app-sidebar-minimize=on] .app-sidebar:hover:not(.animating) .menuSearchBarInput {
+    opacity: 1;
+}
+
+
+
+
+.p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.1rem 0.1rem;
+}
+
+
+
+
+.p-dropdown {
+    background: #ffffff;
+    border: 1px solid rgb(206 198 198);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s, background-size 0.2s cubic-bezier(0.64, 0.09, 0.08, 1);
+    border-radius: 5px;
+  }
+  
+  
+  
+  
+  .p-paginator {
+    background: #ffffff;
+    color: rgba(0, 0, 0, 0.87);
+    border: solid #e4e4e4;
+    border-width: 0;
+    padding: 0.375rem 0.75rem;
+    border-radius: 4px;
+  }
+  .p-paginator .p-paginator-first,
+  .p-paginator .p-paginator-prev,
+  .p-paginator .p-paginator-next,
+  .p-paginator .p-paginator-last {
+    background-color: transparent;
+    border: 0 none;
+    color: rgba(0, 0, 0, 0.6);
+    min-width: 3rem;
+    height: 3rem;
+    margin: 0.143rem;
+    transition: none;
+    border-radius: 50%;
+    --size: 40px;
+    --margin: 2px;
+    margin: 0 var(--margin);
+    border: 1px solid #959697;
+    box-shadow: 0px 0px 2px 0px #2a262624;
+    color: #000;
+    max-width: auto;
+    min-width: var(--size);
+    height: var(--size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+  .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  .p-paginator .p-paginator-first {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+  .p-paginator .p-paginator-last {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+  .p-paginator .p-dropdown {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 3rem;
+  }
+  .p-paginator .p-dropdown .p-dropdown-label {
+    padding-right: 0;
+  }
+  .p-paginator .p-paginator-page-input {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  .p-paginator .p-paginator-page-input .p-inputtext {
+    max-width: 3rem;
+  }
+  .p-paginator .p-paginator-current {
+    background-color: transparent;
+    border: 0 none;
+    color: rgba(0, 0, 0, 0.6);
+    min-width: 3rem;
+    height: 3rem;
+    margin: 0.143rem;
+    padding: 0 0.5rem;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page {
+    background-color: transparent;
+    border: 0 none;
+    color: rgba(0, 0, 0, 0.6);
+    min-width: 3rem;
+    height: 3rem;
+    margin: 0.143rem;
+    transition: none;
+    border-radius: 50%;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    color: #fff;
+    background: #0A6ED1;
+    border: 1px solid #0A6ED1;
+    position: relative;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: transparent;
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  
+  
+  .p-dropdown-items-wrapper {
+    overflow: auto;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'ProximaNova';
+    width: 80px;
+    text-align: center;
+    background-color: var(--kt-progress-bar-color);
+  }
+  
+  
+  .p-paginator .p-dropdown {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    height: 3rem;
+    width: 80px;
+    padding: 10px;
+  }
+  
+  
+  .p-datatable-thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;  
+    background-color: #cde4f6;
+  }
+
+  .thead, tbody, tfoot, tr, td, th {
+    padding: 8px;
+}
+  
+  
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.1rem 0.1rem;
+    border-bottom: 1.5px solid #eff2f5;
+    border-left: 1px solid #eff2f5;
+    padding-left: 10px;
+    font-family: 'ProximaNova';
+    font-size: 13px;
+    font-weight: 700;
+    text-align:start;
+  }
+  
+  
+  .p-datatable>.p-datatable-wrapper {
+    overflow: auto;
+    border-radius: 10px;
+    border: 1px solid var(--bs-gray-300);
+    min-height: 500px;
+  
+  }
+
+
+  .ui-table .ui-table-thead > tr > th {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+    font-weight: bold;
+}

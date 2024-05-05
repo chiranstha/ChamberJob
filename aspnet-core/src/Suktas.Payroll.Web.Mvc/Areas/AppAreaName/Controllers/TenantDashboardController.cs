@@ -1,0 +1,26 @@
+﻿using Abp.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Suktas.Payroll.Authorization;
+using Suktas.Payroll.DashboardCustomization;
+using System.Threading.Tasks;
+using Suktas.Payroll.Web.Areas.AppAreaName.Startup;
+
+namespace Suktas.Payroll.Web.Areas.AppAreaName.Controllers
+{
+    [Area("AppAreaName")]
+    [AbpMvcAuthorize(AppPermissions.Pages_Tenant_Dashboard)]
+    public class TenantDashboardController : CustomizableDashboardControllerBase
+    {
+        public TenantDashboardController(DashboardViewConfiguration dashboardViewConfiguration, 
+            IDashboardCustomizationAppService dashboardCustomizationAppService) 
+            : base(dashboardViewConfiguration, dashboardCustomizationAppService)
+        {
+
+        }
+
+        public async Task<ActionResult> Index()
+        {
+            return await GetView(PayrollDashboardCustomizationConsts.DashboardNames.DefaultTenantDashboard);
+        }
+    }
+}

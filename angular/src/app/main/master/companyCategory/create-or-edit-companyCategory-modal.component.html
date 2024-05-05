@@ -1,0 +1,70 @@
+﻿<div
+    bsModal
+    #createOrEditModal="bs-modal"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="createOrEditModal"
+    aria-hidden="true"
+    [config]="{ backdrop: 'static' }"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" #companyCategoryForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="companyCategory.id">{{ l('EditCompanyCategory') }}</span>
+                        <span *ngIf="!companyCategory.id">{{ l('CreateNewCompanyCategory') }}</span>
+                    </h4>
+
+                    <button type="button"class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
+                       
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="CompanyCategory_Name">{{ l('Name') }} *</label>
+                        <input
+                            type="text"
+                            #CompanyCategory_Name="ngModel"
+                            id="CompanyCategory_Name"
+                            class="form-control"
+                            [(ngModel)]="companyCategory.name"
+                            name="Name"
+                            required
+                        />
+                        <validation-messages [formCtrl]="CompanyCategory_Name"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CompanyCategory_Description">{{ l('Description') }}</label>
+                        <input
+                            type="text"
+                            #CompanyCategory_Description="ngModel"
+                            id="CompanyCategory_Description"
+                            class="form-control"
+                            [(ngModel)]="companyCategory.description"
+                            name="Description"
+                        />
+                        <validation-messages [formCtrl]="CompanyCategory_Description"></validation-messages>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button
+                        type="submit"
+                        class="btn btn-primary blue"
+                        [disabled]="!companyCategoryForm.form.valid"
+                        [buttonBusy]="saving"
+                        [busyText]="l('SavingWithThreeDot')"
+                    >
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
