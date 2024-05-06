@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CompanyTypeServiceProxy, CompanyTypeDto } from '@shared/service-proxies/service-proxies';
+import { CompanyTypeServiceProxy } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from 'abp-ng2-module';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -78,10 +78,10 @@ export class CompanyTypeComponent extends AppComponentBase {
         this.createOrEditCompanyTypeModal.show();
     }
 
-    deleteCompanyType(companyType: CompanyTypeDto): void {
+    deleteCompanyType(id: string): void {
         this.message.confirm('', this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._companyTypeServiceProxy.delete(companyType.id).subscribe(() => {
+                this._companyTypeServiceProxy.delete(id).subscribe(() => {
                     this.reloadPage();
                     this.notify.success(this.l('SuccessfullyDeleted'));
                 });

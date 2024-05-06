@@ -23,18 +23,18 @@ namespace Suktas.Payroll.Master
     {
         private readonly IRepository<Company> _companyRepository;
         private readonly ICompanyExcelExporter _companyExcelExporter;
-        private readonly IRepository<CompanyCategory, int> _lookup_companyCategoryRepository;
-        private readonly IRepository<CompanyType, Guid> _lookup_companyTypeRepository;
+        private readonly IRepository<CompanyCategory, int> _lookupCompanyCategoryRepository;
+        private readonly IRepository<CompanyType, Guid> _lookupCompanyTypeRepository;
 
         private readonly ITempFileCacheManager _tempFileCacheManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
 
-        public CompanyAppService(IRepository<Company> companyRepository, ICompanyExcelExporter companyExcelExporter, IRepository<CompanyCategory, int> lookup_companyCategoryRepository, IRepository<CompanyType, Guid> lookup_companyTypeRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
+        public CompanyAppService(IRepository<Company> companyRepository, ICompanyExcelExporter companyExcelExporter, IRepository<CompanyCategory, int> lookupCompanyCategoryRepository, IRepository<CompanyType, Guid> lookupCompanyTypeRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
         {
             _companyRepository = companyRepository;
             _companyExcelExporter = companyExcelExporter;
-            _lookup_companyCategoryRepository = lookup_companyCategoryRepository;
-            _lookup_companyTypeRepository = lookup_companyTypeRepository;
+            _lookupCompanyCategoryRepository = lookupCompanyCategoryRepository;
+            _lookupCompanyTypeRepository = lookupCompanyTypeRepository;
 
             _tempFileCacheManager = tempFileCacheManager;
             _binaryObjectManager = binaryObjectManager;
@@ -56,10 +56,10 @@ namespace Suktas.Payroll.Master
                 .PageBy(input);
 
             var company = from o in pagedAndFilteredCompany
-                          join o1 in _lookup_companyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
+                          join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
                           from s1 in j1.DefaultIfEmpty()
 
-                          join o2 in _lookup_companyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
+                          join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
                           from s2 in j2.DefaultIfEmpty()
 
                           select new
@@ -72,8 +72,8 @@ namespace Suktas.Payroll.Master
                               o.BusinessNature,
                               o.EstablishedYear,
                               Id = o.Id,
-                              CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
-                              CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name.ToString()
+                              CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
+                              CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
                           };
 
             var totalCount = await filteredCompany.CountAsync();
@@ -125,14 +125,14 @@ namespace Suktas.Payroll.Master
 
             if (output.CompanyCategoryId != null)
             {
-                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
-                output.CompanyCategoryName = _lookupCompanyCategory?.Name?.ToString();
+                var lookupCompanyCategory = await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
+                output.CompanyCategoryName = lookupCompanyCategory?.Name;
             }
 
             if (output.CompanyTypeId != null)
             {
-                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
-                output.CompanyTypeName = _lookupCompanyType?.Name?.ToString();
+                var lookupCompanyType = await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
+                output.CompanyTypeName = lookupCompanyType?.Name;
             }
 
             return output;
@@ -160,14 +160,14 @@ namespace Suktas.Payroll.Master
 
             if (output.CompanyCategoryId != null)
             {
-                var _lookupCompanyCategory = await _lookup_companyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
-                output.CompanyCategoryName = _lookupCompanyCategory?.Name?.ToString();
+                var lookupCompanyCategory = await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
+                output.CompanyCategoryName = lookupCompanyCategory?.Name;
             }
 
             if (output.CompanyTypeId != null)
             {
-                var _lookupCompanyType = await _lookup_companyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
-                output.CompanyTypeName = _lookupCompanyType?.Name?.ToString();
+                var lookupCompanyType = await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
+                output.CompanyTypeName = lookupCompanyType?.Name;
             }
 
             return output;
@@ -253,10 +253,10 @@ namespace Suktas.Payroll.Master
                         .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter), e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
 
             var query = (from o in filteredCompany
-                         join o1 in _lookup_companyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
+                         join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
                          from s1 in j1.DefaultIfEmpty()
 
-                         join o2 in _lookup_companyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
+                         join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
                          from s2 in j2.DefaultIfEmpty()
 
                          select new GetCompanyForViewDto()
@@ -268,8 +268,8 @@ namespace Suktas.Payroll.Master
                              BusinessNature = o.BusinessNature,
                              EstablishedYear = o.EstablishedYear,
                              Id = o.Id,
-                             CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
-                             CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name.ToString()
+                             CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
+                             CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
                          });
 
             var companyListDtos = await query.ToListAsync();
@@ -280,7 +280,7 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Company)]
         public async Task<List<CompanyCompanyCategoryLookupTableDto>> GetAllCompanyCategoryForTableDropdown()
         {
-            return await _lookup_companyCategoryRepository.GetAll()
+            return await _lookupCompanyCategoryRepository.GetAll()
                 .Select(companyCategory => new CompanyCompanyCategoryLookupTableDto
                 {
                     Id = companyCategory.Id,
@@ -291,7 +291,7 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Company)]
         public async Task<List<CompanyCompanyTypeLookupTableDto>> GetAllCompanyTypeForTableDropdown()
         {
-            return await _lookup_companyTypeRepository.GetAll()
+            return await _lookupCompanyTypeRepository.GetAll()
                 .Select(companyType => new CompanyCompanyTypeLookupTableDto
                 {
                     Id = companyType.Id.ToString(),

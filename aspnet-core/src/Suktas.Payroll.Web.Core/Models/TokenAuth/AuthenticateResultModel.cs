@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Suktas.Payroll.Authorization.Users;
 
 namespace Suktas.Payroll.Web.Models.TokenAuth
 {
@@ -28,5 +29,6 @@ namespace Suktas.Payroll.Web.Models.TokenAuth
 
         public int RefreshTokenExpireInSeconds { get; set; }
         public string c { get; set; }
+        public UserTypeEnum UserType { get; set; }
     }
 }

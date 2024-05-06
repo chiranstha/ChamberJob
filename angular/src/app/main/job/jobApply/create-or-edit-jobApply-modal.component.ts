@@ -71,14 +71,9 @@ export class CreateOrEditJobApplyModalComponent extends AppComponentBase impleme
             this.modal.show();
         } else {
             this._jobApplyServiceProxy.getJobApplyForEdit(jobApplyId).subscribe((result) => {
-                this.jobApply = result.jobApply;
+                this.jobApply = result;
 
-                this.companyName = result.companyName;
-                this.jobDemandName = result.jobDemandName;
-                this.employeeName = result.employeeName;
-
-                this.documentFileName = result.documentFileName;
-
+               
                 this.active = true;
                 this.modal.show();
             });

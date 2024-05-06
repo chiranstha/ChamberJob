@@ -21,22 +21,82 @@ namespace Suktas.Payroll.Job
     public class JobApplyAppService : PayrollAppServiceBase, IJobApplyAppService
     {
         private readonly IRepository<JobApply, Guid> _jobApplyRepository;
-        private readonly IRepository<Company, int> _lookup_companyRepository;
-        private readonly IRepository<JobDemand, Guid> _lookup_jobDemandRepository;
-        private readonly IRepository<Employee, Guid> _lookup_employeeRepository;
+        private readonly IRepository<Company, int> _lookupCompanyRepository;
+        private readonly IRepository<JobDemand, Guid> _jobDemandRepository;
+        private readonly IRepository<Employee, Guid> _lookupEmployeeRepository;
+        private readonly IRepository<JobSkill, Guid> _lookupJobSkillRepository;
 
         private readonly ITempFileCacheManager _tempFileCacheManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
 
-        public JobApplyAppService(IRepository<JobApply, Guid> jobApplyRepository, IRepository<Company, int> lookup_companyRepository, IRepository<JobDemand, Guid> lookup_jobDemandRepository, IRepository<Employee, Guid> lookup_employeeRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
+        public JobApplyAppService(IRepository<JobApply, Guid> jobApplyRepository, IRepository<Company, int> lookupCompanyRepository, IRepository<JobDemand, Guid> lookupJobDemandRepository, IRepository<Employee, Guid> lookupEmployeeRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager, IRepository<JobSkill, Guid> lookupJobSkillRepository)
         {
             _jobApplyRepository = jobApplyRepository;
-            _lookup_companyRepository = lookup_companyRepository;
-            _lookup_jobDemandRepository = lookup_jobDemandRepository;
-            _lookup_employeeRepository = lookup_employeeRepository;
+            _lookupCompanyRepository = lookupCompanyRepository;
+            _jobDemandRepository = lookupJobDemandRepository;
+            _lookupEmployeeRepository = lookupEmployeeRepository;
 
             _tempFileCacheManager = tempFileCacheManager;
             _binaryObjectManager = binaryObjectManager;
+            _lookupJobSkillRepository = lookupJobSkillRepository;
+        }
+
+
+
+        public virtual async Task<PagedResultDto<GetJobDemandForViewDto>> GetAllJobDemand(GetAllJobDemandsInput input)
+        {
+
+            var filteredJobDemands = _jobDemandRepository.GetAll()
+                        .Include(e => e.CompanyFk)
+                        .Include(e => e.JobSkillFk)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) || e.Salary.Contains(input.Filter) || e.JobSpecification.Contains(input.Filter) || e.Description.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyNameFilter), e => e.CompanyFk != null && e.CompanyFk.Name == input.CompanyNameFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.JobSkillNameFilter), e => e.JobSkillFk != null && e.JobSkillFk.Name == input.JobSkillNameFilter);
+
+            var pagedAndFilteredJobDemands = filteredJobDemands
+                .OrderBy(input.Sorting ?? "id asc")
+                .PageBy(input);
+
+            var jobDemands = from o in pagedAndFilteredJobDemands
+                             join o1 in _lookupCompanyRepository.GetAll() on o.CompanyId equals o1.Id into j1
+                             from s1 in j1.DefaultIfEmpty()
+
+                             join o2 in _lookupJobSkillRepository.GetAll() on o.JobSkillId equals o2.Id into j2
+                             from s2 in j2.DefaultIfEmpty()
+
+                             select new
+                             {
+
+                                 o.Name,
+                                 o.Address,
+                                 o.Date,
+                                 o.Salary,
+                                 o.ExpiredDate,
+                                 o.Id,
+                                 CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
+                                 JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name
+                             };
+
+            var totalCount = await filteredJobDemands.CountAsync();
+
+            var dbList = await jobDemands.ToListAsync();
+            var results = dbList.Select(o => new GetJobDemandForViewDto
+                {
+                    Name = o.Name,
+                    Address = o.Address,
+                    Date = o.Date,
+                    Salary = o.Salary,
+                    ExpiredDate = o.ExpiredDate,
+                    Id = o.Id,
+                    CompanyName = o.CompanyName,
+                    JobSkillName = o.JobSkillName
+                })
+                .ToList();
+
+            return new PagedResultDto<GetJobDemandForViewDto>(
+                totalCount,
+                results
+            );
 
         }
 
@@ -57,23 +117,23 @@ namespace Suktas.Payroll.Job
                 .PageBy(input);
 
             var jobApply = from o in pagedAndFilteredJobApply
-                           join o1 in _lookup_companyRepository.GetAll() on o.CompanyId equals o1.Id into j1
+                           join o1 in _lookupCompanyRepository.GetAll() on o.CompanyId equals o1.Id into j1
                            from s1 in j1.DefaultIfEmpty()
 
-                           join o2 in _lookup_jobDemandRepository.GetAll() on o.JobDemandId equals o2.Id into j2
+                           join o2 in _jobDemandRepository.GetAll() on o.JobDemandId equals o2.Id into j2
                            from s2 in j2.DefaultIfEmpty()
 
-                           join o3 in _lookup_employeeRepository.GetAll() on o.EmployeeId equals o3.Id into j3
+                           join o3 in _lookupEmployeeRepository.GetAll() on o.EmployeeId equals o3.Id into j3
                            from s3 in j3.DefaultIfEmpty()
 
                            select new
                            {
 
                                o.Date,
-                               Id = o.Id,
-                               CompanyName = s1 == null || s1.Name == null ? "" : s1.Name.ToString(),
-                               JobDemandName = s2 == null || s2.Name == null ? "" : s2.Name.ToString(),
-                               EmployeeName = s3 == null || s3.Name == null ? "" : s3.Name.ToString()
+                               o.Id,
+                               CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
+                               JobDemandName = s2 == null || s2.Name == null ? "" : s2.Name,
+                               EmployeeName = s3 == null || s3.Name == null ? "" : s3.Name
                            };
 
             var totalCount = await filteredJobApply.CountAsync();
@@ -83,7 +143,7 @@ namespace Suktas.Payroll.Job
 
             foreach (var o in dbList)
             {
-                var res = new GetJobApplyForViewDto()
+                var res = new GetJobApplyForViewDto
                 {
                     Date = o.Date,
                     Id = o.Id,
@@ -116,20 +176,20 @@ namespace Suktas.Payroll.Job
 
             if (output.CompanyId != null)
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
-                output.CompanyName = _lookupCompany?.Name?.ToString();
+                var lookupCompany = await _lookupCompanyRepository.FirstOrDefaultAsync((int)output.CompanyId);
+                output.CompanyName = lookupCompany?.Name;
             }
 
             if (output.JobDemandId != null)
             {
-                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
-                output.JobDemandName = _lookupJobDemand?.Name?.ToString();
+                var lookupJobDemand = await _jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
+                output.JobDemandName = lookupJobDemand?.Name;
             }
 
             if (output.EmployeeId != null)
             {
-                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
-                output.EmployeeName = _lookupEmployee?.Name?.ToString();
+                var lookupEmployee = await _lookupEmployeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
+                output.EmployeeName = lookupEmployee?.Name;
             }
 
             return output;
@@ -152,20 +212,20 @@ namespace Suktas.Payroll.Job
 
             if (output.CompanyId != null)
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
-                output.CompanyName = _lookupCompany?.Name?.ToString();
+                var lookupCompany = await _lookupCompanyRepository.FirstOrDefaultAsync((int)output.CompanyId);
+                output.CompanyName = lookupCompany?.Name;
             }
 
             if (output.JobDemandId != null)
             {
-                var _lookupJobDemand = await _lookup_jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
-                output.JobDemandName = _lookupJobDemand?.Name?.ToString();
+                var lookupJobDemand = await _jobDemandRepository.FirstOrDefaultAsync((Guid)output.JobDemandId);
+                output.JobDemandName = lookupJobDemand?.Name;
             }
 
             if (output.EmployeeId != null)
             {
-                var _lookupEmployee = await _lookup_employeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
-                output.EmployeeName = _lookupEmployee?.Name?.ToString();
+                var lookupEmployee = await _lookupEmployeeRepository.FirstOrDefaultAsync((Guid)output.EmployeeId);
+                output.EmployeeName = lookupEmployee?.Name;
             }
 
             return output;
@@ -232,7 +292,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobApply)]
         public async Task<List<JobApplyCompanyLookupTableDto>> GetAllCompanyForTableDropdown()
         {
-            return await _lookup_companyRepository.GetAll()
+            return await _lookupCompanyRepository.GetAll()
                 .Select(company => new JobApplyCompanyLookupTableDto
                 {
                     Id = company.Id,
@@ -243,7 +303,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobApply)]
         public async Task<List<JobApplyJobDemandLookupTableDto>> GetAllJobDemandForTableDropdown()
         {
-            return await _lookup_jobDemandRepository.GetAll()
+            return await _jobDemandRepository.GetAll()
                 .Select(jobDemand => new JobApplyJobDemandLookupTableDto
                 {
                     Id = jobDemand.Id.ToString(),
@@ -254,7 +314,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobApply)]
         public async Task<List<JobApplyEmployeeLookupTableDto>> GetAllEmployeeForTableDropdown()
         {
-            return await _lookup_employeeRepository.GetAll()
+            return await _lookupEmployeeRepository.GetAll()
                 .Select(employee => new JobApplyEmployeeLookupTableDto
                 {
                     Id = employee.Id.ToString(),

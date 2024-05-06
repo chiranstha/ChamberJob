@@ -37,7 +37,7 @@ export class CreateOrEditFinancialYearModalComponent extends AppComponentBase im
             this.modal.show();
         } else {
             this._financialYearsServiceProxy.getFinancialYearForEdit(financialYearId).subscribe((result) => {
-                this.financialYear = result.financialYear;
+                this.financialYear = result;
 
                 this.active = true;
                 this.modal.show();

@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GetQualificationForViewDto, QualificationDto } from '@shared/service-proxies/service-proxies';
+import { GetQualificationForViewDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -20,7 +20,6 @@ export class ViewQualificationModalComponent extends AppComponentBase {
     constructor(injector: Injector) {
         super(injector);
         this.item = new GetQualificationForViewDto();
-        this.item.qualification = new QualificationDto();
     }
 
     show(item: GetQualificationForViewDto): void {

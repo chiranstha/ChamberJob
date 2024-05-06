@@ -38,7 +38,7 @@ export class CreateOrEditJobSkillModalComponent extends AppComponentBase impleme
             this.modal.show();
         } else {
             this._jobSkillServiceProxy.getJobSkillForEdit(jobSkillId).subscribe((result) => {
-                this.jobSkill = result.jobSkill;
+                this.jobSkill = result;
 
                 this.active = true;
                 this.modal.show();

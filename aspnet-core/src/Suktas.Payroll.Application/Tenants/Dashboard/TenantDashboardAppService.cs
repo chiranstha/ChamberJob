@@ -6,7 +6,7 @@ using Suktas.Payroll.Tenants.Dashboard.Dto;
 namespace Suktas.Payroll.Tenants.Dashboard
 {
     [DisableAuditing]
-    [AbpAuthorize(AppPermissions.Pages_Tenant_Dashboard)]
+    [AbpAuthorize]
     public class TenantDashboardAppService : PayrollAppServiceBase, ITenantDashboardAppService
     {
         public GetMemberActivityOutput GetMemberActivity()

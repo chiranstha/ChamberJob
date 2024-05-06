@@ -63,12 +63,7 @@ export class CreateOrEditEmployeeModalComponent extends AppComponentBase impleme
             this.modal.show();
         } else {
             this._employeeServiceProxy.getEmployeeForEdit(employeeId).subscribe((result) => {
-                this.employee = result.employee;
-
-                this.jobSkillName = result.jobSkillName;
-
-                this.photoFileName = result.photoFileName;
-
+                this.employee = result;
                 this.active = true;
                 this.modal.show();
             });

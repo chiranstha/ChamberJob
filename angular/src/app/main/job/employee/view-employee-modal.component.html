@@ -23,27 +23,27 @@
                 <div class="row">
                     <div class="col-6 mb-3">
                         <h6>{{ l('Name') }} :</h6>
-                        {{ item.employee.name }}
+                        {{ item.name }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('PhoneNo') }} :</h6>
-                        {{ item.employee.phoneNo }}
+                        {{ item.phoneNo }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Gender') }} :</h6>
-                        {{ l(genderEnum[item.employee.gender]) }}
+                        {{ l(genderEnum[item.gender]) }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Dbo') }} :</h6>
-                        {{ item.employee.dbo | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
+                        {{ item.dbo | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Qualification') }} :</h6>
-                        {{ item.employee.qualification }}
+                        {{ item.qualification }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('ExpectedSalary') }} :</h6>
-                        {{ item.employee.expectedSalary }}
+                        {{ item.expectedSalary }}
                     </div>
 
                     <div class="col-6 mb-3">

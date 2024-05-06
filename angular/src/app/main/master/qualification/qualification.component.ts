@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { QualificationServiceProxy, QualificationDto } from '@shared/service-proxies/service-proxies';
+import { QualificationServiceProxy } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from 'abp-ng2-module';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -78,10 +78,10 @@ export class QualificationComponent extends AppComponentBase {
         this.createOrEditQualificationModal.show();
     }
 
-    deleteQualification(qualification: QualificationDto): void {
+    deleteQualification(id: string): void {
         this.message.confirm('', this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._qualificationServiceProxy.delete(qualification.id).subscribe(() => {
+                this._qualificationServiceProxy.delete(id).subscribe(() => {
                     this.reloadPage();
                     this.notify.success(this.l('SuccessfullyDeleted'));
                 });

@@ -1,6 +1,6 @@
 ﻿namespace Suktas.Payroll.Authorization.Users
 {
-    public enum UserType
+    public enum UserTypeEnum
     {
         System=0,
         Company=1,

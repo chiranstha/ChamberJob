@@ -38,7 +38,7 @@ export class CreateOrEditCompanyTypeModalComponent extends AppComponentBase impl
             this.modal.show();
         } else {
             this._companyTypeServiceProxy.getCompanyTypeForEdit(companyTypeId).subscribe((result) => {
-                this.companyType = result.companyType;
+                this.companyType = result;
 
                 this.active = true;
                 this.modal.show();

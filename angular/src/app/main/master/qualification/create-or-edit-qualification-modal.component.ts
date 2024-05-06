@@ -38,7 +38,7 @@ export class CreateOrEditQualificationModalComponent extends AppComponentBase im
             this.modal.show();
         } else {
             this._qualificationServiceProxy.getQualificationForEdit(qualificationId).subscribe((result) => {
-                this.qualification = result.qualification;
+                this.qualification = result;
 
                 this.active = true;
                 this.modal.show();

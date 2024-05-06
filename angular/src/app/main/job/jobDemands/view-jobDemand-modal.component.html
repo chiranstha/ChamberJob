@@ -23,23 +23,23 @@
                 <div class="row">
                     <div class="col-6 mb-3">
                         <h6>{{ l('Name') }} :</h6>
-                        {{ item.jobDemand.name }}
+                        {{ item.name }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Address') }} :</h6>
-                        {{ item.jobDemand.address }}
+                        {{ item.address }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Date') }} :</h6>
-                        {{ item.jobDemand.date | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
+                        {{ item.date | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('Salary') }} :</h6>
-                        {{ item.jobDemand.salary }}
+                        {{ item.salary }}
                     </div>
                     <div class="col-6 mb-3">
                         <h6>{{ l('ExpiredDate') }} :</h6>
-                        {{ item.jobDemand.expiredDate | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
+                        {{ item.expiredDate | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
                     </div>
 
                     <div class="col-6 mb-3">

@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JobDemandsServiceProxy, JobDemandDto, ExperienceLevelEnum } from '@shared/service-proxies/service-proxies';
+import { JobDemandsServiceProxy, ExperienceLevelEnum } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from 'abp-ng2-module';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -84,10 +84,10 @@ export class JobDemandsComponent extends AppComponentBase {
         this.createOrEditJobDemandModal.show();
     }
 
-    deleteJobDemand(jobDemand: JobDemandDto): void {
+    deleteJobDemand(id: string): void {
         this.message.confirm('', this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._jobDemandsServiceProxy.delete(jobDemand.id).subscribe(() => {
+                this._jobDemandsServiceProxy.delete(id).subscribe(() => {
                     this.reloadPage();
                     this.notify.success(this.l('SuccessfullyDeleted'));
                 });

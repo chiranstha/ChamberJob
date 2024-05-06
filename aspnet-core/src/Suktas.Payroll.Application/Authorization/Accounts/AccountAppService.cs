@@ -108,6 +108,7 @@ namespace Suktas.Payroll.Authorization.Accounts
                 input.UserName,
                 input.Password,
                 false,
+                input.UserType,
                 AppUrlService.CreateEmailActivationUrlFormat(AbpSession.TenantId)
             );
 

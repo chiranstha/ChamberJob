@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Abp.Auditing;
 using Abp.Authorization.Users;
 using Abp.Extensions;
+using Suktas.Payroll.Authorization.Users;
 using Suktas.Payroll.Validation;
 
 namespace Suktas.Payroll.Authorization.Accounts.Dto
@@ -31,6 +32,8 @@ namespace Suktas.Payroll.Authorization.Accounts.Dto
         [StringLength(AbpUserBase.MaxPlainPasswordLength)]
         [DisableAuditing]
         public string Password { get; set; }
+
+        public UserTypeEnum UserType { get; set; }
 
         [DisableAuditing]
         public string CaptchaResponse { get; set; }

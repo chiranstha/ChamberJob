@@ -24,16 +24,16 @@ namespace Suktas.Payroll.Job
     {
         private readonly IRepository<Employee, Guid> _employeeRepository;
         private readonly IEmployeeExcelExporter _employeeExcelExporter;
-        private readonly IRepository<JobSkill, Guid> _lookup_jobSkillRepository;
+        private readonly IRepository<JobSkill, Guid> _lookupJobSkillRepository;
 
         private readonly ITempFileCacheManager _tempFileCacheManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
 
-        public EmployeeAppService(IRepository<Employee, Guid> employeeRepository, IEmployeeExcelExporter employeeExcelExporter, IRepository<JobSkill, Guid> lookup_jobSkillRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
+        public EmployeeAppService(IRepository<Employee, Guid> employeeRepository, IEmployeeExcelExporter employeeExcelExporter, IRepository<JobSkill, Guid> lookupJobSkillRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
         {
             _employeeRepository = employeeRepository;
             _employeeExcelExporter = employeeExcelExporter;
-            _lookup_jobSkillRepository = lookup_jobSkillRepository;
+            _lookupJobSkillRepository = lookupJobSkillRepository;
 
             _tempFileCacheManager = tempFileCacheManager;
             _binaryObjectManager = binaryObjectManager;
@@ -53,7 +53,7 @@ namespace Suktas.Payroll.Job
                 .PageBy(input);
 
             var employee = from o in pagedAndFilteredEmployee
-                           join o1 in _lookup_jobSkillRepository.GetAll() on o.JobSkillId equals o1.Id into j1
+                           join o1 in _lookupJobSkillRepository.GetAll() on o.JobSkillId equals o1.Id into j1
                            from s1 in j1.DefaultIfEmpty()
 
                            select new
@@ -64,8 +64,8 @@ namespace Suktas.Payroll.Job
                                o.Dbo,
                                o.Qualification,
                                o.ExpectedSalary,
-                               Id = o.Id,
-                               JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name.ToString()
+                               o.Id,
+                               JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name
                            };
 
             var totalCount = await filteredEmployee.CountAsync();
@@ -115,8 +115,8 @@ namespace Suktas.Payroll.Job
 
             if (output.JobSkillId != null)
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
-                output.JobSkillName = _lookupJobSkill?.Name?.ToString();
+                var lookupJobSkill = await _lookupJobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
+                output.JobSkillName = lookupJobSkill?.Name;
             }
 
             return output;
@@ -143,8 +143,8 @@ namespace Suktas.Payroll.Job
 
             if (output.JobSkillId != null)
             {
-                var _lookupJobSkill = await _lookup_jobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
-                output.JobSkillName = _lookupJobSkill?.Name?.ToString();
+                var lookupJobSkill = await _lookupJobSkillRepository.FirstOrDefaultAsync((Guid)output.JobSkillId);
+                output.JobSkillName = lookupJobSkill?.Name;
             }
 
             return output;
@@ -226,7 +226,7 @@ namespace Suktas.Payroll.Job
                         .WhereIf(!string.IsNullOrWhiteSpace(input.JobSkillNameFilter), e => e.JobSkillFk != null && e.JobSkillFk.Name == input.JobSkillNameFilter);
 
             var query = (from o in filteredEmployee
-                         join o1 in _lookup_jobSkillRepository.GetAll() on o.JobSkillId equals o1.Id into j1
+                         join o1 in _lookupJobSkillRepository.GetAll() on o.JobSkillId equals o1.Id into j1
                          from s1 in j1.DefaultIfEmpty()
 
                          select new GetEmployeeForViewDto()
@@ -238,7 +238,7 @@ namespace Suktas.Payroll.Job
                              Qualification = o.Qualification,
                              ExpectedSalary = o.ExpectedSalary,
                              Id = o.Id,
-                             JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name.ToString()
+                             JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name
                          });
 
             var employeeListDtos = await query.ToListAsync();
@@ -249,7 +249,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employee)]
         public async Task<List<EmployeeJobSkillLookupTableDto>> GetAllJobSkillForTableDropdown()
         {
-            return await _lookup_jobSkillRepository.GetAll()
+            return await _lookupJobSkillRepository.GetAll()
                 .Select(jobSkill => new EmployeeJobSkillLookupTableDto
                 {
                     Id = jobSkill.Id.ToString(),

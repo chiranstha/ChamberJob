@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeServiceProxy, EmployeeDto, GenderEnum } from '@shared/service-proxies/service-proxies';
+import { EmployeeServiceProxy, GenderEnum } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from 'abp-ng2-module';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -82,10 +82,10 @@ export class EmployeeComponent extends AppComponentBase {
         this.createOrEditEmployeeModal.show();
     }
 
-    deleteEmployee(employee: EmployeeDto): void {
+    deleteEmployee(id): void {
         this.message.confirm('', this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._employeeServiceProxy.delete(employee.id).subscribe(() => {
+                this._employeeServiceProxy.delete(id).subscribe(() => {
                     this.reloadPage();
                     this.notify.success(this.l('SuccessfullyDeleted'));
                 });

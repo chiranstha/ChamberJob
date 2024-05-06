@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Suktas.Payroll.Authorization.Users;
 
 namespace Suktas.Payroll.Sessions.Dto
 {
@@ -13,5 +14,7 @@ namespace Suktas.Payroll.Sessions.Dto
         public string EmailAddress { get; set; }
 
         public string ProfilePictureId { get; set; }
+
+        public UserTypeEnum UserType { get; set; }
     }
 }

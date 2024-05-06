@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GetJobDemandForViewDto, JobDemandDto, ExperienceLevelEnum } from '@shared/service-proxies/service-proxies';
+import { GetJobDemandForViewDto,  ExperienceLevelEnum } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -21,7 +21,6 @@ export class ViewJobDemandModalComponent extends AppComponentBase {
     constructor(injector: Injector) {
         super(injector);
         this.item = new GetJobDemandForViewDto();
-        this.item.jobDemand = new JobDemandDto();
     }
 
     show(item: GetJobDemandForViewDto): void {

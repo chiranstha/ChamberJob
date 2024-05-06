@@ -19,7 +19,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     animations: [accountModuleAnimation()],
 })
 export class RegisterComponent extends AppComponentBase implements OnInit, AfterViewInit {
-    model: RegisterModel = new RegisterModel();
+   
     passwordComplexitySetting: PasswordComplexitySetting = new PasswordComplexitySetting();
     saving = false;
 
@@ -43,6 +43,7 @@ export class RegisterComponent extends AppComponentBase implements OnInit, After
             return;
         }
 
+        this.createForm();
         this._profileService.getPasswordComplexitySetting().subscribe((result) => {
             this.passwordComplexitySetting = result.setting;
         });
@@ -50,20 +51,38 @@ export class RegisterComponent extends AppComponentBase implements OnInit, After
 
 
     createForm(item: any = {}) {
-    //     name!: string;
-    // surname!: string;
-    // userName!: string;
-    // emailAddress!: string;
-    // password!: string;
-    // captchaResponse!: string
-    //passwordRepeat
+
         this.form = this.fb.group({
             name: [item.name, Validators.required],
             surname: [item.surname ? item.surname : ""],
-            
+            userName: [item.userName, Validators.required],
+            emailAddress: [item.emailAddress, Validators.required],
 
-            
+            password: ['', [
+                Validators.required,
+                Validators.minLength(this.passwordComplexitySetting.requiredLength),
+                this.validatePassword.bind(this)
+            ]],
+
+            passwordRepeat: [item.passwordRepeat, Validators.required],
+            captchaResponse: [item.captchaResponse],
+            userType: [2, Validators.required]
         });
+    }
+
+    validatePassword(control) {
+        const value = control.value;
+        const hasDigit = /[0-9]/.test(value);
+        const hasLowercase = /[a-z]/.test(value);
+        const hasUppercase = /[A-Z]/.test(value);
+        const hasNonAlphanumeric = /[^0-9a-zA-Z]/.test(value);
+
+        const valid = this.passwordComplexitySetting.requireDigit ? hasDigit : true &&
+            this.passwordComplexitySetting.requireLowercase ? hasLowercase : true &&
+                this.passwordComplexitySetting.requireUppercase ? hasUppercase : true &&
+                    this.passwordComplexitySetting.requireNonAlphanumeric ? hasNonAlphanumeric : true;
+
+        return valid ? null : { invalidPassword: true };
     }
 
     ngAfterViewInit(): void {
@@ -71,11 +90,16 @@ export class RegisterComponent extends AppComponentBase implements OnInit, After
     }
 
     save(): void {
+        if (this.form.invalid) {
+            this.message.error(this.l('PleaseCompleteTheForm'));
+            console.log(this.form.errors)
+            return;
+        }
         let recaptchaCallback = (token: string) => {
             this.saving = true;
-            this.model.captchaResponse = token;
+            this.form.get('captchaResponse').setValue(token);
             this._accountService
-                .register(this.model)
+                .register(this.form.getRawValue())
                 .pipe(
                     finalize(() => {
                         this.saving = false;
@@ -90,8 +114,8 @@ export class RegisterComponent extends AppComponentBase implements OnInit, After
 
                     //Autheticate
                     this.saving = true;
-                    this._loginService.authenticateModel.userNameOrEmailAddress = this.model.userName;
-                    this._loginService.authenticateModel.password = this.model.password;
+                    this._loginService.authenticateModel.userNameOrEmailAddress =  this.form.get('userName').value;
+                    this._loginService.authenticateModel.password =  this.form.get('password').value;
                     this._loginService.authenticate(() => {
                         this.saving = false;
                     });

@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { AppRouteGuard } from './shared/common/auth/auth-route-guard';
 import { NotificationsComponent } from './shared/layout/notifications/notifications.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { JobdemandComponent } from './main/employment/jobdemand/jobdemand.component';
 
 @NgModule({
     imports: [
@@ -18,6 +19,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
                         path: '',
                         children: [
                             { path: 'notifications', component: NotificationsComponent },
+                        
+
                             { path: '', redirectTo: '/app/main/dashboard', pathMatch: 'full' },
                         ],
                     },
@@ -31,6 +34,14 @@ import { NgxSpinnerService } from 'ngx-spinner';
                         loadChildren: () => import('app/admin/admin.module').then((m) => m.AdminModule), //Lazy load admin module
                         data: { preload: true },
                         canLoad: [AppRouteGuard],
+                    },
+
+                    {
+                        path: 'employment',
+                        loadChildren: () => import('app/main/employment/employment.module').then(m => m.EmploymentModule),
+                        data: { preload: true },
+                        canLoad: [AppRouteGuard],
+
                     },
                     {
                         path: '**',

@@ -18,12 +18,12 @@ namespace Suktas.Payroll.Job
     public class EmploymentsAppService : PayrollAppServiceBase, IEmploymentsAppService
     {
         private readonly IRepository<Employment, Guid> _employmentRepository;
-        private readonly IRepository<Company, int> _lookup_companyRepository;
+        private readonly IRepository<Company, int> _lookupCompanyRepository;
 
-        public EmploymentsAppService(IRepository<Employment, Guid> employmentRepository, IRepository<Company, int> lookup_companyRepository)
+        public EmploymentsAppService(IRepository<Employment, Guid> employmentRepository, IRepository<Company, int> lookupCompanyRepository)
         {
             _employmentRepository = employmentRepository;
-            _lookup_companyRepository = lookup_companyRepository;
+            _lookupCompanyRepository = lookupCompanyRepository;
 
         }
 
@@ -42,7 +42,7 @@ namespace Suktas.Payroll.Job
                 .PageBy(input);
 
             var employments = from o in pagedAndFilteredEmployments
-                              join o1 in _lookup_companyRepository.GetAll() on o.CompanyId equals o1.Id into j1
+                              join o1 in _lookupCompanyRepository.GetAll() on o.CompanyId equals o1.Id into j1
                               from s1 in j1.DefaultIfEmpty()
 
                               select new
@@ -62,7 +62,7 @@ namespace Suktas.Payroll.Job
                                   o.Trainer,
                                   o.DailyWages,
                                   o.Id,
-                                  CompanyName = s1 == null || s1.Name == null ? "" : s1.Name.ToString()
+                                  CompanyName = s1 == null || s1.Name == null ? "" : s1.Name
                               };
 
             var totalCount = await filteredEmployments.CountAsync();
@@ -126,8 +126,8 @@ namespace Suktas.Payroll.Job
 
             if (output.CompanyId != null)
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
-                output.CompanyName = _lookupCompany?.Name?.ToString();
+                var lookupCompany = await _lookupCompanyRepository.FirstOrDefaultAsync((int)output.CompanyId);
+                output.CompanyName = lookupCompany?.Name;
             }
 
             return output;
@@ -158,8 +158,8 @@ namespace Suktas.Payroll.Job
 
             if (output.CompanyId != null)
             {
-                var _lookupCompany = await _lookup_companyRepository.FirstOrDefaultAsync((int)output.CompanyId);
-                output.CompanyName = _lookupCompany?.Name?.ToString();
+                var lookupCompany = await _lookupCompanyRepository.FirstOrDefaultAsync((int)output.CompanyId);
+                output.CompanyName = lookupCompany?.Name;
             }
 
             return output;
@@ -241,7 +241,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employments)]
         public async Task<List<EmploymentCompanyLookupTableDto>> GetAllCompanyForTableDropdown()
         {
-            return await _lookup_companyRepository.GetAll()
+            return await _lookupCompanyRepository.GetAll()
                 .Select(company => new EmploymentCompanyLookupTableDto
                 {
                     Id = company.Id,

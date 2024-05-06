@@ -48,13 +48,19 @@ import { RouterModule } from '@angular/router';
                         loadChildren: () => import('./master/qualification/qualification.module').then(m => m.QualificationModule),
                         data: { permission: 'Pages.Qualification' }
                     },
+
+                    {
+                        path: 'master/qualification',
+                        loadChildren: () => import('./master/qualification/qualification.module').then(m => m.QualificationModule),
+                        data: { permission: 'Pages.Qualification' }
+                    },
+
+                    
                 
                     
-                    {
-                        path: 'master/companyCategory',
-                        loadChildren: () => import('./master/companyCategory/companyCategory.module').then(m => m.CompanyCategoryModule),
-                        data: { permission: 'Pages.CompanyCategory' }
-                    },
+                  
+
+                   
                 
                     
                     {
@@ -88,7 +94,7 @@ import { RouterModule } from '@angular/router';
                     {
                         path: 'dashboard',
                         loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
-                        data: { permission: 'Pages.Tenant.Dashboard' },
+                        data: {  },
                     },
                     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
                     { path: '**', redirectTo: 'dashboard' },

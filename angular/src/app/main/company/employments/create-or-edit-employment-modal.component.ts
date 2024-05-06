@@ -47,10 +47,7 @@ export class CreateOrEditEmploymentModalComponent extends AppComponentBase imple
             this.modal.show();
         } else {
             this._employmentsServiceProxy.getEmploymentForEdit(employmentId).subscribe((result) => {
-                this.employment = result.employment;
-
-                this.companyName = result.companyName;
-
+                this.employment = result;
                 this.active = true;
                 this.modal.show();
             });

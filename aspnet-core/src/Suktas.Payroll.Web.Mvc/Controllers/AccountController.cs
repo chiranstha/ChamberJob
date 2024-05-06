@@ -558,6 +558,7 @@ namespace Suktas.Payroll.Web.Controllers
                     model.UserName,
                     model.Password,
                     false,
+                    model.UserType,
                     _appUrlService.CreateEmailActivationUrlFormat(AbpSession.TenantId)
                 );
 

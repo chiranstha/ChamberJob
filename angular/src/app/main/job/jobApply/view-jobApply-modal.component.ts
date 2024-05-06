@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GetJobApplyForViewDto, JobApplyDto } from '@shared/service-proxies/service-proxies';
+import { GetJobApplyForViewDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -20,7 +20,6 @@ export class ViewJobApplyModalComponent extends AppComponentBase {
     constructor(injector: Injector) {
         super(injector);
         this.item = new GetJobApplyForViewDto();
-        this.item.jobApply = new JobApplyDto();
     }
 
     show(item: GetJobApplyForViewDto): void {

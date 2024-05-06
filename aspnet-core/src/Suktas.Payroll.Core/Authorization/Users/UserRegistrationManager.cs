@@ -53,7 +53,7 @@ namespace Suktas.Payroll.Authorization.Users
             AsyncQueryableExecuter = NullAsyncQueryableExecuter.Instance;
         }
 
-        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, string emailActivationLink)
+        public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed,UserTypeEnum userType, string emailActivationLink)
         {
             CheckForTenant();
             CheckSelfRegistrationIsEnabled();
@@ -72,6 +72,7 @@ namespace Suktas.Payroll.Authorization.Users
                 IsActive = isNewRegisteredUserActiveByDefault,
                 UserName = userName,
                 IsEmailConfirmed = isEmailConfirmed,
+                UserType = userType,
                 Roles = new List<UserRole>()
             };
 

@@ -32,6 +32,8 @@ namespace Suktas.Payroll.Web.Models.Account
         [DisableAuditing]
         public string Password { get; set; }
 
+        public UserTypeEnum UserType { get; set; }
+
         public bool IsExternalLogin { get; set; }
 
         public string ExternalLoginAuthSchema { get; set; }

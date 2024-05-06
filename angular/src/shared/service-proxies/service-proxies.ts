@@ -8562,6 +8562,87 @@ export class JobApplyServiceProxy {
     /**
      * @param filter (optional) 
      * @param companyNameFilter (optional) 
+     * @param jobSkillNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllJobDemand(filter: string | undefined, companyNameFilter: string | undefined, jobSkillNameFilter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<PagedResultDtoOfGetJobDemandForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobApply/GetAllJobDemand?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (companyNameFilter === null)
+            throw new Error("The parameter 'companyNameFilter' cannot be null.");
+        else if (companyNameFilter !== undefined)
+            url_ += "CompanyNameFilter=" + encodeURIComponent("" + companyNameFilter) + "&";
+        if (jobSkillNameFilter === null)
+            throw new Error("The parameter 'jobSkillNameFilter' cannot be null.");
+        else if (jobSkillNameFilter !== undefined)
+            url_ += "JobSkillNameFilter=" + encodeURIComponent("" + jobSkillNameFilter) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllJobDemand(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllJobDemand(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PagedResultDtoOfGetJobDemandForViewDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PagedResultDtoOfGetJobDemandForViewDto>;
+        }));
+    }
+
+    protected processGetAllJobDemand(response: HttpResponseBase): Observable<PagedResultDtoOfGetJobDemandForViewDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PagedResultDtoOfGetJobDemandForViewDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param companyNameFilter (optional) 
      * @param jobDemandNameFilter (optional) 
      * @param employeeNameFilter (optional) 
      * @param sorting (optional) 
@@ -20373,6 +20454,7 @@ export class AuthenticateResultModel implements IAuthenticateResultModel {
     refreshToken!: string | undefined;
     refreshTokenExpireInSeconds!: number;
     c!: string | undefined;
+    userType!: UserTypeEnum;
 
     constructor(data?: IAuthenticateResultModel) {
         if (data) {
@@ -20402,6 +20484,7 @@ export class AuthenticateResultModel implements IAuthenticateResultModel {
             this.refreshToken = _data["refreshToken"];
             this.refreshTokenExpireInSeconds = _data["refreshTokenExpireInSeconds"];
             this.c = _data["c"];
+            this.userType = _data["userType"];
         }
     }
 
@@ -20431,6 +20514,7 @@ export class AuthenticateResultModel implements IAuthenticateResultModel {
         data["refreshToken"] = this.refreshToken;
         data["refreshTokenExpireInSeconds"] = this.refreshTokenExpireInSeconds;
         data["c"] = this.c;
+        data["userType"] = this.userType;
         return data;
     }
 }
@@ -20449,6 +20533,7 @@ export interface IAuthenticateResultModel {
     refreshToken: string | undefined;
     refreshTokenExpireInSeconds: number;
     c: string | undefined;
+    userType: UserTypeEnum;
 }
 
 export class BlockUserInput implements IBlockUserInput {
@@ -20862,50 +20947,6 @@ export interface IComboboxItemDto {
     isSelected: boolean;
 }
 
-export class CompanyCategoryDto implements ICompanyCategoryDto {
-    name!: string | undefined;
-    description!: string | undefined;
-    id!: number;
-
-    constructor(data?: ICompanyCategoryDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CompanyCategoryDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyCategoryDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICompanyCategoryDto {
-    name: string | undefined;
-    description: string | undefined;
-    id: number;
-}
-
 export class CompanyCompanyCategoryLookupTableDto implements ICompanyCompanyCategoryLookupTableDto {
     id!: number;
     displayName!: string | undefined;
@@ -20984,118 +21025,6 @@ export class CompanyCompanyTypeLookupTableDto implements ICompanyCompanyTypeLook
 export interface ICompanyCompanyTypeLookupTableDto {
     id: string | undefined;
     displayName: string | undefined;
-}
-
-export class CompanyDto implements ICompanyDto {
-    name!: string | undefined;
-    address!: string | undefined;
-    authorizedPerson!: string | undefined;
-    contactNo!: string | undefined;
-    businessNature!: BusinessNatureEnum;
-    establishedYear!: string | undefined;
-    companyCategoryId!: number;
-    companyTypeId!: string;
-    id!: number;
-
-    constructor(data?: ICompanyDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.address = _data["address"];
-            this.authorizedPerson = _data["authorizedPerson"];
-            this.contactNo = _data["contactNo"];
-            this.businessNature = _data["businessNature"];
-            this.establishedYear = _data["establishedYear"];
-            this.companyCategoryId = _data["companyCategoryId"];
-            this.companyTypeId = _data["companyTypeId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CompanyDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["address"] = this.address;
-        data["authorizedPerson"] = this.authorizedPerson;
-        data["contactNo"] = this.contactNo;
-        data["businessNature"] = this.businessNature;
-        data["establishedYear"] = this.establishedYear;
-        data["companyCategoryId"] = this.companyCategoryId;
-        data["companyTypeId"] = this.companyTypeId;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICompanyDto {
-    name: string | undefined;
-    address: string | undefined;
-    authorizedPerson: string | undefined;
-    contactNo: string | undefined;
-    businessNature: BusinessNatureEnum;
-    establishedYear: string | undefined;
-    companyCategoryId: number;
-    companyTypeId: string;
-    id: number;
-}
-
-export class CompanyTypeDto implements ICompanyTypeDto {
-    name!: string | undefined;
-    description!: string | undefined;
-    id!: string;
-
-    constructor(data?: ICompanyTypeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CompanyTypeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CompanyTypeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICompanyTypeDto {
-    name: string | undefined;
-    description: string | undefined;
-    id: string;
 }
 
 export class CreateEditionDto implements ICreateEditionDto {
@@ -23416,70 +23345,6 @@ export interface IEmailSettingsEditDto {
     smtpUseDefaultCredentials: boolean;
 }
 
-export class EmployeeDto implements IEmployeeDto {
-    name!: string | undefined;
-    phoneNo!: string | undefined;
-    gender!: GenderEnum;
-    dbo!: DateTime;
-    qualification!: string | undefined;
-    expectedSalary!: number;
-    jobSkillId!: string;
-    id!: string;
-
-    constructor(data?: IEmployeeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.phoneNo = _data["phoneNo"];
-            this.gender = _data["gender"];
-            this.dbo = _data["dbo"] ? DateTime.fromISO(_data["dbo"].toString()) : <any>undefined;
-            this.qualification = _data["qualification"];
-            this.expectedSalary = _data["expectedSalary"];
-            this.jobSkillId = _data["jobSkillId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): EmployeeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new EmployeeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["phoneNo"] = this.phoneNo;
-        data["gender"] = this.gender;
-        data["dbo"] = this.dbo ? this.dbo.toString() : <any>undefined;
-        data["qualification"] = this.qualification;
-        data["expectedSalary"] = this.expectedSalary;
-        data["jobSkillId"] = this.jobSkillId;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IEmployeeDto {
-    name: string | undefined;
-    phoneNo: string | undefined;
-    gender: GenderEnum;
-    dbo: DateTime;
-    qualification: string | undefined;
-    expectedSalary: number;
-    jobSkillId: string;
-    id: string;
-}
-
 export class EmployeeJobSkillLookupTableDto implements IEmployeeJobSkillLookupTableDto {
     id!: string | undefined;
     displayName!: string | undefined;
@@ -23558,98 +23423,6 @@ export class EmploymentCompanyLookupTableDto implements IEmploymentCompanyLookup
 export interface IEmploymentCompanyLookupTableDto {
     id: number;
     displayName: string | undefined;
-}
-
-export class EmploymentDto implements IEmploymentDto {
-    total!: number;
-    male!: number;
-    female!: number;
-    foreign!: number;
-    impairment!: number;
-    salaryStart!: number;
-    salaryEnd!: number;
-    ageStart!: number;
-    ageEnd!: number;
-    parment!: number;
-    temporary!: number;
-    trainer!: number;
-    dailyWages!: number;
-    companyId!: number | undefined;
-    id!: string;
-
-    constructor(data?: IEmploymentDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.total = _data["total"];
-            this.male = _data["male"];
-            this.female = _data["female"];
-            this.foreign = _data["foreign"];
-            this.impairment = _data["impairment"];
-            this.salaryStart = _data["salaryStart"];
-            this.salaryEnd = _data["salaryEnd"];
-            this.ageStart = _data["ageStart"];
-            this.ageEnd = _data["ageEnd"];
-            this.parment = _data["parment"];
-            this.temporary = _data["temporary"];
-            this.trainer = _data["trainer"];
-            this.dailyWages = _data["dailyWages"];
-            this.companyId = _data["companyId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): EmploymentDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new EmploymentDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["total"] = this.total;
-        data["male"] = this.male;
-        data["female"] = this.female;
-        data["foreign"] = this.foreign;
-        data["impairment"] = this.impairment;
-        data["salaryStart"] = this.salaryStart;
-        data["salaryEnd"] = this.salaryEnd;
-        data["ageStart"] = this.ageStart;
-        data["ageEnd"] = this.ageEnd;
-        data["parment"] = this.parment;
-        data["temporary"] = this.temporary;
-        data["trainer"] = this.trainer;
-        data["dailyWages"] = this.dailyWages;
-        data["companyId"] = this.companyId;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IEmploymentDto {
-    total: number;
-    male: number;
-    female: number;
-    foreign: number;
-    impairment: number;
-    salaryStart: number;
-    salaryEnd: number;
-    ageStart: number;
-    ageEnd: number;
-    parment: number;
-    temporary: number;
-    trainer: number;
-    dailyWages: number;
-    companyId: number | undefined;
-    id: string;
 }
 
 export class EntityChangeListDto implements IEntityChangeListDto {
@@ -24431,54 +24204,6 @@ export interface IFileDto {
     fileName: string;
     fileType: string | undefined;
     fileToken: string;
-}
-
-export class FinancialYearDto implements IFinancialYearDto {
-    name!: string | undefined;
-    fromMiti!: string | undefined;
-    toMiti!: string | undefined;
-    id!: string;
-
-    constructor(data?: IFinancialYearDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.fromMiti = _data["fromMiti"];
-            this.toMiti = _data["toMiti"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): FinancialYearDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new FinancialYearDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["fromMiti"] = this.fromMiti;
-        data["toMiti"] = this.toMiti;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IFinancialYearDto {
-    name: string | undefined;
-    fromMiti: string | undefined;
-    toMiti: string | undefined;
-    id: string;
 }
 
 export class FindOrganizationUnitRolesInput implements IFindOrganizationUnitRolesInput {
@@ -25377,7 +25102,9 @@ export interface IGetAllSubscriptionsOutput {
 }
 
 export class GetCompanyCategoryForEditOutput implements IGetCompanyCategoryForEditOutput {
-    companyCategory!: CreateOrEditCompanyCategoryDto;
+    name!: string;
+    description!: string | undefined;
+    id!: number | undefined;
 
     constructor(data?: IGetCompanyCategoryForEditOutput) {
         if (data) {
@@ -25390,7 +25117,9 @@ export class GetCompanyCategoryForEditOutput implements IGetCompanyCategoryForEd
 
     init(_data?: any) {
         if (_data) {
-            this.companyCategory = _data["companyCategory"] ? CreateOrEditCompanyCategoryDto.fromJS(_data["companyCategory"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -25403,17 +25132,23 @@ export class GetCompanyCategoryForEditOutput implements IGetCompanyCategoryForEd
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyCategory"] = this.companyCategory ? this.companyCategory.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyCategoryForEditOutput {
-    companyCategory: CreateOrEditCompanyCategoryDto;
+    name: string;
+    description: string | undefined;
+    id: number | undefined;
 }
 
 export class GetCompanyCategoryForViewDto implements IGetCompanyCategoryForViewDto {
-    companyCategory!: CompanyCategoryDto;
+    name!: string | undefined;
+    description!: string | undefined;
+    id!: number;
 
     constructor(data?: IGetCompanyCategoryForViewDto) {
         if (data) {
@@ -25426,7 +25161,9 @@ export class GetCompanyCategoryForViewDto implements IGetCompanyCategoryForViewD
 
     init(_data?: any) {
         if (_data) {
-            this.companyCategory = _data["companyCategory"] ? CompanyCategoryDto.fromJS(_data["companyCategory"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -25439,20 +25176,36 @@ export class GetCompanyCategoryForViewDto implements IGetCompanyCategoryForViewD
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyCategory"] = this.companyCategory ? this.companyCategory.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyCategoryForViewDto {
-    companyCategory: CompanyCategoryDto;
+    name: string | undefined;
+    description: string | undefined;
+    id: number;
 }
 
 export class GetCompanyForEditOutput implements IGetCompanyForEditOutput {
-    company!: CreateOrEditCompanyDto;
+    name!: string;
+    address!: string;
+    authorizedPerson!: string | undefined;
+    contactNo!: string;
+    businessNature!: BusinessNatureEnum;
+    establishedYear!: string | undefined;
+    website!: string | undefined;
+    vatNo!: string | undefined;
+    logo!: string | undefined;
+    logoToken!: string | undefined;
+    companyCategoryId!: number;
+    companyTypeId!: string;
     companyCategoryName!: string | undefined;
     companyTypeName!: string | undefined;
     logoFileName!: string | undefined;
+    id!: number | undefined;
 
     constructor(data?: IGetCompanyForEditOutput) {
         if (data) {
@@ -25465,10 +25218,22 @@ export class GetCompanyForEditOutput implements IGetCompanyForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.company = _data["company"] ? CreateOrEditCompanyDto.fromJS(_data["company"]) : <any>undefined;
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.authorizedPerson = _data["authorizedPerson"];
+            this.contactNo = _data["contactNo"];
+            this.businessNature = _data["businessNature"];
+            this.establishedYear = _data["establishedYear"];
+            this.website = _data["website"];
+            this.vatNo = _data["vatNo"];
+            this.logo = _data["logo"];
+            this.logoToken = _data["logoToken"];
+            this.companyCategoryId = _data["companyCategoryId"];
+            this.companyTypeId = _data["companyTypeId"];
             this.companyCategoryName = _data["companyCategoryName"];
             this.companyTypeName = _data["companyTypeName"];
             this.logoFileName = _data["logoFileName"];
+            this.id = _data["id"];
         }
     }
 
@@ -25481,25 +25246,57 @@ export class GetCompanyForEditOutput implements IGetCompanyForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["authorizedPerson"] = this.authorizedPerson;
+        data["contactNo"] = this.contactNo;
+        data["businessNature"] = this.businessNature;
+        data["establishedYear"] = this.establishedYear;
+        data["website"] = this.website;
+        data["vatNo"] = this.vatNo;
+        data["logo"] = this.logo;
+        data["logoToken"] = this.logoToken;
+        data["companyCategoryId"] = this.companyCategoryId;
+        data["companyTypeId"] = this.companyTypeId;
         data["companyCategoryName"] = this.companyCategoryName;
         data["companyTypeName"] = this.companyTypeName;
         data["logoFileName"] = this.logoFileName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyForEditOutput {
-    company: CreateOrEditCompanyDto;
+    name: string;
+    address: string;
+    authorizedPerson: string | undefined;
+    contactNo: string;
+    businessNature: BusinessNatureEnum;
+    establishedYear: string | undefined;
+    website: string | undefined;
+    vatNo: string | undefined;
+    logo: string | undefined;
+    logoToken: string | undefined;
+    companyCategoryId: number;
+    companyTypeId: string;
     companyCategoryName: string | undefined;
     companyTypeName: string | undefined;
     logoFileName: string | undefined;
+    id: number | undefined;
 }
 
 export class GetCompanyForViewDto implements IGetCompanyForViewDto {
-    company!: CompanyDto;
+    name!: string | undefined;
+    address!: string | undefined;
+    authorizedPerson!: string | undefined;
+    contactNo!: string | undefined;
+    businessNature!: BusinessNatureEnum;
+    establishedYear!: string | undefined;
+    companyCategoryId!: number;
+    companyTypeId!: string;
     companyCategoryName!: string | undefined;
     companyTypeName!: string | undefined;
+    id!: number;
 
     constructor(data?: IGetCompanyForViewDto) {
         if (data) {
@@ -25512,9 +25309,17 @@ export class GetCompanyForViewDto implements IGetCompanyForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.company = _data["company"] ? CompanyDto.fromJS(_data["company"]) : <any>undefined;
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.authorizedPerson = _data["authorizedPerson"];
+            this.contactNo = _data["contactNo"];
+            this.businessNature = _data["businessNature"];
+            this.establishedYear = _data["establishedYear"];
+            this.companyCategoryId = _data["companyCategoryId"];
+            this.companyTypeId = _data["companyTypeId"];
             this.companyCategoryName = _data["companyCategoryName"];
             this.companyTypeName = _data["companyTypeName"];
+            this.id = _data["id"];
         }
     }
 
@@ -25527,21 +25332,39 @@ export class GetCompanyForViewDto implements IGetCompanyForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["company"] = this.company ? this.company.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["authorizedPerson"] = this.authorizedPerson;
+        data["contactNo"] = this.contactNo;
+        data["businessNature"] = this.businessNature;
+        data["establishedYear"] = this.establishedYear;
+        data["companyCategoryId"] = this.companyCategoryId;
+        data["companyTypeId"] = this.companyTypeId;
         data["companyCategoryName"] = this.companyCategoryName;
         data["companyTypeName"] = this.companyTypeName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyForViewDto {
-    company: CompanyDto;
+    name: string | undefined;
+    address: string | undefined;
+    authorizedPerson: string | undefined;
+    contactNo: string | undefined;
+    businessNature: BusinessNatureEnum;
+    establishedYear: string | undefined;
+    companyCategoryId: number;
+    companyTypeId: string;
     companyCategoryName: string | undefined;
     companyTypeName: string | undefined;
+    id: number;
 }
 
 export class GetCompanyTypeForEditOutput implements IGetCompanyTypeForEditOutput {
-    companyType!: CreateOrEditCompanyTypeDto;
+    name!: string;
+    description!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetCompanyTypeForEditOutput) {
         if (data) {
@@ -25554,7 +25377,9 @@ export class GetCompanyTypeForEditOutput implements IGetCompanyTypeForEditOutput
 
     init(_data?: any) {
         if (_data) {
-            this.companyType = _data["companyType"] ? CreateOrEditCompanyTypeDto.fromJS(_data["companyType"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -25567,17 +25392,23 @@ export class GetCompanyTypeForEditOutput implements IGetCompanyTypeForEditOutput
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyType"] = this.companyType ? this.companyType.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyTypeForEditOutput {
-    companyType: CreateOrEditCompanyTypeDto;
+    name: string;
+    description: string | undefined;
+    id: string | undefined;
 }
 
 export class GetCompanyTypeForViewDto implements IGetCompanyTypeForViewDto {
-    companyType!: CompanyTypeDto;
+    name!: string | undefined;
+    description!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetCompanyTypeForViewDto) {
         if (data) {
@@ -25590,7 +25421,9 @@ export class GetCompanyTypeForViewDto implements IGetCompanyTypeForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.companyType = _data["companyType"] ? CompanyTypeDto.fromJS(_data["companyType"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -25603,13 +25436,17 @@ export class GetCompanyTypeForViewDto implements IGetCompanyTypeForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["companyType"] = this.companyType ? this.companyType.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetCompanyTypeForViewDto {
-    companyType: CompanyTypeDto;
+    name: string | undefined;
+    description: string | undefined;
+    id: string;
 }
 
 export class GetCurrentLoginInformationsOutput implements IGetCurrentLoginInformationsOutput {
@@ -25965,9 +25802,20 @@ export interface IGetEditionTenantStatisticsOutput {
 }
 
 export class GetEmployeeForEditOutput implements IGetEmployeeForEditOutput {
-    employee!: CreateOrEditEmployeeDto;
+    name!: string | undefined;
+    phoneNo!: string | undefined;
+    gender!: GenderEnum;
+    dbo!: DateTime;
+    experience!: string | undefined;
+    qualification!: string | undefined;
+    expectedSalary!: number;
+    commitmentYear!: number;
+    photo!: string | undefined;
+    photoToken!: string | undefined;
+    jobSkillId!: string;
     jobSkillName!: string | undefined;
     photoFileName!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetEmployeeForEditOutput) {
         if (data) {
@@ -25980,9 +25828,20 @@ export class GetEmployeeForEditOutput implements IGetEmployeeForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.employee = _data["employee"] ? CreateOrEditEmployeeDto.fromJS(_data["employee"]) : <any>undefined;
+            this.name = _data["name"];
+            this.phoneNo = _data["phoneNo"];
+            this.gender = _data["gender"];
+            this.dbo = _data["dbo"] ? DateTime.fromISO(_data["dbo"].toString()) : <any>undefined;
+            this.experience = _data["experience"];
+            this.qualification = _data["qualification"];
+            this.expectedSalary = _data["expectedSalary"];
+            this.commitmentYear = _data["commitmentYear"];
+            this.photo = _data["photo"];
+            this.photoToken = _data["photoToken"];
+            this.jobSkillId = _data["jobSkillId"];
             this.jobSkillName = _data["jobSkillName"];
             this.photoFileName = _data["photoFileName"];
+            this.id = _data["id"];
         }
     }
 
@@ -25995,22 +25854,51 @@ export class GetEmployeeForEditOutput implements IGetEmployeeForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["employee"] = this.employee ? this.employee.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["phoneNo"] = this.phoneNo;
+        data["gender"] = this.gender;
+        data["dbo"] = this.dbo ? this.dbo.toString() : <any>undefined;
+        data["experience"] = this.experience;
+        data["qualification"] = this.qualification;
+        data["expectedSalary"] = this.expectedSalary;
+        data["commitmentYear"] = this.commitmentYear;
+        data["photo"] = this.photo;
+        data["photoToken"] = this.photoToken;
+        data["jobSkillId"] = this.jobSkillId;
         data["jobSkillName"] = this.jobSkillName;
         data["photoFileName"] = this.photoFileName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetEmployeeForEditOutput {
-    employee: CreateOrEditEmployeeDto;
+    name: string | undefined;
+    phoneNo: string | undefined;
+    gender: GenderEnum;
+    dbo: DateTime;
+    experience: string | undefined;
+    qualification: string | undefined;
+    expectedSalary: number;
+    commitmentYear: number;
+    photo: string | undefined;
+    photoToken: string | undefined;
+    jobSkillId: string;
     jobSkillName: string | undefined;
     photoFileName: string | undefined;
+    id: string | undefined;
 }
 
 export class GetEmployeeForViewDto implements IGetEmployeeForViewDto {
-    employee!: EmployeeDto;
+    name!: string | undefined;
+    phoneNo!: string | undefined;
+    gender!: GenderEnum;
+    dbo!: DateTime;
+    qualification!: string | undefined;
+    expectedSalary!: number;
+    jobSkillId!: string;
     jobSkillName!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetEmployeeForViewDto) {
         if (data) {
@@ -26023,8 +25911,15 @@ export class GetEmployeeForViewDto implements IGetEmployeeForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.employee = _data["employee"] ? EmployeeDto.fromJS(_data["employee"]) : <any>undefined;
+            this.name = _data["name"];
+            this.phoneNo = _data["phoneNo"];
+            this.gender = _data["gender"];
+            this.dbo = _data["dbo"] ? DateTime.fromISO(_data["dbo"].toString()) : <any>undefined;
+            this.qualification = _data["qualification"];
+            this.expectedSalary = _data["expectedSalary"];
+            this.jobSkillId = _data["jobSkillId"];
             this.jobSkillName = _data["jobSkillName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26037,20 +25932,48 @@ export class GetEmployeeForViewDto implements IGetEmployeeForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["employee"] = this.employee ? this.employee.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["phoneNo"] = this.phoneNo;
+        data["gender"] = this.gender;
+        data["dbo"] = this.dbo ? this.dbo.toString() : <any>undefined;
+        data["qualification"] = this.qualification;
+        data["expectedSalary"] = this.expectedSalary;
+        data["jobSkillId"] = this.jobSkillId;
         data["jobSkillName"] = this.jobSkillName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetEmployeeForViewDto {
-    employee: EmployeeDto;
+    name: string | undefined;
+    phoneNo: string | undefined;
+    gender: GenderEnum;
+    dbo: DateTime;
+    qualification: string | undefined;
+    expectedSalary: number;
+    jobSkillId: string;
     jobSkillName: string | undefined;
+    id: string;
 }
 
 export class GetEmploymentForEditOutput implements IGetEmploymentForEditOutput {
-    employment!: CreateOrEditEmploymentDto;
+    total!: number;
+    male!: number;
+    female!: number;
+    foreign!: number;
+    impairment!: number;
+    salaryStart!: number;
+    salaryEnd!: number;
+    ageStart!: number;
+    ageEnd!: number;
+    parment!: number;
+    temporary!: number;
+    trainer!: number;
+    dailyWages!: number;
+    companyId!: number | undefined;
     companyName!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetEmploymentForEditOutput) {
         if (data) {
@@ -26063,8 +25986,22 @@ export class GetEmploymentForEditOutput implements IGetEmploymentForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.employment = _data["employment"] ? CreateOrEditEmploymentDto.fromJS(_data["employment"]) : <any>undefined;
+            this.total = _data["total"];
+            this.male = _data["male"];
+            this.female = _data["female"];
+            this.foreign = _data["foreign"];
+            this.impairment = _data["impairment"];
+            this.salaryStart = _data["salaryStart"];
+            this.salaryEnd = _data["salaryEnd"];
+            this.ageStart = _data["ageStart"];
+            this.ageEnd = _data["ageEnd"];
+            this.parment = _data["parment"];
+            this.temporary = _data["temporary"];
+            this.trainer = _data["trainer"];
+            this.dailyWages = _data["dailyWages"];
+            this.companyId = _data["companyId"];
             this.companyName = _data["companyName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26077,20 +26014,62 @@ export class GetEmploymentForEditOutput implements IGetEmploymentForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["employment"] = this.employment ? this.employment.toJSON() : <any>undefined;
+        data["total"] = this.total;
+        data["male"] = this.male;
+        data["female"] = this.female;
+        data["foreign"] = this.foreign;
+        data["impairment"] = this.impairment;
+        data["salaryStart"] = this.salaryStart;
+        data["salaryEnd"] = this.salaryEnd;
+        data["ageStart"] = this.ageStart;
+        data["ageEnd"] = this.ageEnd;
+        data["parment"] = this.parment;
+        data["temporary"] = this.temporary;
+        data["trainer"] = this.trainer;
+        data["dailyWages"] = this.dailyWages;
+        data["companyId"] = this.companyId;
         data["companyName"] = this.companyName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetEmploymentForEditOutput {
-    employment: CreateOrEditEmploymentDto;
+    total: number;
+    male: number;
+    female: number;
+    foreign: number;
+    impairment: number;
+    salaryStart: number;
+    salaryEnd: number;
+    ageStart: number;
+    ageEnd: number;
+    parment: number;
+    temporary: number;
+    trainer: number;
+    dailyWages: number;
+    companyId: number | undefined;
     companyName: string | undefined;
+    id: string | undefined;
 }
 
 export class GetEmploymentForViewDto implements IGetEmploymentForViewDto {
-    employment!: EmploymentDto;
+    total!: number;
+    male!: number;
+    female!: number;
+    foreign!: number;
+    impairment!: number;
+    salaryStart!: number;
+    salaryEnd!: number;
+    ageStart!: number;
+    ageEnd!: number;
+    parment!: number;
+    temporary!: number;
+    trainer!: number;
+    dailyWages!: number;
+    companyId!: number | undefined;
     companyName!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetEmploymentForViewDto) {
         if (data) {
@@ -26103,8 +26082,22 @@ export class GetEmploymentForViewDto implements IGetEmploymentForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.employment = _data["employment"] ? EmploymentDto.fromJS(_data["employment"]) : <any>undefined;
+            this.total = _data["total"];
+            this.male = _data["male"];
+            this.female = _data["female"];
+            this.foreign = _data["foreign"];
+            this.impairment = _data["impairment"];
+            this.salaryStart = _data["salaryStart"];
+            this.salaryEnd = _data["salaryEnd"];
+            this.ageStart = _data["ageStart"];
+            this.ageEnd = _data["ageEnd"];
+            this.parment = _data["parment"];
+            this.temporary = _data["temporary"];
+            this.trainer = _data["trainer"];
+            this.dailyWages = _data["dailyWages"];
+            this.companyId = _data["companyId"];
             this.companyName = _data["companyName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26117,15 +26110,43 @@ export class GetEmploymentForViewDto implements IGetEmploymentForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["employment"] = this.employment ? this.employment.toJSON() : <any>undefined;
+        data["total"] = this.total;
+        data["male"] = this.male;
+        data["female"] = this.female;
+        data["foreign"] = this.foreign;
+        data["impairment"] = this.impairment;
+        data["salaryStart"] = this.salaryStart;
+        data["salaryEnd"] = this.salaryEnd;
+        data["ageStart"] = this.ageStart;
+        data["ageEnd"] = this.ageEnd;
+        data["parment"] = this.parment;
+        data["temporary"] = this.temporary;
+        data["trainer"] = this.trainer;
+        data["dailyWages"] = this.dailyWages;
+        data["companyId"] = this.companyId;
         data["companyName"] = this.companyName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetEmploymentForViewDto {
-    employment: EmploymentDto;
+    total: number;
+    male: number;
+    female: number;
+    foreign: number;
+    impairment: number;
+    salaryStart: number;
+    salaryEnd: number;
+    ageStart: number;
+    ageEnd: number;
+    parment: number;
+    temporary: number;
+    trainer: number;
+    dailyWages: number;
+    companyId: number | undefined;
     companyName: string | undefined;
+    id: string;
 }
 
 export class GetExpiringTenantsOutput implements IGetExpiringTenantsOutput {
@@ -26189,7 +26210,11 @@ export interface IGetExpiringTenantsOutput {
 }
 
 export class GetFinancialYearForEditOutput implements IGetFinancialYearForEditOutput {
-    financialYear!: CreateOrEditFinancialYearDto;
+    name!: string;
+    fromMiti!: string | undefined;
+    toMiti!: string | undefined;
+    isOldYear!: boolean;
+    id!: string | undefined;
 
     constructor(data?: IGetFinancialYearForEditOutput) {
         if (data) {
@@ -26202,7 +26227,11 @@ export class GetFinancialYearForEditOutput implements IGetFinancialYearForEditOu
 
     init(_data?: any) {
         if (_data) {
-            this.financialYear = _data["financialYear"] ? CreateOrEditFinancialYearDto.fromJS(_data["financialYear"]) : <any>undefined;
+            this.name = _data["name"];
+            this.fromMiti = _data["fromMiti"];
+            this.toMiti = _data["toMiti"];
+            this.isOldYear = _data["isOldYear"];
+            this.id = _data["id"];
         }
     }
 
@@ -26215,17 +26244,28 @@ export class GetFinancialYearForEditOutput implements IGetFinancialYearForEditOu
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["financialYear"] = this.financialYear ? this.financialYear.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["fromMiti"] = this.fromMiti;
+        data["toMiti"] = this.toMiti;
+        data["isOldYear"] = this.isOldYear;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetFinancialYearForEditOutput {
-    financialYear: CreateOrEditFinancialYearDto;
+    name: string;
+    fromMiti: string | undefined;
+    toMiti: string | undefined;
+    isOldYear: boolean;
+    id: string | undefined;
 }
 
 export class GetFinancialYearForViewDto implements IGetFinancialYearForViewDto {
-    financialYear!: FinancialYearDto;
+    name!: string | undefined;
+    fromMiti!: string | undefined;
+    toMiti!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetFinancialYearForViewDto) {
         if (data) {
@@ -26238,7 +26278,10 @@ export class GetFinancialYearForViewDto implements IGetFinancialYearForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.financialYear = _data["financialYear"] ? FinancialYearDto.fromJS(_data["financialYear"]) : <any>undefined;
+            this.name = _data["name"];
+            this.fromMiti = _data["fromMiti"];
+            this.toMiti = _data["toMiti"];
+            this.id = _data["id"];
         }
     }
 
@@ -26251,13 +26294,19 @@ export class GetFinancialYearForViewDto implements IGetFinancialYearForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["financialYear"] = this.financialYear ? this.financialYear.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["fromMiti"] = this.fromMiti;
+        data["toMiti"] = this.toMiti;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetFinancialYearForViewDto {
-    financialYear: FinancialYearDto;
+    name: string | undefined;
+    fromMiti: string | undefined;
+    toMiti: string | undefined;
+    id: string;
 }
 
 export class GetGeneralStatsOutput implements IGetGeneralStatsOutput {
@@ -26349,11 +26398,18 @@ export interface IGetIncomeStatisticsDataOutput {
 }
 
 export class GetJobApplyForEditOutput implements IGetJobApplyForEditOutput {
-    jobApply!: CreateOrEditJobApplyDto;
+    date!: DateTime;
+    document!: string | undefined;
+    documentToken!: string | undefined;
+    remark!: string | undefined;
+    companyId!: number;
+    jobDemandId!: string;
+    employeeId!: string;
     companyName!: string | undefined;
     jobDemandName!: string | undefined;
     employeeName!: string | undefined;
     documentFileName!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetJobApplyForEditOutput) {
         if (data) {
@@ -26366,11 +26422,18 @@ export class GetJobApplyForEditOutput implements IGetJobApplyForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.jobApply = _data["jobApply"] ? CreateOrEditJobApplyDto.fromJS(_data["jobApply"]) : <any>undefined;
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.document = _data["document"];
+            this.documentToken = _data["documentToken"];
+            this.remark = _data["remark"];
+            this.companyId = _data["companyId"];
+            this.jobDemandId = _data["jobDemandId"];
+            this.employeeId = _data["employeeId"];
             this.companyName = _data["companyName"];
             this.jobDemandName = _data["jobDemandName"];
             this.employeeName = _data["employeeName"];
             this.documentFileName = _data["documentFileName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26383,28 +26446,46 @@ export class GetJobApplyForEditOutput implements IGetJobApplyForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobApply"] = this.jobApply ? this.jobApply.toJSON() : <any>undefined;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["document"] = this.document;
+        data["documentToken"] = this.documentToken;
+        data["remark"] = this.remark;
+        data["companyId"] = this.companyId;
+        data["jobDemandId"] = this.jobDemandId;
+        data["employeeId"] = this.employeeId;
         data["companyName"] = this.companyName;
         data["jobDemandName"] = this.jobDemandName;
         data["employeeName"] = this.employeeName;
         data["documentFileName"] = this.documentFileName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobApplyForEditOutput {
-    jobApply: CreateOrEditJobApplyDto;
+    date: DateTime;
+    document: string | undefined;
+    documentToken: string | undefined;
+    remark: string | undefined;
+    companyId: number;
+    jobDemandId: string;
+    employeeId: string;
     companyName: string | undefined;
     jobDemandName: string | undefined;
     employeeName: string | undefined;
     documentFileName: string | undefined;
+    id: string | undefined;
 }
 
 export class GetJobApplyForViewDto implements IGetJobApplyForViewDto {
-    jobApply!: JobApplyDto;
+    date!: DateTime;
+    companyId!: number;
+    jobDemandId!: string;
+    employeeId!: string;
     companyName!: string | undefined;
     jobDemandName!: string | undefined;
     employeeName!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetJobApplyForViewDto) {
         if (data) {
@@ -26417,10 +26498,14 @@ export class GetJobApplyForViewDto implements IGetJobApplyForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.jobApply = _data["jobApply"] ? JobApplyDto.fromJS(_data["jobApply"]) : <any>undefined;
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.jobDemandId = _data["jobDemandId"];
+            this.employeeId = _data["employeeId"];
             this.companyName = _data["companyName"];
             this.jobDemandName = _data["jobDemandName"];
             this.employeeName = _data["employeeName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26433,25 +26518,44 @@ export class GetJobApplyForViewDto implements IGetJobApplyForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobApply"] = this.jobApply ? this.jobApply.toJSON() : <any>undefined;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["jobDemandId"] = this.jobDemandId;
+        data["employeeId"] = this.employeeId;
         data["companyName"] = this.companyName;
         data["jobDemandName"] = this.jobDemandName;
         data["employeeName"] = this.employeeName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobApplyForViewDto {
-    jobApply: JobApplyDto;
+    date: DateTime;
+    companyId: number;
+    jobDemandId: string;
+    employeeId: string;
     companyName: string | undefined;
     jobDemandName: string | undefined;
     employeeName: string | undefined;
+    id: string;
 }
 
 export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
-    jobDemand!: CreateOrEditJobDemandDto;
+    name!: string | undefined;
+    address!: string | undefined;
+    date!: DateTime;
+    salary!: string | undefined;
+    interviewDate!: DateTime;
+    experienceLevel!: ExperienceLevelEnum;
+    expiredDate!: DateTime;
+    jobSpecification!: string | undefined;
+    description!: string | undefined;
+    companyId!: number;
+    jobSkillId!: string;
     companyName!: string | undefined;
     jobSkillName!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetJobDemandForEditOutput) {
         if (data) {
@@ -26464,9 +26568,20 @@ export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.jobDemand = _data["jobDemand"] ? CreateOrEditJobDemandDto.fromJS(_data["jobDemand"]) : <any>undefined;
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.salary = _data["salary"];
+            this.interviewDate = _data["interviewDate"] ? DateTime.fromISO(_data["interviewDate"].toString()) : <any>undefined;
+            this.experienceLevel = _data["experienceLevel"];
+            this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
+            this.jobSpecification = _data["jobSpecification"];
+            this.description = _data["description"];
+            this.companyId = _data["companyId"];
+            this.jobSkillId = _data["jobSkillId"];
             this.companyName = _data["companyName"];
             this.jobSkillName = _data["jobSkillName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26479,23 +26594,52 @@ export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobDemand"] = this.jobDemand ? this.jobDemand.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["salary"] = this.salary;
+        data["interviewDate"] = this.interviewDate ? this.interviewDate.toString() : <any>undefined;
+        data["experienceLevel"] = this.experienceLevel;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
+        data["jobSpecification"] = this.jobSpecification;
+        data["description"] = this.description;
+        data["companyId"] = this.companyId;
+        data["jobSkillId"] = this.jobSkillId;
         data["companyName"] = this.companyName;
         data["jobSkillName"] = this.jobSkillName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobDemandForEditOutput {
-    jobDemand: CreateOrEditJobDemandDto;
+    name: string | undefined;
+    address: string | undefined;
+    date: DateTime;
+    salary: string | undefined;
+    interviewDate: DateTime;
+    experienceLevel: ExperienceLevelEnum;
+    expiredDate: DateTime;
+    jobSpecification: string | undefined;
+    description: string | undefined;
+    companyId: number;
+    jobSkillId: string;
     companyName: string | undefined;
     jobSkillName: string | undefined;
+    id: string | undefined;
 }
 
 export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
-    jobDemand!: JobDemandDto;
+    name!: string | undefined;
+    address!: string | undefined;
+    date!: DateTime;
+    salary!: string | undefined;
+    expiredDate!: DateTime;
+    companyId!: number;
+    jobSkillId!: string;
     companyName!: string | undefined;
     jobSkillName!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetJobDemandForViewDto) {
         if (data) {
@@ -26508,9 +26652,16 @@ export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.jobDemand = _data["jobDemand"] ? JobDemandDto.fromJS(_data["jobDemand"]) : <any>undefined;
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.salary = _data["salary"];
+            this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.jobSkillId = _data["jobSkillId"];
             this.companyName = _data["companyName"];
             this.jobSkillName = _data["jobSkillName"];
+            this.id = _data["id"];
         }
     }
 
@@ -26523,21 +26674,37 @@ export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobDemand"] = this.jobDemand ? this.jobDemand.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["salary"] = this.salary;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["jobSkillId"] = this.jobSkillId;
         data["companyName"] = this.companyName;
         data["jobSkillName"] = this.jobSkillName;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobDemandForViewDto {
-    jobDemand: JobDemandDto;
+    name: string | undefined;
+    address: string | undefined;
+    date: DateTime;
+    salary: string | undefined;
+    expiredDate: DateTime;
+    companyId: number;
+    jobSkillId: string;
     companyName: string | undefined;
     jobSkillName: string | undefined;
+    id: string;
 }
 
 export class GetJobSkillForEditOutput implements IGetJobSkillForEditOutput {
-    jobSkill!: CreateOrEditJobSkillDto;
+    name!: string | undefined;
+    description!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetJobSkillForEditOutput) {
         if (data) {
@@ -26550,7 +26717,9 @@ export class GetJobSkillForEditOutput implements IGetJobSkillForEditOutput {
 
     init(_data?: any) {
         if (_data) {
-            this.jobSkill = _data["jobSkill"] ? CreateOrEditJobSkillDto.fromJS(_data["jobSkill"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -26563,17 +26732,23 @@ export class GetJobSkillForEditOutput implements IGetJobSkillForEditOutput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobSkill"] = this.jobSkill ? this.jobSkill.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobSkillForEditOutput {
-    jobSkill: CreateOrEditJobSkillDto;
+    name: string | undefined;
+    description: string | undefined;
+    id: string | undefined;
 }
 
 export class GetJobSkillForViewDto implements IGetJobSkillForViewDto {
-    jobSkill!: JobSkillDto;
+    name!: string | undefined;
+    description!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetJobSkillForViewDto) {
         if (data) {
@@ -26586,7 +26761,9 @@ export class GetJobSkillForViewDto implements IGetJobSkillForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.jobSkill = _data["jobSkill"] ? JobSkillDto.fromJS(_data["jobSkill"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -26599,13 +26776,17 @@ export class GetJobSkillForViewDto implements IGetJobSkillForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["jobSkill"] = this.jobSkill ? this.jobSkill.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetJobSkillForViewDto {
-    jobSkill: JobSkillDto;
+    name: string | undefined;
+    description: string | undefined;
+    id: string;
 }
 
 export class GetLanguageForEditOutput implements IGetLanguageForEditOutput {
@@ -27125,7 +27306,9 @@ export interface IGetPublishedNotificationsOutput {
 }
 
 export class GetQualificationForEditOutput implements IGetQualificationForEditOutput {
-    qualification!: CreateOrEditQualificationDto;
+    name!: string;
+    description!: string | undefined;
+    id!: string | undefined;
 
     constructor(data?: IGetQualificationForEditOutput) {
         if (data) {
@@ -27138,7 +27321,9 @@ export class GetQualificationForEditOutput implements IGetQualificationForEditOu
 
     init(_data?: any) {
         if (_data) {
-            this.qualification = _data["qualification"] ? CreateOrEditQualificationDto.fromJS(_data["qualification"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -27151,17 +27336,23 @@ export class GetQualificationForEditOutput implements IGetQualificationForEditOu
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["qualification"] = this.qualification ? this.qualification.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetQualificationForEditOutput {
-    qualification: CreateOrEditQualificationDto;
+    name: string;
+    description: string | undefined;
+    id: string | undefined;
 }
 
 export class GetQualificationForViewDto implements IGetQualificationForViewDto {
-    qualification!: QualificationDto;
+    name!: string | undefined;
+    description!: string | undefined;
+    id!: string;
 
     constructor(data?: IGetQualificationForViewDto) {
         if (data) {
@@ -27174,7 +27365,9 @@ export class GetQualificationForViewDto implements IGetQualificationForViewDto {
 
     init(_data?: any) {
         if (_data) {
-            this.qualification = _data["qualification"] ? QualificationDto.fromJS(_data["qualification"]) : <any>undefined;
+            this.name = _data["name"];
+            this.description = _data["description"];
+            this.id = _data["id"];
         }
     }
 
@@ -27187,13 +27380,17 @@ export class GetQualificationForViewDto implements IGetQualificationForViewDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["qualification"] = this.qualification ? this.qualification.toJSON() : <any>undefined;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IGetQualificationForViewDto {
-    qualification: QualificationDto;
+    name: string | undefined;
+    description: string | undefined;
+    id: string;
 }
 
 export class GetRecentTenantsOutput implements IGetRecentTenantsOutput {
@@ -28779,58 +28976,6 @@ export interface IJobApplyCompanyLookupTableDto {
     displayName: string | undefined;
 }
 
-export class JobApplyDto implements IJobApplyDto {
-    date!: DateTime;
-    companyId!: number;
-    jobDemandId!: string;
-    employeeId!: string;
-    id!: string;
-
-    constructor(data?: IJobApplyDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
-            this.companyId = _data["companyId"];
-            this.jobDemandId = _data["jobDemandId"];
-            this.employeeId = _data["employeeId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): JobApplyDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new JobApplyDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["date"] = this.date ? this.date.toString() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["jobDemandId"] = this.jobDemandId;
-        data["employeeId"] = this.employeeId;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IJobApplyDto {
-    date: DateTime;
-    companyId: number;
-    jobDemandId: string;
-    employeeId: string;
-    id: string;
-}
-
 export class JobApplyEmployeeLookupTableDto implements IJobApplyEmployeeLookupTableDto {
     id!: string | undefined;
     displayName!: string | undefined;
@@ -28951,70 +29096,6 @@ export interface IJobDemandCompanyLookupTableDto {
     displayName: string | undefined;
 }
 
-export class JobDemandDto implements IJobDemandDto {
-    name!: string | undefined;
-    address!: string | undefined;
-    date!: DateTime;
-    salary!: string | undefined;
-    expiredDate!: DateTime;
-    companyId!: number;
-    jobSkillId!: string;
-    id!: string;
-
-    constructor(data?: IJobDemandDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.address = _data["address"];
-            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
-            this.salary = _data["salary"];
-            this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
-            this.companyId = _data["companyId"];
-            this.jobSkillId = _data["jobSkillId"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): JobDemandDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new JobDemandDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["address"] = this.address;
-        data["date"] = this.date ? this.date.toString() : <any>undefined;
-        data["salary"] = this.salary;
-        data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
-        data["companyId"] = this.companyId;
-        data["jobSkillId"] = this.jobSkillId;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IJobDemandDto {
-    name: string | undefined;
-    address: string | undefined;
-    date: DateTime;
-    salary: string | undefined;
-    expiredDate: DateTime;
-    companyId: number;
-    jobSkillId: string;
-    id: string;
-}
-
 export class JobDemandJobSkillLookupTableDto implements IJobDemandJobSkillLookupTableDto {
     id!: string | undefined;
     displayName!: string | undefined;
@@ -29053,50 +29134,6 @@ export class JobDemandJobSkillLookupTableDto implements IJobDemandJobSkillLookup
 export interface IJobDemandJobSkillLookupTableDto {
     id: string | undefined;
     displayName: string | undefined;
-}
-
-export class JobSkillDto implements IJobSkillDto {
-    name!: string | undefined;
-    description!: string | undefined;
-    id!: string;
-
-    constructor(data?: IJobSkillDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): JobSkillDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new JobSkillDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IJobSkillDto {
-    name: string | undefined;
-    description: string | undefined;
-    id: string;
 }
 
 export class JsonClaimMapDto implements IJsonClaimMapDto {
@@ -32450,50 +32487,6 @@ export enum PaymentPeriodType {
     Annual = 365,
 }
 
-export class QualificationDto implements IQualificationDto {
-    name!: string | undefined;
-    description!: string | undefined;
-    id!: string;
-
-    constructor(data?: IQualificationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): QualificationDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new QualificationDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IQualificationDto {
-    name: string | undefined;
-    description: string | undefined;
-    id: string;
-}
-
 export class RecentTenant implements IRecentTenant {
     id!: number;
     name!: string | undefined;
@@ -32648,6 +32641,7 @@ export class RegisterInput implements IRegisterInput {
     userName!: string;
     emailAddress!: string;
     password!: string;
+    userType!: UserTypeEnum;
     captchaResponse!: string | undefined;
 
     constructor(data?: IRegisterInput) {
@@ -32666,6 +32660,7 @@ export class RegisterInput implements IRegisterInput {
             this.userName = _data["userName"];
             this.emailAddress = _data["emailAddress"];
             this.password = _data["password"];
+            this.userType = _data["userType"];
             this.captchaResponse = _data["captchaResponse"];
         }
     }
@@ -32684,6 +32679,7 @@ export class RegisterInput implements IRegisterInput {
         data["userName"] = this.userName;
         data["emailAddress"] = this.emailAddress;
         data["password"] = this.password;
+        data["userType"] = this.userType;
         data["captchaResponse"] = this.captchaResponse;
         return data;
     }
@@ -32695,6 +32691,7 @@ export interface IRegisterInput {
     userName: string;
     emailAddress: string;
     password: string;
+    userType: UserTypeEnum;
     captchaResponse: string | undefined;
 }
 
@@ -36490,6 +36487,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
     userName!: string | undefined;
     emailAddress!: string | undefined;
     profilePictureId!: string | undefined;
+    userType!: UserTypeEnum;
     id!: number;
 
     constructor(data?: IUserLoginInfoDto) {
@@ -36508,6 +36506,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
             this.userName = _data["userName"];
             this.emailAddress = _data["emailAddress"];
             this.profilePictureId = _data["profilePictureId"];
+            this.userType = _data["userType"];
             this.id = _data["id"];
         }
     }
@@ -36526,6 +36525,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
         data["userName"] = this.userName;
         data["emailAddress"] = this.emailAddress;
         data["profilePictureId"] = this.profilePictureId;
+        data["userType"] = this.userType;
         data["id"] = this.id;
         return data;
     }
@@ -36537,6 +36537,7 @@ export interface IUserLoginInfoDto {
     userName: string | undefined;
     emailAddress: string | undefined;
     profilePictureId: string | undefined;
+    userType: UserTypeEnum;
     id: number;
 }
 
@@ -36715,6 +36716,12 @@ export interface IUserRoleDto {
     roleDisplayName: string | undefined;
     isAssigned: boolean;
     inheritedFromOrganizationUnit: boolean;
+}
+
+export enum UserTypeEnum {
+    System = 0,
+    Company = 1,
+    Employment = 2,
 }
 
 export class UsersToOrganizationUnitInput implements IUsersToOrganizationUnitInput {

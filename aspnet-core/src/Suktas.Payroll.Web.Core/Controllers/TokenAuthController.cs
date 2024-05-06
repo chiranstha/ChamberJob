@@ -241,6 +241,7 @@ namespace Suktas.Payroll.Web.Controllers
                 EncryptedAccessToken = GetEncryptedAccessToken(accessToken),
                 TwoFactorRememberClientToken = twoFactorRememberClientToken,
                 UserId = loginResult.User.Id,
+                UserType = loginResult.User.UserType,
                 ReturnUrl = returnUrl
             };
         }
@@ -637,6 +638,7 @@ namespace Suktas.Payroll.Web.Controllers
                 username,
                 await _userManager.CreateRandomPassword(),
                 true,
+                UserTypeEnum.Employment,
                 null
             );
 

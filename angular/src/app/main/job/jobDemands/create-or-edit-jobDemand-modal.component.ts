@@ -54,10 +54,8 @@ export class CreateOrEditJobDemandModalComponent extends AppComponentBase implem
             this.modal.show();
         } else {
             this._jobDemandsServiceProxy.getJobDemandForEdit(jobDemandId).subscribe((result) => {
-                this.jobDemand = result.jobDemand;
+                this.jobDemand = result;
 
-                this.companyName = result.companyName;
-                this.jobSkillName = result.jobSkillName;
 
                 this.active = true;
                 this.modal.show();

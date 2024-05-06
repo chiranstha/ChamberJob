@@ -15,6 +15,7 @@ namespace Suktas.Payroll.Authorization.Users
         public virtual Guid? ProfilePictureId { get; set; }
 
         public virtual bool ShouldChangePasswordOnNextLogin { get; set; }
+        public virtual UserTypeEnum UserType { get; set; } = UserTypeEnum.System;
 
         public DateTime? SignInTokenExpireTimeUtc { get; set; }
 

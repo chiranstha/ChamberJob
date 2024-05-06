@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, Injector, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JobSkillServiceProxy, JobSkillDto } from '@shared/service-proxies/service-proxies';
+import { JobSkillServiceProxy } from '@shared/service-proxies/service-proxies';
 import { NotifyService } from 'abp-ng2-module';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -78,10 +78,10 @@ export class JobSkillComponent extends AppComponentBase {
         this.createOrEditJobSkillModal.show();
     }
 
-    deleteJobSkill(jobSkill: JobSkillDto): void {
+    deleteJobSkill(id: string): void {
         this.message.confirm('', this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._jobSkillServiceProxy.delete(jobSkill.id).subscribe(() => {
+                this._jobSkillServiceProxy.delete(id).subscribe(() => {
                     this.reloadPage();
                     this.notify.success(this.l('SuccessfullyDeleted'));
                 });
