@@ -4,9 +4,10 @@ import { AppSharedModule } from '@app/shared/app-shared.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { CustomizableDashboardModule } from '@app/shared/common/customizable-dashboard/customizable-dashboard.module';
+import { CreateEmployeeModalComponent } from './createEmployeeModal/createEmployeeModal.component';
 
 @NgModule({
-    declarations: [DashboardComponent],
+    declarations: [DashboardComponent,CreateEmployeeModalComponent],
     imports: [AppSharedModule, AdminSharedModule, DashboardRoutingModule, CustomizableDashboardModule],
 })
 export class DashboardModule {}

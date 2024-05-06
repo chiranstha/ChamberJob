@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Suktas.Payroll.Job
 {
-    [AbpAuthorize(AppPermissions.Pages_JobApply)]
+    [AbpAuthorize]
     public class JobApplyAppService : PayrollAppServiceBase, IJobApplyAppService
     {
         private readonly IRepository<JobApply, Guid> _jobApplyRepository;
@@ -42,7 +42,7 @@ namespace Suktas.Payroll.Job
         }
 
 
-
+        [AbpAuthorize]
         public virtual async Task<PagedResultDto<GetJobDemandForViewDto>> GetAllJobDemand(GetAllJobDemandsInput input)
         {
 
@@ -195,7 +195,7 @@ namespace Suktas.Payroll.Job
             return output;
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply_Edit)]
+        [AbpAuthorize]
         public virtual async Task<GetJobApplyForEditOutput> GetJobApplyForEdit(EntityDto<Guid> input)
         {
             var jobApply = await _jobApplyRepository.FirstOrDefaultAsync(input.Id);
@@ -243,7 +243,7 @@ namespace Suktas.Payroll.Job
             }
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply_Create)]
+        [AbpAuthorize]
         protected virtual async Task Create(CreateOrEditJobApplyDto input)
         {
             var jobApply = new JobApply
@@ -266,7 +266,7 @@ namespace Suktas.Payroll.Job
 
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply_Edit)]
+        [AbpAuthorize]
         protected virtual async Task Update(CreateOrEditJobApplyDto input)
         {
             var jobApply = await _jobApplyRepository.FirstOrDefaultAsync((Guid)input.Id);
@@ -284,12 +284,12 @@ namespace Suktas.Payroll.Job
 
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply_Delete)]
+        [AbpAuthorize]
         public virtual async Task Delete(EntityDto<Guid> input)
         {
             await _jobApplyRepository.DeleteAsync(input.Id);
         }
-        [AbpAuthorize(AppPermissions.Pages_JobApply)]
+        [AbpAuthorize]
         public async Task<List<JobApplyCompanyLookupTableDto>> GetAllCompanyForTableDropdown()
         {
             return await _lookupCompanyRepository.GetAll()
@@ -300,7 +300,7 @@ namespace Suktas.Payroll.Job
                 }).ToListAsync();
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply)]
+        [AbpAuthorize]
         public async Task<List<JobApplyJobDemandLookupTableDto>> GetAllJobDemandForTableDropdown()
         {
             return await _jobDemandRepository.GetAll()
@@ -311,7 +311,7 @@ namespace Suktas.Payroll.Job
                 }).ToListAsync();
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply)]
+        [AbpAuthorize]
         public async Task<List<JobApplyEmployeeLookupTableDto>> GetAllEmployeeForTableDropdown()
         {
             return await _lookupEmployeeRepository.GetAll()
@@ -353,15 +353,10 @@ namespace Suktas.Payroll.Job
             return file?.Description;
         }
 
-        [AbpAuthorize(AppPermissions.Pages_JobApply_Edit)]
+        [AbpAuthorize]
         public virtual async Task RemoveDocumentFile(EntityDto<Guid> input)
         {
-            var jobApply = await _jobApplyRepository.FirstOrDefaultAsync(input.Id);
-            if (jobApply == null)
-            {
-                throw new UserFriendlyException(L("EntityNotFound"));
-            }
-
+            var jobApply = await _jobApplyRepository.FirstOrDefaultAsync(input.Id) ?? throw new UserFriendlyException(L("EntityNotFound"));
             if (!jobApply.Document.HasValue)
             {
                 throw new UserFriendlyException(L("FileNotFound"));

@@ -109,11 +109,11 @@
                                         </th>
                                         <th style="width: 150px" pSortableColumn="name">
                                             {{ l('Name') }}
-                                            <p-sortIcon field="qualification.name"></p-sortIcon>
+                                            <p-sortIcon field="name"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="description">
                                             {{ l('Description') }}
-                                            <p-sortIcon field="qualification.description"></p-sortIcon>
+                                            <p-sortIcon field="description"></p-sortIcon>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -148,7 +148,7 @@
                                                             class="dropdown-item"
                                                             (click)="
                                                                 createOrEditQualificationModal.show(
-                                                                    record.qualification.id
+                                                                    record.id
                                                                 )
                                                             "
                                                         >
@@ -160,7 +160,7 @@
                                                             class="dropdown-item"
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.Qualification.Delete')"
-                                                            (click)="deleteQualification(record.qualification)"
+                                                            (click)="deleteQualification(record.id)"
                                                         >
                                                             {{ l('Delete') }}
                                                         </a>
@@ -170,11 +170,11 @@
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
-                                            {{ record.qualification.name }}
+                                            {{ record.name }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Description') }}</span>
-                                            {{ record.qualification.description }}
+                                            {{ record.description }}
                                         </td>
                                     </tr>
                                 </ng-template>

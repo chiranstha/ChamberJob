@@ -11,10 +11,7 @@
         public const string Pages_Employments_Edit = "Pages.Employments.Edit";
         public const string Pages_Employments_Delete = "Pages.Employments.Delete";
 
-        public const string Pages_JobApply = "Pages.JobApply";
-        public const string Pages_JobApply_Create = "Pages.JobApply.Create";
-        public const string Pages_JobApply_Edit = "Pages.JobApply.Edit";
-        public const string Pages_JobApply_Delete = "Pages.JobApply.Delete";
+        
 
         public const string Pages_JobDemands = "Pages.JobDemands";
         public const string Pages_JobDemands_Create = "Pages.JobDemands.Create";

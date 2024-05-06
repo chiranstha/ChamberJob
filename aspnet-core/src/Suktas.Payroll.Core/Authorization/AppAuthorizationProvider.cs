@@ -35,10 +35,7 @@ namespace Suktas.Payroll.Authorization
             employments.CreateChildPermission(AppPermissions.Pages_Employments_Edit, L("EditEmployment"));
             employments.CreateChildPermission(AppPermissions.Pages_Employments_Delete, L("DeleteEmployment"));
 
-            var jobApply = pages.CreateChildPermission(AppPermissions.Pages_JobApply, L("JobApply"));
-            jobApply.CreateChildPermission(AppPermissions.Pages_JobApply_Create, L("CreateNewJobApply"));
-            jobApply.CreateChildPermission(AppPermissions.Pages_JobApply_Edit, L("EditJobApply"));
-            jobApply.CreateChildPermission(AppPermissions.Pages_JobApply_Delete, L("DeleteJobApply"));
+            
 
             var jobDemands = pages.CreateChildPermission(AppPermissions.Pages_JobDemands, L("JobDemands"));
             jobDemands.CreateChildPermission(AppPermissions.Pages_JobDemands_Create, L("CreateNewJobDemand"));

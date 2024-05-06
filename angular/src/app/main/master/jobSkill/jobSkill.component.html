@@ -91,7 +91,7 @@
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.JobSkill.Edit')"
                                                             class="dropdown-item"
-                                                            (click)="createOrEditJobSkillModal.show(record.jobSkill.id)"
+                                                            (click)="createOrEditJobSkillModal.show(record.id)"
                                                         >
                                                             {{ l('Edit') }}
                                                         </a>
@@ -101,7 +101,7 @@
                                                             class="dropdown-item"
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.JobSkill.Delete')"
-                                                            (click)="deleteJobSkill(record.jobSkill)"
+                                                            (click)="deleteJobSkill(record.id)"
                                                         >
                                                             {{ l('Delete') }}
                                                         </a>
@@ -111,11 +111,11 @@
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
-                                            {{ record.jobSkill.name }}
+                                            {{ record.name }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Description') }}</span>
-                                            {{ record.jobSkill.description }}
+                                            {{ record.description }}
                                         </td>
                                     </tr>
                                 </ng-template>
