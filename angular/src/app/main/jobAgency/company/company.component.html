@@ -1,6 +1,6 @@
 ﻿<div [@routerTransition]>
     <div class="content d-flex flex-column flex-column-fluid">
-        <sub-header [title]="'Employee' | localize" [description]="'EmployeeHeaderInfo' | localize">
+        <sub-header [title]="'Company' | localize" [description]="'CompanyHeaderInfo' | localize">
             <div role="actions">
                 <button
                     (click)="exportToExcel()"
@@ -10,15 +10,7 @@
                     {{ l('ExportToExcel') }}
                 </button>
 
-                <button
-                    id="btn_create_employee"
-                    *ngIf="isGranted('Pages.Employee.Create')"
-                    (click)="createEmployee()"
-                    class="btn btn-primary blue"
-                >
-                    <i class="fa fa-plus"></i>
-                    {{ l('CreateNewEmployee') }}
-                </button>
+               
             </div>
         </sub-header>
 
@@ -40,7 +32,7 @@
                                                 type="text"
                                             />
                                             <span class="input-group-btn">
-                                                <button (click)="getEmployee()" class="btn btn-primary" type="submit">
+                                                <button (click)="getCompany()" class="btn btn-primary" type="submit">
                                                     <i class="flaticon-search-1"></i>
                                                 </button>
                                             </span>
@@ -55,13 +47,29 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="JobSkillNameFilter">({{ l('JobSkill') }}) {{ l('Name') }}</label>
+                                        <label for="CompanyCategoryNameFilter">
+                                            ({{ l('CompanyCategory') }}) {{ l('Name') }}
+                                        </label>
                                         <input
                                             type="text"
                                             class="form-control"
-                                            id="JobSkillNameFilter"
-                                            name="jobSkillNameFilter"
-                                            [(ngModel)]="jobSkillNameFilter"
+                                            id="CompanyCategoryNameFilter"
+                                            name="companyCategoryNameFilter"
+                                            [(ngModel)]="companyCategoryNameFilter"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="CompanyTypeNameFilter">
+                                            ({{ l('CompanyType') }}) {{ l('Name') }}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="CompanyTypeNameFilter"
+                                            name="companyTypeNameFilter"
+                                            [(ngModel)]="companyTypeNameFilter"
                                         />
                                     </div>
                                 </div>
@@ -104,7 +112,7 @@
                         <div class="primeng-datatable-container col-12" [busyIf]="primengTableHelper.isLoading">
                             <p-table
                                 #dataTable
-                                (onLazyLoad)="getEmployee($event)"
+                                (onLazyLoad)="getCompany($event)"
                                 [value]="primengTableHelper.records"
                                 rows="{{ primengTableHelper.defaultRecordsCountPerPage }}"
                                 [paginator]="false"
@@ -116,117 +124,75 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th
-                                            style="width: 130px"
-                                            [hidden]="!isGrantedAny('Pages.Employee.Edit', 'Pages.Employee.Delete')"
-                                        >
-                                            {{ l('Actions') }}
-                                        </th>
-                                        <th style="width: 150px" pSortableColumn="jobSkillName">
+                                       
+                                        <th style="width: 150px" pSortableColumn="companyCategoryName">
                                             {{ l('Name') }}
-                                            <p-sortIcon field="jobSkillName"></p-sortIcon>
+                                            <p-sortIcon field="companyCategoryName"></p-sortIcon>
+                                        </th>
+                                        <th style="width: 150px" pSortableColumn="companyTypeName">
+                                            {{ l('Name') }}
+                                            <p-sortIcon field="companyTypeName"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="name">
                                             {{ l('Name') }}
                                             <p-sortIcon field="name"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="phoneNo">
-                                            {{ l('PhoneNo') }}
-                                            <p-sortIcon field="phoneNo"></p-sortIcon>
+                                        <th style="width: 150px" pSortableColumn="address">
+                                            {{ l('Address') }}
+                                            <p-sortIcon field="address"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="gender">
-                                            {{ l('Gender') }}
-                                            <p-sortIcon field="gender"></p-sortIcon>
+                                        <th style="width: 150px" pSortableColumn="authorizedPerson">
+                                            {{ l('AuthorizedPerson') }}
+                                            <p-sortIcon field="authorizedPerson"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="dbo">
-                                            {{ l('Dbo') }}
-                                            <p-sortIcon field="dbo"></p-sortIcon>
+                                        <th style="width: 150px" pSortableColumn="contactNo">
+                                            {{ l('ContactNo') }}
+                                            <p-sortIcon field="contactNo"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="qualification">
-                                            {{ l('Qualification') }}
-                                            <p-sortIcon field="qualification"></p-sortIcon>
+                                        <th style="width: 150px" pSortableColumn="businessNature">
+                                            {{ l('BusinessNature') }}
+                                            <p-sortIcon field="businessNature"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="expectedSalary">
-                                            {{ l('ExpectedSalary') }}
-                                            <p-sortIcon field="expectedSalary"></p-sortIcon>
+                                        <th style="width: 150px" pSortableColumn="establishedYear">
+                                            {{ l('EstablishedYear') }}
+                                            <p-sortIcon field="establishedYear"></p-sortIcon>
                                         </th>
                                     </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
                                     <tr>
-                                        <td
-                                            style="width: 130px"
-                                            [hidden]="!isGrantedAny('Pages.Employee.Edit', 'Pages.Employee.Delete')"
-                                        >
-                                            <div class="btn-group dropdown" dropdown container="body">
-                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
-                                                    <i class="fa fa-cog"></i>
-                                                    <span class="caret"></span>
-                                                    {{ l('Actions') }}
-                                                </button>
-                                                <ul class="dropdown-menu" *dropdownMenu>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="dropdown-item"
-                                                            (click)="viewEmployeeModal.show(record)"
-                                                        >
-                                                            {{ l('View') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employee.Edit')"
-                                                            class="dropdown-item"
-                                                            (click)="createOrEditEmployeeModal.show(record.id)"
-                                                        >
-                                                            {{ l('Edit') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            class="dropdown-item"
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employee.Delete')"
-                                                            (click)="deleteEmployee(record.id)"
-                                                        >
-                                                            {{ l('Delete') }}
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                      
+                                        <td style="width: 150px">
+                                            <span class="p-column-title">{{ l('Name') }}</span>
+                                            {{ record.companyCategoryName }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
-                                            {{ record.jobSkillName }}
+                                            {{ record.companyTypeName }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
                                             {{ record.name }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="p-column-title">{{ l('PhoneNo') }}</span>
-                                            {{ record.phoneNo }}
+                                            <span class="p-column-title">{{ l('Address') }}</span>
+                                            {{ record.address }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="p-column-title">{{ l('Gender') }}</span>
-                                            {{ l(genderEnum[record.gender]) }}
+                                            <span class="p-column-title">{{ l('AuthorizedPerson') }}</span>
+                                            {{ record.authorizedPerson }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="p-column-title">{{ l('Dbo') }}</span>
-                                            <span *ngIf="record.dbo">
-                                                {{ record.dbo | luxonFormat : 'F' }}
-                                            </span>
-                                            <span *ngIf="!record.dbo">-</span>
+                                            <span class="p-column-title">{{ l('ContactNo') }}</span>
+                                            {{ record.contactNo }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="p-column-title">{{ l('Qualification') }}</span>
-                                            {{ record.qualification }}
+                                            <span class="p-column-title">{{ l('BusinessNature') }}</span>
+                                            {{ l(businessNatureEnum[record.businessNature]) }}
                                         </td>
                                         <td style="width: 150px">
-                                            <span class="p-column-title">{{ l('ExpectedSalary') }}</span>
-                                            {{ record.expectedSalary }}
+                                            <span class="p-column-title">{{ l('EstablishedYear') }}</span>
+                                            {{ record.establishedYear }}
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -238,7 +204,7 @@
                                 <p-paginator
                                     [rows]="primengTableHelper.defaultRecordsCountPerPage"
                                     #paginator
-                                    (onPageChange)="getEmployee($event)"
+                                    (onPageChange)="getCompany($event)"
                                     [totalRecords]="primengTableHelper.totalRecordsCount"
                                     [rowsPerPageOptions]="primengTableHelper.predefinedRecordsCountPerPage"
                                     [showCurrentPageReport]="true"
@@ -253,7 +219,6 @@
                 </div>
             </div>
         </div>
-        <createOrEditEmployeeModal #createOrEditEmployeeModal (modalSave)="getEmployee()"></createOrEditEmployeeModal>
-        <viewEmployeeModal #viewEmployeeModal></viewEmployeeModal>
+     
     </div>
 </div>

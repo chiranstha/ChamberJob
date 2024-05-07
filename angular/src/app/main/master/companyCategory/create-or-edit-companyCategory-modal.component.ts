@@ -38,7 +38,7 @@ export class CreateOrEditCompanyCategoryModalComponent extends AppComponentBase 
             this.modal.show();
         } else {
             this._companyCategoryServiceProxy.getCompanyCategoryForEdit(companyCategoryId).subscribe((result) => {
-                this.companyCategory = result.companyCategory;
+                this.companyCategory = result;
 
                 this.active = true;
                 this.modal.show();

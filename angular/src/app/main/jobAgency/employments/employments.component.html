@@ -2,15 +2,7 @@
     <div class="content d-flex flex-column flex-column-fluid">
         <sub-header [title]="'Employments' | localize" [description]="'EmploymentsHeaderInfo' | localize">
             <div role="actions">
-                <button
-                    id="btn_create_employment"
-                    *ngIf="isGranted('Pages.Employments.Create')"
-                    (click)="createEmployment()"
-                    class="btn btn-primary blue"
-                >
-                    <i class="fa fa-plus"></i>
-                    {{ l('CreateNewEmployment') }}
-                </button>
+                
             </div>
         </sub-header>
 
@@ -135,14 +127,7 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th
-                                            style="width: 130px"
-                                            [hidden]="
-                                                !isGrantedAny('Pages.Employments.Edit', 'Pages.Employments.Delete')
-                                            "
-                                        >
-                                            {{ l('Actions') }}
-                                        </th>
+                                        
                                         <th style="width: 150px" pSortableColumn="companyName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="companyName"></p-sortIcon>
@@ -209,46 +194,7 @@
                                                 !isGrantedAny('Pages.Employments.Edit', 'Pages.Employments.Delete')
                                             "
                                         >
-                                            <div class="btn-group dropdown" dropdown container="body">
-                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
-                                                    <i class="fa fa-cog"></i>
-                                                    <span class="caret"></span>
-                                                    {{ l('Actions') }}
-                                                </button>
-                                                <ul class="dropdown-menu" *dropdownMenu>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="dropdown-item"
-                                                            (click)="viewEmploymentModal.show(record)"
-                                                        >
-                                                            {{ l('View') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employments.Edit')"
-                                                            class="dropdown-item"
-                                                            (click)="
-                                                                createOrEditEmploymentModal.show(record.id)
-                                                            "
-                                                        >
-                                                            {{ l('Edit') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            class="dropdown-item"
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employments.Delete')"
-                                                            (click)="deleteEmployment(record.id)"
-                                                        >
-                                                            {{ l('Delete') }}
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                           
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
@@ -331,10 +277,6 @@
                 </div>
             </div>
         </div>
-        <createOrEditEmploymentModal
-            #createOrEditEmploymentModal
-            (modalSave)="getEmployments()"
-        ></createOrEditEmploymentModal>
-        <viewEmploymentModal #viewEmploymentModal></viewEmploymentModal>
+       
     </div>
 </div>

@@ -44,12 +44,19 @@ export class AppNavigationService {
                     ]),
 
                 new AppMenuItem(
-                    'Master',
+                    'Job Application',
                     '',
                     'fa-regular fa-house',
                     '',
                     [],
                     [
+
+                        new AppMenuItem('Company', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+                        new AppMenuItem('Employee', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+                        new AppMenuItem('JobDemand', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+                        new AppMenuItem('Employment', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+
+
                         new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
 
                         new AppMenuItem('Employee', 'Pages.Employee', 'flaticon-more', '/app/main/job/employee'),

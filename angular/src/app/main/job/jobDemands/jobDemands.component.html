@@ -134,33 +134,33 @@
                                         >
                                             {{ l('Actions') }}
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="companyFk.name">
+                                        <th style="width: 150px" pSortableColumn="companyName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="companyName"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="jobSkillFk.name">
+                                        <th style="width: 150px" pSortableColumn="jobSkillName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="jobSkillName"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="name">
                                             {{ l('Name') }}
-                                            <p-sortIcon field="jobDemand.name"></p-sortIcon>
+                                            <p-sortIcon field="name"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="address">
                                             {{ l('Address') }}
-                                            <p-sortIcon field="jobDemand.address"></p-sortIcon>
+                                            <p-sortIcon field="address"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="date">
                                             {{ l('Date') }}
-                                            <p-sortIcon field="jobDemand.date"></p-sortIcon>
+                                            <p-sortIcon field="date"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="salary">
                                             {{ l('Salary') }}
-                                            <p-sortIcon field="jobDemand.salary"></p-sortIcon>
+                                            <p-sortIcon field="salary"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="expiredDate">
                                             {{ l('ExpiredDate') }}
-                                            <p-sortIcon field="jobDemand.expiredDate"></p-sortIcon>
+                                            <p-sortIcon field="expiredDate"></p-sortIcon>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -192,7 +192,7 @@
                                                             *ngIf="permission.isGranted('Pages.JobDemands.Edit')"
                                                             class="dropdown-item"
                                                             (click)="
-                                                                createOrEditJobDemandModal.show(record.jobDemand.id)
+                                                                createOrEditJobDemandModal.show(record.id)
                                                             "
                                                         >
                                                             {{ l('Edit') }}
@@ -203,7 +203,7 @@
                                                             class="dropdown-item"
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.JobDemands.Delete')"
-                                                            (click)="deleteJobDemand(record.jobDemand)"
+                                                            (click)="deleteJobDemand(record.id)"
                                                         >
                                                             {{ l('Delete') }}
                                                         </a>
@@ -221,29 +221,29 @@
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
-                                            {{ record.jobDemand.name }}
+                                            {{ record.name }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Address') }}</span>
-                                            {{ record.jobDemand.address }}
+                                            {{ record.address }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Date') }}</span>
-                                            <span *ngIf="record.jobDemand.date">
-                                                {{ record.jobDemand.date | luxonFormat : 'F' }}
+                                            <span *ngIf="record.date">
+                                                {{ record.date | luxonFormat : 'F' }}
                                             </span>
-                                            <span *ngIf="!record.jobDemand.date">-</span>
+                                            <span *ngIf="!record.date">-</span>
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Salary') }}</span>
-                                            {{ record.jobDemand.salary }}
+                                            {{ record.salary }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('ExpiredDate') }}</span>
-                                            <span *ngIf="record.jobDemand.expiredDate">
-                                                {{ record.jobDemand.expiredDate | luxonFormat : 'F' }}
+                                            <span *ngIf="record.expiredDate">
+                                                {{ record.expiredDate | luxonFormat : 'F' }}
                                             </span>
-                                            <span *ngIf="!record.jobDemand.expiredDate">-</span>
+                                            <span *ngIf="!record.expiredDate">-</span>
                                         </td>
                                     </tr>
                                 </ng-template>

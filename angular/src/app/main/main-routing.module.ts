@@ -75,6 +75,21 @@ import { RouterModule } from '@angular/router';
                         loadChildren: () => import('./master/jobSkill/jobSkill.module').then(m => m.JobSkillModule),
                         data: { permission: 'Pages.JobSkill' }
                     },
+
+
+                    
+                    {
+                        path: 'master/companyCategory',
+                        loadChildren: () => import('./master/companyCategory/companyCategory.module').then(m => m.CompanyCategoryModule),
+                        data: { permission: 'Pages.JobSkill' }
+                    },
+
+                     
+                    {
+                        path: 'jobAgency',
+                        loadChildren: () => import('./jobAgency/jobAgency.module').then(m => m.JobAgencyModule),
+                        data: { permission: 'Pages.JobSkill' }
+                    },
                 
                     
                    

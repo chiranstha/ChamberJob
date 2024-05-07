@@ -1,7 +1,8 @@
 ﻿import { Component, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { DashboardCustomizationConst } from '@app/shared/common/customizable-dashboard/DashboardCustomizationConsts';
-import { CreateEmployeeModalComponent } from './createEmployeeModal/createEmployeeModal.component';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { CreateOrEditEmployeeModalComponent } from './createEmployeeModal/create-or-edit-employee-modal.component';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -10,14 +11,19 @@ import { CreateEmployeeModalComponent } from './createEmployeeModal/createEmploy
 })
 export class DashboardComponent extends AppComponentBase implements OnInit {
 
-    @ViewChild('CreateEmployeeModal', { static: true })
-    createOrEditCompanyTypeModal: CreateEmployeeModalComponent;
+    @ViewChild('createOrEditEmployeeModal', { static: true })
+    createOrEditEmployeeModal: CreateOrEditEmployeeModalComponent;
     dashboardName = DashboardCustomizationConst.dashboardNames.defaultTenantDashboard;
 
     constructor(injector: Injector) {
         super(injector);
     }
     ngOnInit(): void {
-        this.createOrEditCompanyTypeModal.show('');
+      
+    }
+
+    openCreateOrEditModal()
+    {
+        this.createOrEditEmployeeModal.show();
     }
 }

@@ -1,7 +1,7 @@
 ﻿import { AppConsts } from '@shared/AppConsts';
 import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { GetCompanyCategoryForViewDto, CompanyCategoryDto } from '@shared/service-proxies/service-proxies';
+import { GetCompanyCategoryForViewDto } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
 
 @Component({
@@ -20,9 +20,7 @@ export class ViewCompanyCategoryModalComponent extends AppComponentBase {
     constructor(injector: Injector) {
         super(injector);
         this.item = new GetCompanyCategoryForViewDto();
-        this.item.companyCategory = new CompanyCategoryDto();
     }
-
     show(item: GetCompanyCategoryForViewDto): void {
         this.item = item;
         this.active = true;

@@ -10,15 +10,7 @@
                     {{ l('ExportToExcel') }}
                 </button>
 
-                <button
-                    id="btn_create_employee"
-                    *ngIf="isGranted('Pages.Employee.Create')"
-                    (click)="createEmployee()"
-                    class="btn btn-primary blue"
-                >
-                    <i class="fa fa-plus"></i>
-                    {{ l('CreateNewEmployee') }}
-                </button>
+               
             </div>
         </sub-header>
 
@@ -116,12 +108,7 @@
                             >
                                 <ng-template pTemplate="header">
                                     <tr>
-                                        <th
-                                            style="width: 130px"
-                                            [hidden]="!isGrantedAny('Pages.Employee.Edit', 'Pages.Employee.Delete')"
-                                        >
-                                            {{ l('Actions') }}
-                                        </th>
+                                       
                                         <th style="width: 150px" pSortableColumn="jobSkillName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="jobSkillName"></p-sortIcon>
@@ -154,49 +141,7 @@
                                 </ng-template>
                                 <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
                                     <tr>
-                                        <td
-                                            style="width: 130px"
-                                            [hidden]="!isGrantedAny('Pages.Employee.Edit', 'Pages.Employee.Delete')"
-                                        >
-                                            <div class="btn-group dropdown" dropdown container="body">
-                                                <button class="dropdown-toggle btn btn-sm btn-primary" dropdownToggle>
-                                                    <i class="fa fa-cog"></i>
-                                                    <span class="caret"></span>
-                                                    {{ l('Actions') }}
-                                                </button>
-                                                <ul class="dropdown-menu" *dropdownMenu>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            class="dropdown-item"
-                                                            (click)="viewEmployeeModal.show(record)"
-                                                        >
-                                                            {{ l('View') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employee.Edit')"
-                                                            class="dropdown-item"
-                                                            (click)="createOrEditEmployeeModal.show(record.id)"
-                                                        >
-                                                            {{ l('Edit') }}
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a
-                                                            class="dropdown-item"
-                                                            href="javascript:;"
-                                                            *ngIf="permission.isGranted('Pages.Employee.Delete')"
-                                                            (click)="deleteEmployee(record.id)"
-                                                        >
-                                                            {{ l('Delete') }}
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
+                                       
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
                                             {{ record.jobSkillName }}
@@ -253,7 +198,6 @@
                 </div>
             </div>
         </div>
-        <createOrEditEmployeeModal #createOrEditEmployeeModal (modalSave)="getEmployee()"></createOrEditEmployeeModal>
-        <viewEmployeeModal #viewEmployeeModal></viewEmployeeModal>
+      
     </div>
 </div>

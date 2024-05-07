@@ -138,37 +138,37 @@
                                         >
                                             {{ l('Actions') }}
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="companyCategoryFk.name">
+                                        <th style="width: 150px" pSortableColumn="companyCategoryName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="companyCategoryName"></p-sortIcon>
                                         </th>
-                                        <th style="width: 150px" pSortableColumn="companyTypeFk.name">
+                                        <th style="width: 150px" pSortableColumn="companyTypeName">
                                             {{ l('Name') }}
                                             <p-sortIcon field="companyTypeName"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="name">
                                             {{ l('Name') }}
-                                            <p-sortIcon field="company.name"></p-sortIcon>
+                                            <p-sortIcon field="name"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="address">
                                             {{ l('Address') }}
-                                            <p-sortIcon field="company.address"></p-sortIcon>
+                                            <p-sortIcon field="address"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="authorizedPerson">
                                             {{ l('AuthorizedPerson') }}
-                                            <p-sortIcon field="company.authorizedPerson"></p-sortIcon>
+                                            <p-sortIcon field="authorizedPerson"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="contactNo">
                                             {{ l('ContactNo') }}
-                                            <p-sortIcon field="company.contactNo"></p-sortIcon>
+                                            <p-sortIcon field="contactNo"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="businessNature">
                                             {{ l('BusinessNature') }}
-                                            <p-sortIcon field="company.businessNature"></p-sortIcon>
+                                            <p-sortIcon field="businessNature"></p-sortIcon>
                                         </th>
                                         <th style="width: 150px" pSortableColumn="establishedYear">
                                             {{ l('EstablishedYear') }}
-                                            <p-sortIcon field="company.establishedYear"></p-sortIcon>
+                                            <p-sortIcon field="establishedYear"></p-sortIcon>
                                         </th>
                                     </tr>
                                 </ng-template>
@@ -199,7 +199,7 @@
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.Company.Edit')"
                                                             class="dropdown-item"
-                                                            (click)="createOrEditCompanyModal.show(record.company.id)"
+                                                            (click)="createOrEditCompanyModal.show(record.id)"
                                                         >
                                                             {{ l('Edit') }}
                                                         </a>
@@ -209,7 +209,7 @@
                                                             class="dropdown-item"
                                                             href="javascript:;"
                                                             *ngIf="permission.isGranted('Pages.Company.Delete')"
-                                                            (click)="deleteCompany(record.company)"
+                                                            (click)="deleteCompany(record.id)"
                                                         >
                                                             {{ l('Delete') }}
                                                         </a>
@@ -227,27 +227,27 @@
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Name') }}</span>
-                                            {{ record.company.name }}
+                                            {{ record.name }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('Address') }}</span>
-                                            {{ record.company.address }}
+                                            {{ record.address }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('AuthorizedPerson') }}</span>
-                                            {{ record.company.authorizedPerson }}
+                                            {{ record.authorizedPerson }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('ContactNo') }}</span>
-                                            {{ record.company.contactNo }}
+                                            {{ record.contactNo }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('BusinessNature') }}</span>
-                                            {{ l(businessNatureEnum[record.company.businessNature]) }}
+                                            {{ l(businessNatureEnum[record.businessNature]) }}
                                         </td>
                                         <td style="width: 150px">
                                             <span class="p-column-title">{{ l('EstablishedYear') }}</span>
-                                            {{ record.company.establishedYear }}
+                                            {{ record.establishedYear }}
                                         </td>
                                     </tr>
                                 </ng-template>
