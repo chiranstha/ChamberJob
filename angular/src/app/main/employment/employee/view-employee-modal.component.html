@@ -22,21 +22,33 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6 mb-3">
-                        <h6>{{ l('Date') }} :</h6>
-                        {{ item.date | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
+                        <h6>{{ l('Name') }} :</h6>
+                        {{ item.name }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('PhoneNo') }} :</h6>
+                        {{ item.phoneNo }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Gender') }} :</h6>
+                        {{ l(genderEnum[item.gender]) }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Dbo') }} :</h6>
+                        {{ item.dbo | luxonFormat : 'yyyy-LL-dd HH:mm:ss' }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('Qualification') }} :</h6>
+                        {{ item.qualification }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <h6>{{ l('ExpectedSalary') }} :</h6>
+                        {{ item.expectedSalary }}
                     </div>
 
                     <div class="col-6 mb-3">
-                        <h6>({{ l('Company') }}) {{ l('Name') }} :</h6>
-                        {{ item.companyName }}
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h6>({{ l('JobDemand') }}) {{ l('Name') }} :</h6>
-                        {{ item.jobDemandName }}
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h6>({{ l('Employee') }}) {{ l('Name') }} :</h6>
-                        {{ item.employeeName }}
+                        <h6>({{ l('JobSkill') }}) {{ l('Name') }} :</h6>
+                        {{ item.jobSkillName }}
                     </div>
                 </div>
             </div>

@@ -17,8 +17,8 @@
                         <span *ngIf="!employee.id">{{ l('CreateNewEmployee') }}</span>
                     </h4>
 
-                    <button type="button" class="close" (click)="close()" aria-label="Close" [disabled]="saving">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
+                       
                     </button>
                 </div>
                 <div class="modal-body">
@@ -179,7 +179,7 @@
                                     </a>
                                 </div>
                                 <div class="alert-close">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true" (click)="removePhotoFile()">
                                             <i class="la la-close fa-1x"></i>
                                         </span>

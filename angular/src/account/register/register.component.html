@@ -11,13 +11,13 @@
             id="kt_userType_option_1" />
         <label class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center mb-5"
             for="kt_userType_option_1">
-            <i class="ki-duotone ki-setting-2 fs-4x me-4"><span class="path1"></span><span class="path2"></span></i>
+            <i class="fa-duotone fa-setting-2 fs-4x me-4"><span class="path1"></span><span class="path2"></span></i>
 
             <span class="d-block fw-semibold text-start">
                 <span class="text-gray-900 fw-bold d-block fs-3">Company</span>
-                <span class="text-muted fw-semibold fs-6">
+                <!-- <span class="text-muted fw-semibold fs-6">
                     Get codes from an app like Google Authenticator, Microsoft Authenticator, Authy or 1Password.
-                </span>
+                </span> -->
             </span>
         </label>
         <!--end::Option-->
@@ -26,13 +26,13 @@
         <input type="radio" class="btn-check" name="userType" formControlName="userType" value="2" id="kt_userType_option_2" />
         <label class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center"
             for="kt_userType_option_2">
-            <i class="ki-duotone ki-message-text-2 fs-4x me-4"><span class="path1"></span><span
+            <i class="fa-duotone fa-message-text-2 fs-4x me-4"><span class="path1"></span><span
                     class="path2"></span><span class="path3"></span></i>
 
             <span class="d-block fw-semibold text-start">
                 <span class="text-gray-900 fw-bold d-block fs-3">Employer</span>
-                <span class="text-muted fw-semibold fs-6">We will send a code via SMS if you need to use your backup
-                    login method.</span>
+                <!-- <span class="text-muted fw-semibold fs-6">We will send a code via SMS if you need to use your backup
+                    login method.</span> -->
             </span>
         </label>
         <!--end::Option-->
@@ -60,7 +60,7 @@
                 placeholder="{{ 'Surname' | localize }} *" formControlName="surname" name="Surname" required
                 maxlength="64" />
             <label for="floatingInput">{{ 'Surname' | localize }}</label>
-            <validation-messages [formCtrl]="surnameInput"></validation-messages>
+           
         </div>
 
         <div class="form-floating mb-7">
@@ -75,7 +75,7 @@
                 placeholder="{{ 'UserName' | localize }} *" name="UserName" formControlName="userName" required
                 maxlength="256" />
             <label for="floatingInput">{{ 'UserName' | localize }} </label>
-            <validation-messages [formCtrl]="userNameInput"></validation-messages>
+          
         </div>
 
         <div class="form-floating mb-7">

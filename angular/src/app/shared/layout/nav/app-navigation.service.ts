@@ -51,21 +51,21 @@ export class AppNavigationService {
                     [],
                     [
 
-                        new AppMenuItem('Company', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
-                        new AppMenuItem('Employee', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+                        new AppMenuItem('Company', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/company'),
+                        new AppMenuItem('Employee', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/employee'),
                         new AppMenuItem('JobDemand', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
-                        new AppMenuItem('Employment', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/jobdemand'),
+                        new AppMenuItem('Employment', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/employments'),
 
 
-                        new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
+                     
 
-                        new AppMenuItem('Employee', 'Pages.Employee', 'flaticon-more', '/app/main/job/employee'),
+                    
 
-                        new AppMenuItem('JobDemands', 'Pages.JobDemands', 'flaticon-more', '/app/main/job/jobDemands'),
+                        // new AppMenuItem('JobDemands', 'Pages.JobDemands', 'flaticon-more', '/app/main/job/jobDemands'),
 
-                        new AppMenuItem('JobApply', 'Pages.JobApply', 'flaticon-more', '/app/main/job/jobApply'),
+                        // new AppMenuItem('JobApply', 'Pages.JobApply', 'flaticon-more', '/app/main/job/jobApply'),
 
-                        new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
+                        // new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
                     ]),
 
 
@@ -181,15 +181,13 @@ export class AppNavigationService {
                 new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'fa-regular fa-computer', '/app/main/dashboard'),
                
                 new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
-
-                new AppMenuItem('Employee', 'Pages.Employee', 'flaticon-more', '/app/main/job/employee'),
+                new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
 
                 new AppMenuItem('JobDemands', 'Pages.JobDemands', 'flaticon-more', '/app/main/job/jobDemands'),
 
                 new AppMenuItem('JobApply', 'Pages.JobApply', 'flaticon-more', '/app/main/job/jobApply'),
 
-                new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
-
+             
                
 
 
@@ -206,13 +204,13 @@ export class AppNavigationService {
                
                 new AppMenuItem('Dashboard', '', 'fa-regular fa-computer', '/app/main/dashboard'),
                
-                new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
+              
 
-                new AppMenuItem('Employee', '', 'flaticon-more', '/app/main/job/employee'),
+                new AppMenuItem('Employee', '', 'flaticon-more', '/app/employment/employee'),
 
                 new AppMenuItem('JobDemands', '', 'flaticon-more', '/app/employment/jobdemand'),
 
-                new AppMenuItem('JobApply', '', 'flaticon-more', '/app/main/job/jobApply'),
+                new AppMenuItem('JobApply', '', 'flaticon-more', '/app/employment/jobapply'),
 
                // new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
 

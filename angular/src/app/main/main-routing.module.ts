@@ -29,12 +29,7 @@ import { RouterModule } from '@angular/router';
                     },
                 
                     
-                    {
-                        path: 'job/employee',
-                        loadChildren: () => import('./job/employee/employee.module').then(m => m.EmployeeModule),
-                        data: { permission: 'Pages.Employee' }
-                    },
-                
+                  
                     
                     {
                         path: 'master/company',

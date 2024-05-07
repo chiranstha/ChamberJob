@@ -16,7 +16,6 @@ import { JobdemandComponent } from './jobdemand/jobdemand.component';
                 { path: 'company', component: CompanyComponent, data: {  } },
                 { path: 'employee', component: EmployeeComponent, data: {  } },
                 { path: 'employments', component: EmploymentsComponent, data: {  } },
-                { path: 'company', component: CompanyComponent, data: {  } },
 
             ]
         }

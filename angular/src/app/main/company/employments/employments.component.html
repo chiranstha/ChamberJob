@@ -1,6 +1,18 @@
 ﻿<div [@routerTransition]>
     <div class="content d-flex flex-column flex-column-fluid">
         <sub-header [title]="'Employments' | localize" [description]="'EmploymentsHeaderInfo' | localize">
+            <div role="search">
+                <div class="position-relative w-md-400px me-md-2">
+                    <i class="fa-duotone fa-magnifying-glass fs-3 text-gray-500 position-absolute top-50 translate-middle ms-6"><span
+                            class="path1"></span><span class="path2"></span></i>
+                    <input (keyup)="getEmployments()" (keyup.enter)="getEmployments()"
+                           [(ngModel)]="filterText" [ngModelOptions]="{ standalone: true }"
+                           class="form-control form-control-solid ps-10" name="search" placeholder="Search"
+                           type="text"
+                           value="">
+                </div>
+               
+               </div>
             <div role="actions">
                 <button
                     id="btn_create_employment"
@@ -17,106 +29,7 @@
         <div [class]="containerClass">
             <div class="card card-custom gutter-b">
                 <div class="card-body">
-                    <form class="form" autocomplete="off">
-                        <div>
-                            <div class="row align-items-center">
-                                <div class="col-xl-12">
-                                    <div class="form-group m-form__group align-items-center">
-                                        <div class="input-group">
-                                            <input
-                                                [(ngModel)]="filterText"
-                                                name="filterText"
-                                                autoFocus
-                                                class="form-control m-input"
-                                                [placeholder]="l('SearchWithThreeDot')"
-                                                type="text"
-                                            />
-                                            <span class="input-group-btn">
-                                                <button
-                                                    (click)="getEmployments()"
-                                                    class="btn btn-primary"
-                                                    type="submit"
-                                                >
-                                                    <i class="flaticon-search-1"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" [hidden]="!advancedFiltersAreShown">
-                                <div class="col-md-12">
-                                    <div class="separator separator-dashed"></div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="MinMaleFilter">{{ l('MinMax') }} {{ l('Male') }}</label>
-                                        <div class="input-group">
-                                            <input
-                                                type="number"
-                                                class="form-control"
-                                                id="MinMaleFilter"
-                                                [(ngModel)]="minMaleFilter"
-                                                placeholder="{{ l('MinValue') }}"
-                                                name="minMaleFilter"
-                                            />
-                                            <input
-                                                type="number"
-                                                class="form-control"
-                                                [(ngModel)]="maxMaleFilter"
-                                                placeholder="{{ l('MaxValue') }}"
-                                                name="maxMaleFilter"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="CompanyNameFilter">({{ l('Company') }}) {{ l('Name') }}</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="CompanyNameFilter"
-                                            name="companyNameFilter"
-                                            [(ngModel)]="companyNameFilter"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 mt-5">
-                                    <button
-                                        (click)="resetFilters()"
-                                        class="btn btn-secondary btn-sm"
-                                        id="btn-reset-filters"
-                                    >
-                                        Reset
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row my-4">
-                                <div class="col-sm-12">
-                                    <span
-                                        class="clickable-item text-muted"
-                                        *ngIf="!advancedFiltersAreShown"
-                                        (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
-                                    >
-                                        <i class="fa fa-angle-down"></i>
-                                        {{ l('ShowAdvancedFilters') }}
-                                    </span>
-                                    <span
-                                        class="clickable-item text-muted"
-                                        *ngIf="advancedFiltersAreShown"
-                                        (click)="advancedFiltersAreShown = !advancedFiltersAreShown"
-                                    >
-                                        <i class="fa fa-angle-up"></i>
-                                        {{ l('HideAdvancedFilters') }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                
 
                     <div class="row align-items-center">
                         <!--<Primeng-Datatable-Start>-->

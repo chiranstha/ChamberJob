@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Suktas.Payroll.Job
 {
-    [AbpAuthorize(AppPermissions.Pages_Employee)]
+    [AbpAuthorize]
     public class EmployeeAppService : PayrollAppServiceBase, IEmployeeAppService
     {
         private readonly IRepository<Employee, Guid> _employeeRepository;
@@ -122,7 +122,7 @@ namespace Suktas.Payroll.Job
             return output;
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee_Edit)]
+        [AbpAuthorize]
         public virtual async Task<GetEmployeeForEditOutput> GetEmployeeForEdit(EntityDto<Guid> input)
         {
             var employee = await _employeeRepository.FirstOrDefaultAsync(input.Id);
@@ -162,7 +162,7 @@ namespace Suktas.Payroll.Job
             }
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee_Create)]
+        [AbpAuthorize]
         protected virtual async Task Create(CreateOrEditEmployeeDto input)
         {
             var employee = new Employee
@@ -189,7 +189,7 @@ namespace Suktas.Payroll.Job
 
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee_Edit)]
+        [AbpAuthorize]
         protected virtual async Task Update(CreateOrEditEmployeeDto input)
         {
             var employee = await _employeeRepository.FirstOrDefaultAsync((Guid)input.Id);
@@ -207,11 +207,11 @@ namespace Suktas.Payroll.Job
                 employee.JobSkillId = input.JobSkillId;
                 await _employeeRepository.UpdateAsync(employee);
             }
-            employee.Photo = await GetBinaryObjectFromCache(input.PhotoToken);
 
+            if (employee != null) employee.Photo = await GetBinaryObjectFromCache(input.PhotoToken);
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee_Delete)]
+        [AbpAuthorize]
         public virtual async Task Delete(EntityDto<Guid> input)
         {
             await _employeeRepository.DeleteAsync(input.Id);
@@ -246,7 +246,7 @@ namespace Suktas.Payroll.Job
             return _employeeExcelExporter.ExportToFile(employeeListDtos);
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee)]
+        [AbpAuthorize]
         public async Task<List<EmployeeJobSkillLookupTableDto>> GetAllJobSkillForTableDropdown()
         {
             return await _lookupJobSkillRepository.GetAll()
@@ -288,7 +288,7 @@ namespace Suktas.Payroll.Job
             return file?.Description;
         }
 
-        [AbpAuthorize(AppPermissions.Pages_Employee_Edit)]
+        [AbpAuthorize]
         public virtual async Task RemovePhotoFile(EntityDto<Guid> input)
         {
             var employee = await _employeeRepository.FirstOrDefaultAsync(input.Id);
