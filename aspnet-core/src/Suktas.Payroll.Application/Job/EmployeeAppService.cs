@@ -192,7 +192,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize]
         protected virtual async Task Update(CreateOrEditEmployeeDto input)
         {
-            var employee = await _employeeRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var employee = await _employeeRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if (employee != null)
             {
                 employee.Name = input.Name;

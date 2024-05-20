@@ -36,6 +36,7 @@ import { MultipleSelectComboboxInputTypeComponent } from './input-types/multiple
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { PasswordInputWithShowButtonComponent } from './password-input-with-show-button/password-input-with-show-button.component';
 import { KeyValueListManagerComponent } from './key-value-list-manager/key-value-list-manager.component';
+import { NepaliDatepickerModule } from './npx-np-datepicker/np-datepicker.module';
 
 @NgModule({
     imports: [
@@ -54,6 +55,7 @@ import { KeyValueListManagerComponent } from './key-value-list-manager/key-value
         CountoModule,
         AppBsModalModule,
         AutoCompleteModule,
+        NepaliDatepickerModule
     ],
     declarations: [
         TimeZoneComboComponent,

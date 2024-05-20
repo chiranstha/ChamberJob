@@ -210,7 +210,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employments_Edit)]
         protected virtual async Task Update(CreateOrEditEmploymentDto input)
         {
-            var employment = await _employmentRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var employment = await _employmentRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if(employment != null)
             {
                 employment.Total = input.Total;

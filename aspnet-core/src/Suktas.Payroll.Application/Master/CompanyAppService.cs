@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Abp.Runtime.Session;
 
 namespace Suktas.Payroll.Master
 {
@@ -29,7 +30,10 @@ namespace Suktas.Payroll.Master
         private readonly ITempFileCacheManager _tempFileCacheManager;
         private readonly IBinaryObjectManager _binaryObjectManager;
 
-        public CompanyAppService(IRepository<Company> companyRepository, ICompanyExcelExporter companyExcelExporter, IRepository<CompanyCategory, int> lookupCompanyCategoryRepository, IRepository<CompanyType, Guid> lookupCompanyTypeRepository, ITempFileCacheManager tempFileCacheManager, IBinaryObjectManager binaryObjectManager)
+        public CompanyAppService(IRepository<Company> companyRepository, ICompanyExcelExporter companyExcelExporter,
+            IRepository<CompanyCategory, int> lookupCompanyCategoryRepository,
+            IRepository<CompanyType, Guid> lookupCompanyTypeRepository, ITempFileCacheManager tempFileCacheManager,
+            IBinaryObjectManager binaryObjectManager)
         {
             _companyRepository = companyRepository;
             _companyExcelExporter = companyExcelExporter;
@@ -38,43 +42,45 @@ namespace Suktas.Payroll.Master
 
             _tempFileCacheManager = tempFileCacheManager;
             _binaryObjectManager = binaryObjectManager;
-
         }
 
         public virtual async Task<PagedResultDto<GetCompanyForViewDto>> GetAll(GetAllCompanyInput input)
         {
-
             var filteredCompany = _companyRepository.GetAll()
-                        .Include(e => e.CompanyCategoryFk)
-                        .Include(e => e.CompanyTypeFk)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) || e.AuthorizedPerson.Contains(input.Filter) || e.ContactNo.Contains(input.Filter) || e.EstablishedYear.Contains(input.Filter) || e.Website.Contains(input.Filter) || e.VatNo.Contains(input.Filter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyCategoryNameFilter), e => e.CompanyCategoryFk != null && e.CompanyCategoryFk.Name == input.CompanyCategoryNameFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter), e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
+                .Include(e => e.CompanyCategoryFk)
+                .Include(e => e.CompanyTypeFk)
+                .Where(e => e.UserId == AbpSession.GetUserId())
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter),
+                    e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) ||
+                         e.AuthorizedPerson.Contains(input.Filter) || e.ContactNo.Contains(input.Filter) ||
+                         e.EstablishedYear.Contains(input.Filter) || e.Website.Contains(input.Filter) ||
+                         e.VatNo.Contains(input.Filter))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyCategoryNameFilter),
+                    e => e.CompanyCategoryFk != null && e.CompanyCategoryFk.Name == input.CompanyCategoryNameFilter)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter),
+                    e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
 
             var pagedAndFilteredCompany = filteredCompany
                 .OrderBy(input.Sorting ?? "id asc")
                 .PageBy(input);
 
             var company = from o in pagedAndFilteredCompany
-                          join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
-                          from s1 in j1.DefaultIfEmpty()
-
-                          join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
-                          from s2 in j2.DefaultIfEmpty()
-
-                          select new
-                          {
-
-                              o.Name,
-                              o.Address,
-                              o.AuthorizedPerson,
-                              o.ContactNo,
-                              o.BusinessNature,
-                              o.EstablishedYear,
-                              Id = o.Id,
-                              CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
-                              CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
-                          };
+                join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
+                from s1 in j1.DefaultIfEmpty()
+                join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
+                from s2 in j2.DefaultIfEmpty()
+                select new
+                {
+                    o.Name,
+                    o.Address,
+                    o.AuthorizedPerson,
+                    o.ContactNo,
+                    o.BusinessNature,
+                    o.EstablishedYear,
+                    Id = o.Id,
+                    CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
+                    CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
+                };
 
             var totalCount = await filteredCompany.CountAsync();
 
@@ -85,7 +91,6 @@ namespace Suktas.Payroll.Master
             {
                 var res = new GetCompanyForViewDto()
                 {
-
                     Name = o.Name,
                     Address = o.Address,
                     AuthorizedPerson = o.AuthorizedPerson,
@@ -104,7 +109,73 @@ namespace Suktas.Payroll.Master
                 totalCount,
                 results
             );
+        }
 
+
+        public virtual async Task<PagedResultDto<GetCompanyForViewDto>> GetAllCompany(GetAllCompanyInput input)
+        {
+            var filteredCompany = _companyRepository.GetAll()
+                .Include(e => e.CompanyCategoryFk)
+                .Include(e => e.CompanyTypeFk)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter),
+                    e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) ||
+                         e.AuthorizedPerson.Contains(input.Filter) || e.ContactNo.Contains(input.Filter) ||
+                         e.EstablishedYear.Contains(input.Filter) || e.Website.Contains(input.Filter) ||
+                         e.VatNo.Contains(input.Filter))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyCategoryNameFilter),
+                    e => e.CompanyCategoryFk != null && e.CompanyCategoryFk.Name == input.CompanyCategoryNameFilter)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter),
+                    e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
+
+            var pagedAndFilteredCompany = filteredCompany
+                .OrderBy(input.Sorting ?? "id asc")
+                .PageBy(input);
+
+            var company = from o in pagedAndFilteredCompany
+                join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
+                from s1 in j1.DefaultIfEmpty()
+                join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
+                from s2 in j2.DefaultIfEmpty()
+                select new
+                {
+                    o.Name,
+                    o.Address,
+                    o.AuthorizedPerson,
+                    o.ContactNo,
+                    o.BusinessNature,
+                    o.EstablishedYear,
+                    Id = o.Id,
+                    CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
+                    CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
+                };
+
+            var totalCount = await filteredCompany.CountAsync();
+
+            var dbList = await company.ToListAsync();
+            var results = new List<GetCompanyForViewDto>();
+
+            foreach (var o in dbList)
+            {
+                var res = new GetCompanyForViewDto()
+                {
+                    Name = o.Name,
+                    Address = o.Address,
+                    AuthorizedPerson = o.AuthorizedPerson,
+                    ContactNo = o.ContactNo,
+                    BusinessNature = o.BusinessNature,
+                    EstablishedYear = o.EstablishedYear,
+                    Id = o.Id,
+                    CompanyCategoryName = o.CompanyCategoryName,
+                    CompanyTypeName = o.CompanyTypeName
+                };
+
+                results.Add(res);
+            }
+
+            return new PagedResultDto<GetCompanyForViewDto>(
+                totalCount,
+                results
+            );
         }
 
         public virtual async Task<GetCompanyForViewDto> GetCompanyForView(int id)
@@ -125,13 +196,15 @@ namespace Suktas.Payroll.Master
 
             if (output.CompanyCategoryId != null)
             {
-                var lookupCompanyCategory = await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
+                var lookupCompanyCategory =
+                    await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
                 output.CompanyCategoryName = lookupCompanyCategory?.Name;
             }
 
             if (output.CompanyTypeId != null)
             {
-                var lookupCompanyType = await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
+                var lookupCompanyType =
+                    await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
                 output.CompanyTypeName = lookupCompanyType?.Name;
             }
 
@@ -160,13 +233,15 @@ namespace Suktas.Payroll.Master
 
             if (output.CompanyCategoryId != null)
             {
-                var lookupCompanyCategory = await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
+                var lookupCompanyCategory =
+                    await _lookupCompanyCategoryRepository.FirstOrDefaultAsync((int)output.CompanyCategoryId);
                 output.CompanyCategoryName = lookupCompanyCategory?.Name;
             }
 
             if (output.CompanyTypeId != null)
             {
-                var lookupCompanyType = await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
+                var lookupCompanyType =
+                    await _lookupCompanyTypeRepository.FirstOrDefaultAsync((Guid)output.CompanyTypeId);
                 output.CompanyTypeName = lookupCompanyType?.Name;
             }
 
@@ -188,6 +263,10 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Company_Create)]
         protected virtual async Task Create(CreateOrEditCompanyDto input)
         {
+            if (await _companyRepository.CountAsync(e => e.Name == input.Name && e.UserId == AbpSession.GetUserId()) >
+                0)
+                throw new UserFriendlyException(L("CompanyAlreadyExists"));
+
             var company = new Company
             {
                 Name = input.Name,
@@ -201,23 +280,20 @@ namespace Suktas.Payroll.Master
                 VatNo = input.VatNo,
                 Logo = input.Logo,
                 CompanyCategoryId = input.CompanyCategoryId,
+                UserId = AbpSession.GetUserId(),
+                TenantId = AbpSession.TenantId
             };
 
-            if (AbpSession.TenantId != null)
-            {
-                company.TenantId = (int?)AbpSession.TenantId;
-            }
 
             await _companyRepository.InsertAsync(company);
             company.Logo = await GetBinaryObjectFromCache(input.LogoToken);
-
         }
 
         [AbpAuthorize(AppPermissions.Pages_Company_Edit)]
         protected virtual async Task Update(CreateOrEditCompanyDto input)
         {
             var company = await _companyRepository.FirstOrDefaultAsync((int)input.Id);
-            if(company != null)
+            if (company != null)
             {
                 company.Name = input.Name;
                 company.Address = input.Address;
@@ -232,8 +308,8 @@ namespace Suktas.Payroll.Master
                 company.CompanyCategoryId = input.CompanyCategoryId;
                 await _companyRepository.UpdateAsync(company);
             }
-            company.Logo = await GetBinaryObjectFromCache(input.LogoToken);
 
+            company.Logo = await GetBinaryObjectFromCache(input.LogoToken);
         }
 
         [AbpAuthorize(AppPermissions.Pages_Company_Delete)]
@@ -244,33 +320,36 @@ namespace Suktas.Payroll.Master
 
         public virtual async Task<FileDto> GetCompanyToExcel(GetAllCompanyForExcelInput input)
         {
-
             var filteredCompany = _companyRepository.GetAll()
-                        .Include(e => e.CompanyCategoryFk)
-                        .Include(e => e.CompanyTypeFk)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) || e.AuthorizedPerson.Contains(input.Filter) || e.ContactNo.Contains(input.Filter) || e.EstablishedYear.Contains(input.Filter) || e.Website.Contains(input.Filter) || e.VatNo.Contains(input.Filter))
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyCategoryNameFilter), e => e.CompanyCategoryFk != null && e.CompanyCategoryFk.Name == input.CompanyCategoryNameFilter)
-                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter), e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
+                .Include(e => e.CompanyCategoryFk)
+                .Include(e => e.CompanyTypeFk)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter),
+                    e => false || e.Name.Contains(input.Filter) || e.Address.Contains(input.Filter) ||
+                         e.AuthorizedPerson.Contains(input.Filter) || e.ContactNo.Contains(input.Filter) ||
+                         e.EstablishedYear.Contains(input.Filter) || e.Website.Contains(input.Filter) ||
+                         e.VatNo.Contains(input.Filter))
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyCategoryNameFilter),
+                    e => e.CompanyCategoryFk != null && e.CompanyCategoryFk.Name == input.CompanyCategoryNameFilter)
+                .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyTypeNameFilter),
+                    e => e.CompanyTypeFk != null && e.CompanyTypeFk.Name == input.CompanyTypeNameFilter);
 
             var query = (from o in filteredCompany
-                         join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
-                         from s1 in j1.DefaultIfEmpty()
-
-                         join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
-                         from s2 in j2.DefaultIfEmpty()
-
-                         select new GetCompanyForViewDto()
-                         {
-                             Name = o.Name,
-                             Address = o.Address,
-                             AuthorizedPerson = o.AuthorizedPerson,
-                             ContactNo = o.ContactNo,
-                             BusinessNature = o.BusinessNature,
-                             EstablishedYear = o.EstablishedYear,
-                             Id = o.Id,
-                             CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
-                             CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
-                         });
+                join o1 in _lookupCompanyCategoryRepository.GetAll() on o.CompanyCategoryId equals o1.Id into j1
+                from s1 in j1.DefaultIfEmpty()
+                join o2 in _lookupCompanyTypeRepository.GetAll() on o.CompanyTypeId equals o2.Id into j2
+                from s2 in j2.DefaultIfEmpty()
+                select new GetCompanyForViewDto()
+                {
+                    Name = o.Name,
+                    Address = o.Address,
+                    AuthorizedPerson = o.AuthorizedPerson,
+                    ContactNo = o.ContactNo,
+                    BusinessNature = o.BusinessNature,
+                    EstablishedYear = o.EstablishedYear,
+                    Id = o.Id,
+                    CompanyCategoryName = s1 == null || s1.Name == null ? "" : s1.Name,
+                    CompanyTypeName = s2 == null || s2.Name == null ? "" : s2.Name
+                });
 
             var companyListDtos = await query.ToListAsync();
 
@@ -284,7 +363,9 @@ namespace Suktas.Payroll.Master
                 .Select(companyCategory => new CompanyCompanyCategoryLookupTableDto
                 {
                     Id = companyCategory.Id,
-                    DisplayName = companyCategory == null || companyCategory.Name == null ? "" : companyCategory.Name.ToString()
+                    DisplayName = companyCategory == null || companyCategory.Name == null
+                        ? ""
+                        : companyCategory.Name.ToString()
                 }).ToListAsync();
         }
 
@@ -347,6 +428,5 @@ namespace Suktas.Payroll.Master
             await _binaryObjectManager.DeleteAsync(company.Logo.Value);
             company.Logo = null;
         }
-
     }
 }

@@ -130,7 +130,7 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Qualification_Edit)]
         protected virtual async Task Update(CreateOrEditQualificationDto input)
         {
-            var qualification = await _qualificationRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var qualification = await _qualificationRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if(qualification != null)
             {
                 qualification.Name = input.Name;

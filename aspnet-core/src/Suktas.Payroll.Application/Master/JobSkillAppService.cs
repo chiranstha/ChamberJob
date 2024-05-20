@@ -127,7 +127,7 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_JobSkill_Edit)]
         protected virtual async Task Update(CreateOrEditJobSkillDto input)
         {
-            var jobSkill = await _jobSkillRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var jobSkill = await _jobSkillRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if (jobSkill != null)
             {
                 jobSkill.Name = input.Name;

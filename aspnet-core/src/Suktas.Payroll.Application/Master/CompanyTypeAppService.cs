@@ -127,7 +127,7 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_CompanyType_Edit)]
         protected virtual async Task Update(CreateOrEditCompanyTypeDto input)
         {
-            var companyType = await _companyTypeRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var companyType = await _companyTypeRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if(companyType != null)
             {
                 companyType.Name = input.Name;

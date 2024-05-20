@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities.Auditing;
 using Abp.Domain.Entities;
+using Suktas.Payroll.Authorization.Users;
 
 namespace Suktas.Payroll.Job
 {
@@ -40,6 +41,12 @@ namespace Suktas.Payroll.Job
 
         [ForeignKey("JobSkillId")]
         public JobSkill JobSkillFk { get; set; }
+
+
+        public virtual long UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public User UserFk { get; set; }
 
     }
 }

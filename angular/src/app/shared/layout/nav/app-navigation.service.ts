@@ -57,9 +57,9 @@ export class AppNavigationService {
                         new AppMenuItem('Employment', '', 'fa-regular fa-briefcase', '/app/main/jobAgency/employments'),
 
 
-                     
 
-                    
+
+
 
                         // new AppMenuItem('JobDemands', 'Pages.JobDemands', 'flaticon-more', '/app/main/job/jobDemands'),
 
@@ -167,19 +167,18 @@ export class AppNavigationService {
                         )
                     ]
                 ),
-                // new AppMenuItem(
-                //     'DemoUiComponents',
-                //     'Pages.DemoUiComponents',
-                //     'flaticon-shapes',
-                //     '/app/admin/demo-ui-components'
-                // ),
+                new AppMenuItem(
+                    'DemoUiComponents',
+                    'Pages.DemoUiComponents',
+                    'flaticon-shapes',
+                    '/app/admin/demo-ui-components'
+                ),
             ]);
-        }
-        else if (this._appSessionService.user.userType === UserTypeEnum.Company) {
+        } else if (this._appSessionService.user.userType === UserTypeEnum.Company) {
             return new AppMenu('MainMenu', 'MainMenu', [
-                
+
                 new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'fa-regular fa-computer', '/app/main/dashboard'),
-               
+
                 new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
                 new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
 
@@ -187,24 +186,23 @@ export class AppNavigationService {
 
                 new AppMenuItem('JobApply', 'Pages.JobApply', 'flaticon-more', '/app/main/job/jobApply'),
 
-             
-               
 
 
 
 
 
 
-                
+
+
+
             ]);
-        }
-        else {
+        } else {
 
             return new AppMenu('MainMenu', 'MainMenu', [
-               
+
                 new AppMenuItem('Dashboard', '', 'fa-regular fa-computer', '/app/main/dashboard'),
-               
-              
+
+
 
                 new AppMenuItem('Employee', '', 'flaticon-more', '/app/employment/employee'),
 
@@ -214,14 +212,14 @@ export class AppNavigationService {
 
                // new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
 
-               
 
 
 
 
 
 
-                
+
+
             ]);
 
         }

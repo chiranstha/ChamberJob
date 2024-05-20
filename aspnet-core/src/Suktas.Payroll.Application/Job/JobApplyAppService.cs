@@ -269,7 +269,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize]
         protected virtual async Task Update(CreateOrEditJobApplyDto input)
         {
-            var jobApply = await _jobApplyRepository.FirstOrDefaultAsync((Guid)input.Id);
+            var jobApply = await _jobApplyRepository.FirstOrDefaultAsync(e=>e.Id==input.Id);
             if(jobApply != null)
             {
                 jobApply.Date = input.Date;
