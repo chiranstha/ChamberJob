@@ -1,0 +1,74 @@
+<div
+    #changePictureModal="bs-modal"
+    [config]="{ backdrop: 'static' }"
+    appBsModal
+    aria-hidden="true"
+    aria-labelledby="myLargeModalLabel"
+    class="modal fade"
+    role="dialog"
+    tabindex="-1"
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form #changePictureModalForm="ngForm" (ngSubmit)="save()" *ngIf="active">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span>{{ uploaderTitle }}</span>
+                    </h5>
+                    <button (click)="close()" [attr.aria-label]="l('Close')" class="btn-close" type="button">
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-5">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input
+                                        (change)="fileChangeEvent($event)"
+                                        id="uploadProfilePicture"
+                                        type="file"
+
+                                />
+                                <label
+                                    #uploadProfilePictureInputLabel
+                                    class="custom-file-label"
+                                    for="uploadProfilePicture"
+                                >
+                                    {{ 'ChooseAFile' | localize }}
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <image-cropper
+                            (imageCropped)="imageCroppedFile($event)"
+                            [aspectRatio]="ratio"
+                            [imageChangedEvent]="imageChangedEvent"
+                            [maintainAspectRatio]="aspectRatio"
+                            [onlyScaleDown]="true"
+                            [roundCropper]="false"
+                            format="png"
+                    ></image-cropper>
+                </div>
+                <div class="modal-footer">
+                    <button
+                            (click)="close()"
+                            [disabled]="saving"
+                            class="btn btn-light-primary fw-bold"
+                            type="button"
+                    >
+                        {{ 'Cancel' | localize }}
+                    </button>
+                    <button
+                            [disabled]="!changePictureModalForm.form.valid || saving"
+                            class="btn btn-primary fw-bold"
+                            type="submit"
+                    >
+                        <i class="pi pi-save"></i>
+                        <span>{{ 'Save' | localize }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

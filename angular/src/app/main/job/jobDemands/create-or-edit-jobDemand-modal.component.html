@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="JobDemand_Name">{{ l('Name') }}</label>
+                        <label for="JobDemand_Name">{{ l('JobTitle') }}</label>
                         <input type="text" id="JobDemand_Name" class="form-control" formControlName="name"
                             name="Name" />
                         <div *ngIf="
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="JobDemand_Address">{{ l('Address') }}</label>
+                        <label for="JobDemand_Address">{{ l('JobLocation') }}</label>
                         <input type="text" #JobDemand_Address id="JobDemand_Address" class="form-control"
                             formControlName="address" name="Address" />
                         <div *ngIf="
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="JobDemand_Date">{{ l('Date') }}</label>
+                        <label for="JobDemand_Date">{{ l('EntryDate') }}</label>
                         <npdual-datepicker [dateFormat]="'yyyy/MM/dd'" [formControl]="form.controls['dateMiti']"
                             [isfinancialYear]="false" [npDatePickerId]="'dateMiti'"
                             [placeholder]="'yyyy/MM/dd'"></npdual-datepicker>
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="JobDemand_Salary">{{ l('Salary') }}</label>
+                        <label for="JobDemand_Salary">{{ l('SalaryRange') }}</label>
                         <input type="text" #JobDemand_Salary id="JobDemand_Salary" class="form-control"
                             formControlName="salary" name="Salary" />
                         <validation-messages [formCtrl]="JobDemand_Salary"></validation-messages>
@@ -154,7 +154,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="JobDemand_Description">{{ l('Description') }}</label>
+                        <label for="JobDemand_Description">{{ l('JobSkill') }}</label>
 
                         <p-editor formControlName="description" [style]="{ height: '120px' }" />
 
@@ -173,7 +173,7 @@
                     </button>
                 </div>
             </form>
-            {{this.form.value|json}}
+            <!-- {{this.form.value|json}} -->
         </div>
     </div>
 </div>

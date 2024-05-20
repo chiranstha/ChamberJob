@@ -111,19 +111,25 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_Qualification_Create)]
         protected virtual async Task Create(CreateOrEditQualificationDto input)
         {
-            var qualification = new Qualification
+
+            var joblist = input.Name.Split(',');
+
+            foreach (var data in joblist)
             {
-                Name = input.Name,
-                Description = input.Description,
-            };
+                var qualification = new Qualification
+                {
+                    Name = data,
+                    Description = input.Description,
+                };
 
 
-            if (AbpSession.TenantId != null)
-            {
-                qualification.TenantId = (int?)AbpSession.TenantId;
+                if (AbpSession.TenantId != null)
+                {
+                    qualification.TenantId = (int?)AbpSession.TenantId;
+                }
+
+                await _qualificationRepository.InsertAsync(qualification);
             }
-
-            await _qualificationRepository.InsertAsync(qualification);
 
         }
 

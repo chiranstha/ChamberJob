@@ -97,6 +97,64 @@ namespace Suktas.Payroll.Job
 
         }
 
+
+        public virtual async Task<PagedResultDto<GetEmployeeForViewDto>> GetAllEmployment(GetAllEmployeeInput input)
+        {
+
+            var filteredEmployee = _employeeRepository.GetAll()
+                        .Include(e => e.JobSkillFk)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false || e.Name.Contains(input.Filter) || e.PhoneNo.Contains(input.Filter) || e.Experience.Contains(input.Filter) || e.Qualification.Contains(input.Filter))
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.JobSkillNameFilter), e => e.JobSkillFk != null && e.JobSkillFk.Name == input.JobSkillNameFilter);
+
+            var pagedAndFilteredEmployee = filteredEmployee
+                .OrderBy(input.Sorting ?? "id asc")
+                .PageBy(input);
+
+            var employee = from o in pagedAndFilteredEmployee
+                           join o1 in _lookupJobSkillRepository.GetAll() on o.JobSkillId equals o1.Id into j1
+                           from s1 in j1.DefaultIfEmpty()
+
+                           select new
+                           {
+                               o.Name,
+                               o.PhoneNo,
+                               o.Gender,
+                               o.Dbo,
+                               o.Qualification,
+                               o.ExpectedSalary,
+                               o.Id,
+                               JobSkillName = s1 == null || s1.Name == null ? "" : s1.Name
+                           };
+
+            var totalCount = await filteredEmployee.CountAsync();
+
+            var dbList = await employee.ToListAsync();
+            var results = new List<GetEmployeeForViewDto>();
+
+            foreach (var o in dbList)
+            {
+                var res = new GetEmployeeForViewDto()
+                {
+                    Name = o.Name,
+                    PhoneNo = o.PhoneNo,
+                    Gender = o.Gender,
+                    Dbo = o.Dbo,
+                    Qualification = o.Qualification,
+                    ExpectedSalary = o.ExpectedSalary,
+                    Id = o.Id,
+                    JobSkillName = o.JobSkillName
+                };
+
+                results.Add(res);
+            }
+
+            return new PagedResultDto<GetEmployeeForViewDto>(
+                totalCount,
+                results
+            );
+
+        }
+
         public virtual async Task<GetEmployeeForViewDto> GetEmployeeForView(Guid id)
         {
             var employee = await _employeeRepository.GetAsync(id);

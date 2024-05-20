@@ -13,15 +13,15 @@ namespace Suktas.Payroll.Job.Dtos
 
         public string Address { get; set; }
 
-        public DateTime Date { get; set; }
+        public string DateMiti { get; set; }
 
         public string Salary { get; set; }
 
-        public DateTime InterviewDate { get; set; }
+        public string InterviewDateMiti { get; set; }
 
         public ExperienceLevelEnum ExperienceLevel { get; set; }
 
-        public DateTime ExpiredDate { get; set; }
+        public string ExpiredDateMiti { get; set; }
 
         public string JobSpecification { get; set; }
 

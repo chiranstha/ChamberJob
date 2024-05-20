@@ -167,24 +167,24 @@ export class AppNavigationService {
                         )
                     ]
                 ),
-                new AppMenuItem(
-                    'DemoUiComponents',
-                    'Pages.DemoUiComponents',
-                    'flaticon-shapes',
-                    '/app/admin/demo-ui-components'
-                ),
+                // new AppMenuItem(
+                //     'DemoUiComponents',
+                //     'Pages.DemoUiComponents',
+                //     'flaticon-shapes',
+                //     '/app/admin/demo-ui-components'
+                // ),
             ]);
         } else if (this._appSessionService.user.userType === UserTypeEnum.Company) {
             return new AppMenu('MainMenu', 'MainMenu', [
 
                 new AppMenuItem('Dashboard', 'Pages.Tenant.Dashboard', 'fa-regular fa-computer', '/app/main/dashboard'),
 
-                new AppMenuItem('Company', 'Pages.Company', 'flaticon-more', '/app/main/master/company'),
-                new AppMenuItem('Employments', 'Pages.Employments', 'flaticon-more', '/app/main/company/employments'),
+                new AppMenuItem('Company', 'Pages.Company', 'fa-duotone fa-buildings', '/app/main/master/company'),
+                new AppMenuItem('Employments', 'Pages.Employments', 'fa-duotone fa-person-dress', '/app/main/company/employments'),
 
-                new AppMenuItem('JobDemands', 'Pages.JobDemands', 'flaticon-more', '/app/main/job/jobDemands'),
+                new AppMenuItem('JobDemands', 'Pages.JobDemands', 'fa-duotone fa-briefcase', '/app/main/job/jobDemands'),
 
-                new AppMenuItem('JobApply', 'Pages.JobApply', 'flaticon-more', '/app/main/job/jobApply'),
+                new AppMenuItem('JobApply', 'Pages.JobApply', 'fa-duotone fa-person-running', '/app/main/job/jobApply'),
 
 
 

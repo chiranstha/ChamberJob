@@ -1956,6 +1956,87 @@ export class CompanyServiceProxy {
     }
 
     /**
+     * @param filter (optional) 
+     * @param companyCategoryNameFilter (optional) 
+     * @param companyTypeNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllCompany(filter: string | undefined, companyCategoryNameFilter: string | undefined, companyTypeNameFilter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<PagedResultDtoOfGetCompanyForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Company/GetAllCompany?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (companyCategoryNameFilter === null)
+            throw new Error("The parameter 'companyCategoryNameFilter' cannot be null.");
+        else if (companyCategoryNameFilter !== undefined)
+            url_ += "CompanyCategoryNameFilter=" + encodeURIComponent("" + companyCategoryNameFilter) + "&";
+        if (companyTypeNameFilter === null)
+            throw new Error("The parameter 'companyTypeNameFilter' cannot be null.");
+        else if (companyTypeNameFilter !== undefined)
+            url_ += "CompanyTypeNameFilter=" + encodeURIComponent("" + companyTypeNameFilter) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllCompany(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllCompany(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PagedResultDtoOfGetCompanyForViewDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PagedResultDtoOfGetCompanyForViewDto>;
+        }));
+    }
+
+    protected processGetAllCompany(response: HttpResponseBase): Observable<PagedResultDtoOfGetCompanyForViewDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PagedResultDtoOfGetCompanyForViewDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -6224,6 +6305,82 @@ export class EmployeeServiceProxy {
     }
 
     /**
+     * @param filter (optional) 
+     * @param jobSkillNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllEmployment(filter: string | undefined, jobSkillNameFilter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<PagedResultDtoOfGetEmployeeForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Employee/GetAllEmployment?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (jobSkillNameFilter === null)
+            throw new Error("The parameter 'jobSkillNameFilter' cannot be null.");
+        else if (jobSkillNameFilter !== undefined)
+            url_ += "JobSkillNameFilter=" + encodeURIComponent("" + jobSkillNameFilter) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllEmployment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllEmployment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PagedResultDtoOfGetEmployeeForViewDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PagedResultDtoOfGetEmployeeForViewDto>;
+        }));
+    }
+
+    protected processGetAllEmployment(response: HttpResponseBase): Observable<PagedResultDtoOfGetEmployeeForViewDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PagedResultDtoOfGetEmployeeForViewDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @param id (optional) 
      * @return Success
      */
@@ -6755,6 +6912,92 @@ export class EmploymentsServiceProxy {
     }
 
     protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetEmploymentForViewDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PagedResultDtoOfGetEmploymentForViewDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param maxMaleFilter (optional) 
+     * @param minMaleFilter (optional) 
+     * @param companyNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllEmployment(filter: string | undefined, maxMaleFilter: number | undefined, minMaleFilter: number | undefined, companyNameFilter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<PagedResultDtoOfGetEmploymentForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/Employments/GetAllEmployment?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (maxMaleFilter === null)
+            throw new Error("The parameter 'maxMaleFilter' cannot be null.");
+        else if (maxMaleFilter !== undefined)
+            url_ += "MaxMaleFilter=" + encodeURIComponent("" + maxMaleFilter) + "&";
+        if (minMaleFilter === null)
+            throw new Error("The parameter 'minMaleFilter' cannot be null.");
+        else if (minMaleFilter !== undefined)
+            url_ += "MinMaleFilter=" + encodeURIComponent("" + minMaleFilter) + "&";
+        if (companyNameFilter === null)
+            throw new Error("The parameter 'companyNameFilter' cannot be null.");
+        else if (companyNameFilter !== undefined)
+            url_ += "CompanyNameFilter=" + encodeURIComponent("" + companyNameFilter) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllEmployment(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllEmployment(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PagedResultDtoOfGetEmploymentForViewDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PagedResultDtoOfGetEmploymentForViewDto>;
+        }));
+    }
+
+    protected processGetAllEmployment(response: HttpResponseBase): Observable<PagedResultDtoOfGetEmploymentForViewDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -9240,6 +9483,87 @@ export class JobDemandsServiceProxy {
     }
 
     protected processGetAll(response: HttpResponseBase): Observable<PagedResultDtoOfGetJobDemandForViewDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PagedResultDtoOfGetJobDemandForViewDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param companyNameFilter (optional) 
+     * @param jobSkillNameFilter (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getAllDemand(filter: string | undefined, companyNameFilter: string | undefined, jobSkillNameFilter: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<PagedResultDtoOfGetJobDemandForViewDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDemands/GetAllDemand?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (companyNameFilter === null)
+            throw new Error("The parameter 'companyNameFilter' cannot be null.");
+        else if (companyNameFilter !== undefined)
+            url_ += "CompanyNameFilter=" + encodeURIComponent("" + companyNameFilter) + "&";
+        if (jobSkillNameFilter === null)
+            throw new Error("The parameter 'jobSkillNameFilter' cannot be null.");
+        else if (jobSkillNameFilter !== undefined)
+            url_ += "JobSkillNameFilter=" + encodeURIComponent("" + jobSkillNameFilter) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllDemand(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllDemand(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<PagedResultDtoOfGetJobDemandForViewDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PagedResultDtoOfGetJobDemandForViewDto>;
+        }));
+    }
+
+    protected processGetAllDemand(response: HttpResponseBase): Observable<PagedResultDtoOfGetJobDemandForViewDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -21770,11 +22094,11 @@ export interface ICreateOrEditJobApplyDto {
 export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
     name!: string | undefined;
     address!: string | undefined;
-    date!: DateTime;
+    dateMiti!: string | undefined;
     salary!: string | undefined;
-    interviewDate!: DateTime;
+    interviewDateMiti!: string | undefined;
     experienceLevel!: ExperienceLevelEnum;
-    expiredDate!: DateTime;
+    expiredDateMiti!: string | undefined;
     jobSpecification!: string | undefined;
     description!: string | undefined;
     companyId!: number;
@@ -21794,11 +22118,11 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
         if (_data) {
             this.name = _data["name"];
             this.address = _data["address"];
-            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.dateMiti = _data["dateMiti"];
             this.salary = _data["salary"];
-            this.interviewDate = _data["interviewDate"] ? DateTime.fromISO(_data["interviewDate"].toString()) : <any>undefined;
+            this.interviewDateMiti = _data["interviewDateMiti"];
             this.experienceLevel = _data["experienceLevel"];
-            this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
+            this.expiredDateMiti = _data["expiredDateMiti"];
             this.jobSpecification = _data["jobSpecification"];
             this.description = _data["description"];
             this.companyId = _data["companyId"];
@@ -21818,11 +22142,11 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
         data["address"] = this.address;
-        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["dateMiti"] = this.dateMiti;
         data["salary"] = this.salary;
-        data["interviewDate"] = this.interviewDate ? this.interviewDate.toString() : <any>undefined;
+        data["interviewDateMiti"] = this.interviewDateMiti;
         data["experienceLevel"] = this.experienceLevel;
-        data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
+        data["expiredDateMiti"] = this.expiredDateMiti;
         data["jobSpecification"] = this.jobSpecification;
         data["description"] = this.description;
         data["companyId"] = this.companyId;
@@ -21835,11 +22159,11 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
 export interface ICreateOrEditJobDemandDto {
     name: string | undefined;
     address: string | undefined;
-    date: DateTime;
+    dateMiti: string | undefined;
     salary: string | undefined;
-    interviewDate: DateTime;
+    interviewDateMiti: string | undefined;
     experienceLevel: ExperienceLevelEnum;
-    expiredDate: DateTime;
+    expiredDateMiti: string | undefined;
     jobSpecification: string | undefined;
     description: string | undefined;
     companyId: number;

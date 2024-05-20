@@ -83,7 +83,7 @@ export class ChangeProfilePictureModalComponent extends AppComponentBase {
             file.withCredentials = false;
         };
 
-        var token =  this.guid();
+        let token =  this.guid();
         this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
             form.append('FileType', fileItem.file.type);
             form.append('FileName', 'ProfilePicture');

@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using Abp.Runtime.Session;
 using Abp.UI;
 using Suktas.Payroll.Authorization.Users;
+using Suktas.Payroll.NepaliDate;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Suktas.Payroll.Job
 {
@@ -235,11 +237,14 @@ namespace Suktas.Payroll.Job
                 Name = input.Name,
                 Description = input.Description,
                 Address = input.Address,
-                Date = input.Date,
+                
+                DateMiti = input.DateMiti,
                 Salary = input.Salary,
-                InterviewDate = input.InterviewDate,
+               
                 ExperienceLevel = input.ExperienceLevel,
-                ExpiredDate = input.ExpiredDate,
+                InterviewDate = DateConverter.ConvertToEnglish(input.InterviewDateMiti),
+                Date = DateConverter.ConvertToEnglish(input.DateMiti),
+                ExpiredDate = DateConverter.ConvertToEnglish(input.ExpiredDateMiti),
                 JobSpecification = input.JobSpecification,
                 CompanyId = input.CompanyId,
                 JobSkillId = input.JobSkillId,
@@ -260,13 +265,14 @@ namespace Suktas.Payroll.Job
                 jobDemand.Name = input.Name;
                 jobDemand.Description = input.Description;
                 jobDemand.Address = input.Address;
-                jobDemand.Date = input.Date;
                 jobDemand.Salary = input.Salary;
-                jobDemand.InterviewDate = input.InterviewDate;
                 jobDemand.ExperienceLevel = input.ExperienceLevel;
                 jobDemand.JobSpecification = input.JobSpecification;
                 jobDemand.CompanyId = input.CompanyId;
                 jobDemand.JobSkillId = input.JobSkillId;
+                jobDemand.InterviewDate = DateConverter.ConvertToEnglish(input.InterviewDateMiti);
+                jobDemand.Date = DateConverter.ConvertToEnglish(input.DateMiti);
+                jobDemand.ExpiredDate = DateConverter.ConvertToEnglish(input.ExpiredDateMiti);
                 await _jobDemandRepository.UpdateAsync(jobDemand);
             }
 

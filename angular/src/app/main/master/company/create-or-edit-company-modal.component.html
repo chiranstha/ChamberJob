@@ -10,11 +10,11 @@
 >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form *ngIf="active" #companyForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+            <form *ngIf="active" [formGroup]="form" novalidate (ngSubmit)="save()" autocomplete="off">
                 <div class="modal-header">
                     <h4 class="modal-title">
-                        <span *ngIf="company.id">{{ l('EditCompany') }}</span>
-                        <span *ngIf="!company.id">{{ l('CreateNewCompany') }}</span>
+                        <span *ngIf="id">{{ l('EditCompany') }}</span>
+                        <span *ngIf="!id">{{ l('CreateNewCompany') }}</span>
                     </h4>
 
                     <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
@@ -26,7 +26,7 @@
                         <label for="CompanyCategoryName">{{ l('CompanyCategory') }}</label>
                         <select
                             name="company.companyCategoryId"
-                            [(ngModel)]="company.companyCategoryId"
+                            formControlName="companyCategoryId"
                             class="form-select"
                             required
                         >
@@ -41,7 +41,7 @@
                         <label for="CompanyTypeName">{{ l('CompanyType') }}</label>
                         <select
                             name="company.companyTypeId"
-                            [(ngModel)]="company.companyTypeId"
+                            formControlName="companyTypeId"
                             class="form-select"
                             required
                         >
@@ -56,10 +56,10 @@
                         <label for="Company_Name">{{ l('Name') }} *</label>
                         <input
                             type="text"
-                            #Company_Name="ngModel"
+                            #Company_Name
                             id="Company_Name"
                             class="form-control"
-                            [(ngModel)]="company.name"
+                            formControlName="name"
                             name="Name"
                             required
                         />
@@ -70,10 +70,10 @@
                         <label for="Company_Address">{{ l('Address') }} *</label>
                         <input
                             type="text"
-                            #Company_Address="ngModel"
+                            #Company_Address
                             id="Company_Address"
                             class="form-control"
-                            [(ngModel)]="company.address"
+                            formControlName="address"
                             name="Address"
                             required
                         />
@@ -84,10 +84,10 @@
                         <label for="Company_AuthorizedPerson">{{ l('AuthorizedPerson') }}</label>
                         <input
                             type="text"
-                            #Company_AuthorizedPerson="ngModel"
+                            #Company_AuthorizedPerson
                             id="Company_AuthorizedPerson"
                             class="form-control"
-                            [(ngModel)]="company.authorizedPerson"
+                            formControlName="authorizedPerson"
                             name="AuthorizedPerson"
                         />
                         <validation-messages [formCtrl]="Company_AuthorizedPerson"></validation-messages>
@@ -97,10 +97,10 @@
                         <label for="Company_ContactNo">{{ l('ContactNo') }} *</label>
                         <input
                             type="text"
-                            #Company_ContactNo="ngModel"
+                            #Company_ContactNo
                             id="Company_ContactNo"
                             class="form-control"
-                            [(ngModel)]="company.contactNo"
+                            formControlName="contactNo"
                             name="ContactNo"
                             required
                         />
@@ -111,10 +111,10 @@
                         <label for="Company_BusinessNature">{{ l('BusinessNature') }}</label>
                         <select
                             class="form-select"
-                            #Company_BusinessNature="ngModel"
+                            #Company_BusinessNature
                             name="BusinessNature"
                             id="Company_BusinessNature"
-                            [(ngModel)]="company.businessNature"
+                            formControlName="businessNature"
                         >
                             <option value="1">{{ l('Manufacturing') }}</option>
 
@@ -131,10 +131,10 @@
                         <label for="Company_EstablishedYear">{{ l('EstablishedYear') }}</label>
                         <input
                             type="text"
-                            #Company_EstablishedYear="ngModel"
+                            #Company_EstablishedYear
                             id="Company_EstablishedYear"
                             class="form-control"
-                            [(ngModel)]="company.establishedYear"
+                            formControlName="establishedYear"
                             name="EstablishedYear"
                         />
                         <validation-messages [formCtrl]="Company_EstablishedYear"></validation-messages>
@@ -144,10 +144,10 @@
                         <label for="Company_Website">{{ l('Website') }}</label>
                         <input
                             type="text"
-                            #Company_Website="ngModel"
+                            #Company_Website
                             id="Company_Website"
                             class="form-control"
-                            [(ngModel)]="company.website"
+                            formControlName="website"
                             name="Website"
                         />
                         <validation-messages [formCtrl]="Company_Website"></validation-messages>
@@ -157,10 +157,10 @@
                         <label for="Company_VatNo">{{ l('VatNo') }}</label>
                         <input
                             type="text"
-                            #Company_VatNo="ngModel"
+                            #Company_VatNo
                             id="Company_VatNo"
                             class="form-control"
-                            [(ngModel)]="company.vatNo"
+                            formControlName="vatNo"
                             name="VatNo"
                         />
                         <validation-messages [formCtrl]="Company_VatNo"></validation-messages>
@@ -191,7 +191,7 @@
                             <span class="font-weight-bold">{{ 'CurrentFile' | localize }} :</span>
                             <div class="alert alert-custom alert-white alert-bold m-1" role="alert">
                                 <div class="alert-text">
-                                    <a href="{{ getDownloadUrl(company.logo) }}" target="_blank">{{ logoFileName }}</a>
+                                    <!-- <a href="{{ getDownloadUrl(company.logo) }}" target="_blank">{{ logoFileName }}</a> -->
                                 </div>
                                 <div class="alert-close">
                                     <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
@@ -211,8 +211,9 @@
                     <button
                         type="submit"
                         class="btn btn-primary blue"
-                        [disabled]="!companyForm.form.valid"
+                        [disabled]="form.invalid"
                         [buttonBusy]="saving"
+                        (click)="save()"
                         [busyText]="l('SavingWithThreeDot')"
                     >
                         <i class="fa fa-save"></i>

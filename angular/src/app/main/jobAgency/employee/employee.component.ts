@@ -54,7 +54,7 @@ export class EmployeeComponent extends AppComponentBase {
         this.primengTableHelper.showLoadingIndicator();
 
         this._employeeServiceProxy
-            .getAll(
+            .getAllEmployment(
                 this.filterText,
                 this.jobSkillNameFilter,
                 this.primengTableHelper.getSorting(this.dataTable),

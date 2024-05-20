@@ -19,14 +19,17 @@ namespace Suktas.Payroll.Job
         public virtual string Address { get; set; }
 
         public virtual DateTime Date { get; set; }
+        public virtual string DateMiti { get; set; }
 
         public virtual string Salary { get; set; }
 
         public virtual DateTime InterviewDate { get; set; }
+        public virtual DateTime InterviewDateMiti { get; set; }
 
         public virtual ExperienceLevelEnum ExperienceLevel { get; set; }
 
         public virtual DateTime ExpiredDate { get; set; }
+        public virtual DateTime ExpiredDateMiti { get; set; }
 
         public virtual string JobSpecification { get; set; }
 

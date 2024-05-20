@@ -102,6 +102,82 @@ namespace Suktas.Payroll.Job
 
         }
 
+
+        public virtual async Task<PagedResultDto<GetEmploymentForViewDto>> GetAllEmployment(GetAllEmploymentsInput input)
+        {
+
+            var filteredEmployments = _employmentRepository.GetAll()
+                        .Include(e => e.CompanyFk)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false)
+                        .WhereIf(input.MinMaleFilter != null, e => e.Male >= input.MinMaleFilter)
+                        .WhereIf(input.MaxMaleFilter != null, e => e.Male <= input.MaxMaleFilter)
+                        .WhereIf(!string.IsNullOrWhiteSpace(input.CompanyNameFilter), e => e.CompanyFk != null && e.CompanyFk.Name == input.CompanyNameFilter);
+
+            var pagedAndFilteredEmployments = filteredEmployments
+                .OrderBy(input.Sorting ?? "id asc")
+                .PageBy(input);
+
+            var employments = from o in pagedAndFilteredEmployments
+                              join o1 in _lookupCompanyRepository.GetAll() on o.CompanyId equals o1.Id into j1
+                              from s1 in j1.DefaultIfEmpty()
+
+                              select new
+                              {
+
+                                  o.Total,
+                                  o.Male,
+                                  o.Female,
+                                  o.Foreign,
+                                  o.Impairment,
+                                  o.SalaryStart,
+                                  o.SalaryEnd,
+                                  o.AgeStart,
+                                  o.AgeEnd,
+                                  o.Parment,
+                                  o.Temporary,
+                                  o.Trainer,
+                                  o.DailyWages,
+                                  o.Id,
+                                  CompanyName = s1 == null || s1.Name == null ? "" : s1.Name
+                              };
+
+            var totalCount = await filteredEmployments.CountAsync();
+
+            var dbList = await employments.ToListAsync();
+            var results = new List<GetEmploymentForViewDto>();
+
+            foreach (var o in dbList)
+            {
+                var res = new GetEmploymentForViewDto()
+                {
+
+                    Total = o.Total,
+                    Male = o.Male,
+                    Female = o.Female,
+                    Foreign = o.Foreign,
+                    Impairment = o.Impairment,
+                    SalaryStart = o.SalaryStart,
+                    SalaryEnd = o.SalaryEnd,
+                    AgeStart = o.AgeStart,
+                    AgeEnd = o.AgeEnd,
+                    Parment = o.Parment,
+                    Temporary = o.Temporary,
+                    Trainer = o.Trainer,
+                    DailyWages = o.DailyWages,
+                    Id = o.Id,
+                    CompanyName = o.CompanyName
+                };
+
+                results.Add(res);
+            }
+
+            return new PagedResultDto<GetEmploymentForViewDto>(
+                totalCount,
+                results
+            );
+
+        }
+
         public virtual async Task<GetEmploymentForViewDto> GetEmploymentForView(Guid id)
         {
             var employment = await _employmentRepository.GetAsync(id);

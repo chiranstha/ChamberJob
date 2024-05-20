@@ -109,18 +109,25 @@ namespace Suktas.Payroll.Master
         [AbpAuthorize(AppPermissions.Pages_JobSkill_Create)]
         protected virtual async Task Create(CreateOrEditJobSkillDto input)
         {
-            var jobSkill = new JobSkill 
-            {
-                Name = input.Name,
-                Description= input.Description,
-            };
+            var joblist = input.Name.Split(',');
 
-            if (AbpSession.TenantId != null)
+            foreach (var data in joblist)
             {
-                jobSkill.TenantId = (int?)AbpSession.TenantId;
+                var jobSkill = new JobSkill
+                {
+                    Name = data,
+                    Description = input.Description,
+                };
+
+                if (AbpSession.TenantId != null)
+                {
+                    jobSkill.TenantId = (int?)AbpSession.TenantId;
+                }
+
+                await _jobSkillRepository.InsertAsync(jobSkill);
             }
 
-            await _jobSkillRepository.InsertAsync(jobSkill);
+            
 
         }
 

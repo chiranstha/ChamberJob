@@ -16,6 +16,8 @@ import { IAjaxResponse, TokenService } from '@node_modules/abp-ng2-module';
 import { AppConsts } from '@shared/AppConsts';
 
 import { HttpClient } from '@angular/common/http';
+import NepaliDate from 'nepali-date-converter';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'createOrEditCompanyModal',
@@ -23,14 +25,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CreateOrEditCompanyModalComponent extends AppComponentBase implements OnInit {
     @ViewChild('createOrEditModal', { static: true }) modal: ModalDirective;
-
+    @ViewChild('Company_logoLabel') company_logoLabel: ElementRef;
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
-
+    form: FormGroup;
     active = false;
     saving = false;
-
-    company: CreateOrEditCompanyDto = new CreateOrEditCompanyDto();
-
     companyCategoryName = '';
     companyTypeName = '';
 
@@ -40,47 +39,84 @@ export class CreateOrEditCompanyModalComponent extends AppComponentBase implemen
     logoFileUploader: FileUploader;
     logoFileToken: string;
     logoFileName: string;
-    logoFileAcceptedTypes: string = '';
-    @ViewChild('Company_logoLabel') company_logoLabel: ElementRef;
+    logoFileAcceptedTypes = '';
+
+    id: number;
 
     constructor(
         injector: Injector,
         private _companyServiceProxy: CompanyServiceProxy,
         private _dateTimeService: DateTimeService,
         private _tokenService: TokenService,
-        private _http: HttpClient
+        private _http: HttpClient,
+        private fb: FormBuilder,
     ) {
         super(injector);
     }
 
+
+    ngOnInit(): void {
+        this.createForm();
+        this.getAllCompanyCategory();
+        this.getAllCompanyType();
+        this._http.get(AppConsts.remoteServiceBaseUrl + '/company/GetLogoFileAllowedTypes').subscribe((data: any) => {
+            if (!data || !data.result) {
+                return;
+            }
+
+            let list = data.result as string[];
+            if (list.length === 0) {
+                return;
+            }
+
+            for (let i = 0; i < list.length; i++) {
+                this.logoFileAcceptedTypes += '.' + list[i] + ',';
+            }
+        });
+    }
+
+
+
+
+
+    createForm(item: any = {}) {
+        this.form = this.fb.group({
+            name: [item.name ? item.name : '', Validators.required],
+            address: [item.address ? item.address : '', Validators.required],
+            authorizedPerson: [item.authorizedPerson ? item.authorizedPerson : ''],
+            contactNo: [item.contactNo ? item.contactNo : ''],
+            businessNature: [item.businessNature ? item.businessNature : ''],
+            establishedYear: [item.establishedYear ? item.establishedYear : ''],
+            website: [item.website ? item.website : ''],
+            vatNo: [item.vatNo ? item.vatNo : ''],
+            logo: [item.logo ? item.logo : ''],
+            logoToken: [item.logoToken ? item.logoToken : ''],
+            companyCategoryId: [item.companyCategoryId ? item.companyCategoryId : '', Validators.required],
+            companyTypeId: [item.companyTypeId ? item.companyTypeId : '', Validators.required],
+            id: [item.id ? item.id : null],
+        });
+    }
+
+
     show(companyId?: number): void {
-        if (!companyId) {
-            this.company = new CreateOrEditCompanyDto();
-            this.company.id = companyId;
-            this.companyCategoryName = '';
-            this.companyTypeName = '';
+        this.id = companyId;
+        if (companyId) {
 
-            this.logoFileName = null;
-
-            this.active = true;
-            this.modal.show();
-        } else {
             this._companyServiceProxy.getCompanyForEdit(companyId).subscribe((result) => {
-                this.company = result;
+                this.createForm(result);
 
-                
+
                 this.logoFileName = result.logoFileName;
 
-                this.active = true;
-                this.modal.show();
+
             });
         }
-        this._companyServiceProxy.getAllCompanyCategoryForTableDropdown().subscribe((result) => {
-            this.allCompanyCategorys = result;
-        });
-        this._companyServiceProxy.getAllCompanyTypeForTableDropdown().subscribe((result) => {
-            this.allCompanyTypes = result;
-        });
+
+
+
+        this.active = true;
+        this.modal.show();
+
 
         this.logoFileUploader = this.initializeUploader(
             AppConsts.remoteServiceBaseUrl + '/Company/UploadlogoFile',
@@ -88,13 +124,30 @@ export class CreateOrEditCompanyModalComponent extends AppComponentBase implemen
         );
     }
 
+
+    getAllCompanyCategory() {
+        this._companyServiceProxy.getAllCompanyCategoryForTableDropdown().subscribe((result) => {
+            this.allCompanyCategorys = result;
+        });
+        ;
+    }
+
+    getAllCompanyType() {
+
+        this._companyServiceProxy.getAllCompanyTypeForTableDropdown().subscribe((result) => {
+            this.allCompanyTypes = result;
+        });
+    }
+
+
+
     save(): void {
         this.saving = true;
 
-        this.company.logoToken = this.logoFileToken;
+        this.form.get('logoToken').setValue( this.logoFileToken);
 
         this._companyServiceProxy
-            .createOrEdit(this.company)
+            .createOrEdit(this.form.getRawValue())
             .pipe(
                 finalize(() => {
                     this.saving = false;
@@ -118,7 +171,8 @@ export class CreateOrEditCompanyModalComponent extends AppComponentBase implemen
     removeLogoFile(): void {
         this.message.confirm(this.l('DoYouWantToRemoveTheFile'), this.l('AreYouSure'), (isConfirmed) => {
             if (isConfirmed) {
-                this._companyServiceProxy.removeLogoFile(this.company.id).subscribe(() => {
+                let companyId = this.form.get('id').value;
+                this._companyServiceProxy.removeLogoFile(companyId).subscribe(() => {
                     abp.notify.success(this.l('SuccessfullyDeleted'));
                     this.logoFileName = null;
                 });
@@ -160,20 +214,5 @@ export class CreateOrEditCompanyModalComponent extends AppComponentBase implemen
         this.modal.hide();
     }
 
-    ngOnInit(): void {
-        this._http.get(AppConsts.remoteServiceBaseUrl + '/company/GetLogoFileAllowedTypes').subscribe((data: any) => {
-            if (!data || !data.result) {
-                return;
-            }
 
-            let list = data.result as string[];
-            if (list.length == 0) {
-                return;
-            }
-
-            for (let i = 0; i < list.length; i++) {
-                this.logoFileAcceptedTypes += '.' + list[i] + ',';
-            }
-        });
-    }
 }

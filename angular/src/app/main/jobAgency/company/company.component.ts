@@ -55,7 +55,7 @@ export class CompanyComponent extends AppComponentBase {
         this.primengTableHelper.showLoadingIndicator();
 
         this._companyServiceProxy
-            .getAll(
+            .getAllCompany(
                 this.filterText,
                 this.companyCategoryNameFilter,
                 this.companyTypeNameFilter,

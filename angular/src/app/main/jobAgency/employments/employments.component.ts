@@ -57,7 +57,7 @@ export class EmploymentsComponent extends AppComponentBase {
         this.primengTableHelper.showLoadingIndicator();
 
         this._employmentsServiceProxy
-            .getAll(
+            .getAllEmployment(
                 this.filterText,
                 this.maxMaleFilter == null ? this.maxMaleFilterEmpty : this.maxMaleFilter,
                 this.minMaleFilter == null ? this.minMaleFilterEmpty : this.minMaleFilter,
