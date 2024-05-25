@@ -202,6 +202,7 @@ namespace Suktas.Payroll.Job
 
             var output = new GetJobApplyForEditOutput 
             {
+                Id = jobApply.Id,
                 Date = jobApply.Date,
                 Document = jobApply.Document,
                 Remark = jobApply.Remark,
@@ -280,8 +281,8 @@ namespace Suktas.Payroll.Job
                 jobApply.EmployeeId = input.EmployeeId;
                 await _jobApplyRepository.UpdateAsync(jobApply);
             }
-            jobApply.Document = await GetBinaryObjectFromCache(input.DocumentToken);
 
+            if (jobApply != null) jobApply.Document = await GetBinaryObjectFromCache(input.DocumentToken);
         }
 
         [AbpAuthorize]

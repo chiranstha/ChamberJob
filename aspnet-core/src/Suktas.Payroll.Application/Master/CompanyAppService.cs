@@ -215,18 +215,23 @@ namespace Suktas.Payroll.Master
         public virtual async Task<GetCompanyForEditOutput> GetCompanyForEdit(EntityDto input)
         {
             var company = await _companyRepository.FirstOrDefaultAsync(input.Id);
+            if (company == null)
+            {
+                throw new UserFriendlyException(L("EntityNotFound"));
+            }
 
             var output = new GetCompanyForEditOutput
             {
-                Name = company?.Name,
-                Address = company?.Address,
-                AuthorizedPerson = company?.AuthorizedPerson,
+                Id = company.Id,
+                Name = company.Name,
+                Address = company.Address,
+                AuthorizedPerson = company.AuthorizedPerson,
                 ContactNo = company.ContactNo,
                 BusinessNature = company.BusinessNature,
                 EstablishedYear = company.EstablishedYear,
-                Website = company?.Website,
+                Website = company.Website,
                 VatNo = company.VatNo,
-                Logo = company?.Logo,
+                Logo = company.Logo,
                 CompanyCategoryId = company.CompanyCategoryId,
                 CompanyTypeId = company.CompanyTypeId
             };

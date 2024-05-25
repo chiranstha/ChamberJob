@@ -198,6 +198,7 @@ namespace Suktas.Payroll.Job
 
             var output = new GetJobDemandForEditOutput
             {
+                Id = jobDemand.Id,
                 Name = jobDemand.Name,
                 Address = jobDemand.Address,
                 Date = jobDemand.Date,

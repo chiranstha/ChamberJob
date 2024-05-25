@@ -216,6 +216,7 @@ namespace Suktas.Payroll.Job
 
             var output = new GetEmploymentForEditOutput
             {
+                Id = employment.Id,
                 Total = employment.Total,
                 Male = employment.Male,
                 Female = employment.Female,
