@@ -375,7 +375,7 @@ namespace Suktas.Payroll.Master
             return await _lookupCompanyTypeRepository.GetAll()
                 .Select(companyType => new CompanyCompanyTypeLookupTableDto
                 {
-                    Id = companyType.Id.ToString(),
+                    Id = companyType.Id,
                     DisplayName = companyType == null || companyType.Name == null ? "" : companyType.Name.ToString()
                 }).ToListAsync();
         }

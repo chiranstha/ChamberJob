@@ -338,7 +338,7 @@ namespace Suktas.Payroll.Job
             return await _lookupJobSkillRepository.GetAll()
                 .Select(jobSkill => new JobDemandJobSkillLookupTableDto
                 {
-                    Id = jobSkill.Id.ToString(),
+                    Id = jobSkill.Id,
                     DisplayName = jobSkill == null || jobSkill.Name == null ? "" : jobSkill.Name.ToString()
                 }).ToListAsync();
         }

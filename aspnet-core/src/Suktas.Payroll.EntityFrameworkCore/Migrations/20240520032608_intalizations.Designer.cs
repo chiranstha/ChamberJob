@@ -12,7 +12,7 @@ using Suktas.Payroll.EntityFrameworkCore;
 namespace Suktas.Payroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    [Migration("20240505094222_intalizations")]
+    [Migration("20240520032608_intalizations")]
     partial class intalizations
     {
         /// <inheritdoc />
@@ -1665,6 +1665,9 @@ namespace Suktas.Payroll.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorUserId");
@@ -1781,6 +1784,275 @@ namespace Suktas.Payroll.Migrations
                     b.HasIndex("TenantId", "UserId");
 
                     b.ToTable("AppFriendships");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CommitmentYear")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Dbo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("ExpectedSalary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("JobSkillId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("Photo")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Qualification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobSkillId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("tbl_Employee");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.Employment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AgeEnd")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AgeStart")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DailyWages")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Female")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Foreign")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Impairment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Male")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Parment")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SalaryEnd")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SalaryStart")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Temporary")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Trainer")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Employments");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.JobApply", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("Document")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("JobDemandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("JobDemandId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("tbl_JobApply");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.JobDemand", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExperienceLevel")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpiredDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("JobSkillId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("JobSpecification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Salary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("JobSkillId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("tbl_JobDemand");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Master.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AuthorizedPerson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BusinessNature")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CompanyTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContactNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EstablishedYear")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("Logo")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("VatNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyCategoryId");
+
+                    b.HasIndex("CompanyTypeId");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("tbl_Company");
                 });
 
             modelBuilder.Entity("Suktas.Payroll.Master.CompanyCategory", b =>
@@ -2420,6 +2692,107 @@ namespace Suktas.Payroll.Migrations
                     b.Navigation("DeleterUser");
 
                     b.Navigation("LastModifierUser");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.Employee", b =>
+                {
+                    b.HasOne("Suktas.Payroll.Master.JobSkill", "JobSkillFk")
+                        .WithMany()
+                        .HasForeignKey("JobSkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JobSkillFk");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.Employment", b =>
+                {
+                    b.HasOne("Suktas.Payroll.Master.Company", "CompanyFk")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("CompanyFk");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.JobApply", b =>
+                {
+                    b.HasOne("Suktas.Payroll.Master.Company", "CompanyFk")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Job.Employee", "EmployeeFk")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Job.JobDemand", "JobDemandFk")
+                        .WithMany()
+                        .HasForeignKey("JobDemandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyFk");
+
+                    b.Navigation("EmployeeFk");
+
+                    b.Navigation("JobDemandFk");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Job.JobDemand", b =>
+                {
+                    b.HasOne("Suktas.Payroll.Master.Company", "CompanyFk")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Master.JobSkill", "JobSkillFk")
+                        .WithMany()
+                        .HasForeignKey("JobSkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyFk");
+
+                    b.Navigation("JobSkillFk");
+
+                    b.Navigation("UserFk");
+                });
+
+            modelBuilder.Entity("Suktas.Payroll.Master.Company", b =>
+                {
+                    b.HasOne("Suktas.Payroll.Master.CompanyCategory", "CompanyCategoryFk")
+                        .WithMany()
+                        .HasForeignKey("CompanyCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Master.CompanyType", "CompanyTypeFk")
+                        .WithMany()
+                        .HasForeignKey("CompanyTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Suktas.Payroll.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CompanyCategoryFk");
+
+                    b.Navigation("CompanyTypeFk");
+
+                    b.Navigation("UserFk");
                 });
 
             modelBuilder.Entity("Suktas.Payroll.MultiTenancy.Payments.SubscriptionPayment", b =>

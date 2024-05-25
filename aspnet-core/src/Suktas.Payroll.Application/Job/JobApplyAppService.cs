@@ -306,7 +306,7 @@ namespace Suktas.Payroll.Job
             return await _jobDemandRepository.GetAll()
                 .Select(jobDemand => new JobApplyJobDemandLookupTableDto
                 {
-                    Id = jobDemand.Id.ToString(),
+                    Id = jobDemand.Id,
                     DisplayName = jobDemand == null || jobDemand.Name == null ? "" : jobDemand.Name.ToString()
                 }).ToListAsync();
         }
@@ -317,7 +317,7 @@ namespace Suktas.Payroll.Job
             return await _lookupEmployeeRepository.GetAll()
                 .Select(employee => new JobApplyEmployeeLookupTableDto
                 {
-                    Id = employee.Id.ToString(),
+                    Id = employee.Id,
                     DisplayName = employee == null || employee.Name == null ? "" : employee.Name.ToString()
                 }).ToListAsync();
         }

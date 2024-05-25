@@ -68,7 +68,7 @@ export class CreateOrEditJobDemandModalComponent extends AppComponentBase implem
             jobSpecification: [item.jobSpecification ? item.jobSpecification : '', Validators.required],
             description: [item.description ? item.description : ''],
             companyId: [item.companyId ? item.companyId : '', Validators.required],
-            jobSkillId: [item.jobSkillId ? item.jobSkillId : '', Validators.required],
+            jobSkillId: [item.jobSkillId ? item.jobSkillId : null, Validators.required],
             id: [item.id ? item.id : null],
         });
     }

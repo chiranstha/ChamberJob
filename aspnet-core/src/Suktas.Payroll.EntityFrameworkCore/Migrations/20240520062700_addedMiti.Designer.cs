@@ -12,8 +12,8 @@ using Suktas.Payroll.EntityFrameworkCore;
 namespace Suktas.Payroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    [Migration("20240505105533_intalizations489")]
-    partial class intalizations489
+    [Migration("20240520062700_addedMiti")]
+    partial class addedMiti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1665,6 +1665,9 @@ namespace Suktas.Payroll.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorUserId");
@@ -1946,6 +1949,9 @@ namespace Suktas.Payroll.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DateMiti")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -1955,7 +1961,13 @@ namespace Suktas.Payroll.Migrations
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ExpiredDateMiti")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InterviewDateMiti")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("JobSkillId")
@@ -1973,6 +1985,9 @@ namespace Suktas.Payroll.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -1980,6 +1995,8 @@ namespace Suktas.Payroll.Migrations
                     b.HasIndex("JobSkillId");
 
                     b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("tbl_JobDemand");
                 });
@@ -2025,6 +2042,9 @@ namespace Suktas.Payroll.Migrations
                     b.Property<int?>("TenantId")
                         .HasColumnType("int");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("VatNo")
                         .HasColumnType("nvarchar(max)");
 
@@ -2038,6 +2058,8 @@ namespace Suktas.Payroll.Migrations
                     b.HasIndex("CompanyTypeId");
 
                     b.HasIndex("TenantId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("tbl_Company");
                 });
@@ -2742,9 +2764,17 @@ namespace Suktas.Payroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Suktas.Payroll.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CompanyFk");
 
                     b.Navigation("JobSkillFk");
+
+                    b.Navigation("UserFk");
                 });
 
             modelBuilder.Entity("Suktas.Payroll.Master.Company", b =>
@@ -2761,9 +2791,17 @@ namespace Suktas.Payroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Suktas.Payroll.Authorization.Users.User", "UserFk")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CompanyCategoryFk");
 
                     b.Navigation("CompanyTypeFk");
+
+                    b.Navigation("UserFk");
                 });
 
             modelBuilder.Entity("Suktas.Payroll.MultiTenancy.Payments.SubscriptionPayment", b =>

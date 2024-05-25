@@ -24,7 +24,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "preserveSymlinks": true,
+            "preserveSymlinks": false,
             "assets": [
               "src/assets",
               "src/metronic",
@@ -96,12 +96,12 @@
               "src/assets/metronic/common/js/components/toggle.js",
               "src/assets/metronic/common/js/components/util.js"
             ],
-            "vendorChunk": true,
+            "vendorChunk": false,
             "extractLicenses": false,
             "buildOptimizer": false,
-            "sourceMap": true,
+            "sourceMap": false,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": false
           },
           "configurations": {
             "hmr": {
@@ -125,13 +125,13 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -146,13 +146,13 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -293,6 +293,6 @@
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": "4e2bdc89-df36-4f6b-98d1-d54524b5b465"
   }
 }
