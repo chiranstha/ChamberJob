@@ -11,7 +11,7 @@
         <app-companyStats></app-companyStats>
         </div>
     <div [class]="containerClass">
-        <div class="card card-custom gutter-b">
+        <!-- <div class="card card-custom gutter-b">
             <div class="card-body">
 
                 <div id="chart">
@@ -27,19 +27,27 @@
             </div>
         </div>
 
-        <hr />
+        <hr /> -->
+
+
+        <div class="card card-custom gutter-b">
+            <app-sectorWiseJob></app-sectorWiseJob>
+        </div>
+    
 
 
         <div class="card card-custom gutter-b">
             <app-topJobDemand></app-topJobDemand>
         </div>
+
+        <div class="card card-custom gutter-b">
+            <app-addressWiseJobDemand></app-addressWiseJobDemand>
+        </div>
     </div>
 
     <hr />
 
-    <div class="card card-custom gutter-b">
-        <app-sectorWiseJob></app-sectorWiseJob>
-    </div>
+   
 
 
 </div>

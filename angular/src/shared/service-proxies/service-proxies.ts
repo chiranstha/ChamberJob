@@ -9413,6 +9413,532 @@ export class JobApplyServiceProxy {
 }
 
 @Injectable()
+export class JobDashboardServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getJobStats(): Observable<GetJobStatsDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDashboard/GetJobStats";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetJobStats(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetJobStats(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetJobStatsDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetJobStatsDto>;
+        }));
+    }
+
+    protected processGetJobStats(response: HttpResponseBase): Observable<GetJobStatsDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetJobStatsDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getCompanyWiseJob(): Observable<GetCompanyWiseJobDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/JobDashboard/GetCompanyWiseJob";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCompanyWiseJob(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCompanyWiseJob(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetCompanyWiseJobDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetCompanyWiseJobDto[]>;
+        }));
+    }
+
+    protected processGetCompanyWiseJob(response: HttpResponseBase): Observable<GetCompanyWiseJobDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GetCompanyWiseJobDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getCompanyWiseJobChart(): Observable<GetCompanyWiseJobChartDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDashboard/GetCompanyWiseJobChart";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCompanyWiseJobChart(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCompanyWiseJobChart(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetCompanyWiseJobChartDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetCompanyWiseJobChartDto>;
+        }));
+    }
+
+    protected processGetCompanyWiseJobChart(response: HttpResponseBase): Observable<GetCompanyWiseJobChartDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetCompanyWiseJobChartDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getCompanyTotalJobChart(): Observable<GetCompanyTotalJobChartDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDashboard/GetCompanyTotalJobChart";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCompanyTotalJobChart(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCompanyTotalJobChart(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetCompanyTotalJobChartDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetCompanyTotalJobChartDto>;
+        }));
+    }
+
+    protected processGetCompanyTotalJobChart(response: HttpResponseBase): Observable<GetCompanyTotalJobChartDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetCompanyTotalJobChartDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAddressWiseJobChart(): Observable<GetCompanyTotalJobChartDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDashboard/GetAddressWiseJobChart";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAddressWiseJobChart(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAddressWiseJobChart(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetCompanyTotalJobChartDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetCompanyTotalJobChartDto>;
+        }));
+    }
+
+    protected processGetAddressWiseJobChart(response: HttpResponseBase): Observable<GetCompanyTotalJobChartDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = GetCompanyTotalJobChartDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
+export class JobDemandReportingServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @return Success
+     */
+    getAllDemand(): Observable<GetAllJobDemandReportDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/JobDemandReporting/GetAllDemand";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllDemand(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllDemand(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<GetAllJobDemandReportDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<GetAllJobDemandReportDto[]>;
+        }));
+    }
+
+    protected processGetAllDemand(response: HttpResponseBase): Observable<GetAllJobDemandReportDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GetAllJobDemandReportDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param filter (optional) 
+     * @param companyNameFilter (optional) 
+     * @param jobSkillNameFilter (optional) 
+     * @return Success
+     */
+    getJobDemandsToExcel(filter: string | undefined, companyNameFilter: string | undefined, jobSkillNameFilter: string | undefined): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/JobDemandReporting/GetJobDemandsToExcel?";
+        if (filter === null)
+            throw new Error("The parameter 'filter' cannot be null.");
+        else if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&";
+        if (companyNameFilter === null)
+            throw new Error("The parameter 'companyNameFilter' cannot be null.");
+        else if (companyNameFilter !== undefined)
+            url_ += "CompanyNameFilter=" + encodeURIComponent("" + companyNameFilter) + "&";
+        if (jobSkillNameFilter === null)
+            throw new Error("The parameter 'jobSkillNameFilter' cannot be null.");
+        else if (jobSkillNameFilter !== undefined)
+            url_ += "JobSkillNameFilter=" + encodeURIComponent("" + jobSkillNameFilter) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetJobDemandsToExcel(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetJobDemandsToExcel(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileDto>;
+        }));
+    }
+
+    protected processGetJobDemandsToExcel(response: HttpResponseBase): Observable<FileDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FileDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllCompanyForTableDropdown(): Observable<JobDemandCompanyLookupTableDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/JobDemandReporting/GetAllCompanyForTableDropdown";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllCompanyForTableDropdown(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllCompanyForTableDropdown(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<JobDemandCompanyLookupTableDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<JobDemandCompanyLookupTableDto[]>;
+        }));
+    }
+
+    protected processGetAllCompanyForTableDropdown(response: HttpResponseBase): Observable<JobDemandCompanyLookupTableDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(JobDemandCompanyLookupTableDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllJobSkillForTableDropdown(): Observable<JobDemandJobSkillLookupTableDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/JobDemandReporting/GetAllJobSkillForTableDropdown";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllJobSkillForTableDropdown(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllJobSkillForTableDropdown(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<JobDemandJobSkillLookupTableDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<JobDemandJobSkillLookupTableDto[]>;
+        }));
+    }
+
+    protected processGetAllJobSkillForTableDropdown(response: HttpResponseBase): Observable<JobDemandJobSkillLookupTableDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(JobDemandJobSkillLookupTableDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class JobDemandsServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -25253,6 +25779,82 @@ export interface IGetAllEntitiesHasDynamicPropertyOutput {
     entityFullName: string | undefined;
 }
 
+export class GetAllJobDemandReportDto implements IGetAllJobDemandReportDto {
+    name!: string | undefined;
+    address!: string | undefined;
+    date!: DateTime;
+    salary!: string | undefined;
+    expiredDate!: DateTime;
+    companyId!: number;
+    jobSkillId!: string;
+    companyName!: string | undefined;
+    jobSkillName!: string | undefined;
+    requiredQty!: number;
+    id!: string;
+
+    constructor(data?: IGetAllJobDemandReportDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.salary = _data["salary"];
+            this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
+            this.companyId = _data["companyId"];
+            this.jobSkillId = _data["jobSkillId"];
+            this.companyName = _data["companyName"];
+            this.jobSkillName = _data["jobSkillName"];
+            this.requiredQty = _data["requiredQty"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): GetAllJobDemandReportDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetAllJobDemandReportDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["salary"] = this.salary;
+        data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
+        data["companyId"] = this.companyId;
+        data["jobSkillId"] = this.jobSkillId;
+        data["companyName"] = this.companyName;
+        data["jobSkillName"] = this.jobSkillName;
+        data["requiredQty"] = this.requiredQty;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IGetAllJobDemandReportDto {
+    name: string | undefined;
+    address: string | undefined;
+    date: DateTime;
+    salary: string | undefined;
+    expiredDate: DateTime;
+    companyId: number;
+    jobSkillId: string;
+    companyName: string | undefined;
+    jobSkillName: string | undefined;
+    requiredQty: number;
+    id: string;
+}
+
 export class GetAllSendAttemptsOfWebhookEventOutput implements IGetAllSendAttemptsOfWebhookEventOutput {
     id!: string;
     webhookUri!: string | undefined;
@@ -25689,6 +26291,62 @@ export interface IGetCompanyForViewDto {
     id: number;
 }
 
+export class GetCompanyTotalJobChartDto implements IGetCompanyTotalJobChartDto {
+    category!: string[] | undefined;
+    data!: number[] | undefined;
+
+    constructor(data?: IGetCompanyTotalJobChartDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["category"])) {
+                this.category = [] as any;
+                for (let item of _data["category"])
+                    this.category!.push(item);
+            }
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GetCompanyTotalJobChartDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCompanyTotalJobChartDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.category)) {
+            data["category"] = [];
+            for (let item of this.category)
+                data["category"].push(item);
+        }
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGetCompanyTotalJobChartDto {
+    category: string[] | undefined;
+    data: number[] | undefined;
+}
+
 export class GetCompanyTypeForEditOutput implements IGetCompanyTypeForEditOutput {
     name!: string;
     description!: string | undefined;
@@ -25775,6 +26433,166 @@ export interface IGetCompanyTypeForViewDto {
     name: string | undefined;
     description: string | undefined;
     id: string;
+}
+
+export class GetCompanyWiseJobChartDto implements IGetCompanyWiseJobChartDto {
+    category!: string[] | undefined;
+    series!: GetCompanyWiseSeriesDto[] | undefined;
+
+    constructor(data?: IGetCompanyWiseJobChartDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["category"])) {
+                this.category = [] as any;
+                for (let item of _data["category"])
+                    this.category!.push(item);
+            }
+            if (Array.isArray(_data["series"])) {
+                this.series = [] as any;
+                for (let item of _data["series"])
+                    this.series!.push(GetCompanyWiseSeriesDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): GetCompanyWiseJobChartDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCompanyWiseJobChartDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.category)) {
+            data["category"] = [];
+            for (let item of this.category)
+                data["category"].push(item);
+        }
+        if (Array.isArray(this.series)) {
+            data["series"] = [];
+            for (let item of this.series)
+                data["series"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IGetCompanyWiseJobChartDto {
+    category: string[] | undefined;
+    series: GetCompanyWiseSeriesDto[] | undefined;
+}
+
+export class GetCompanyWiseJobDto implements IGetCompanyWiseJobDto {
+    name!: string | undefined;
+    address!: string | undefined;
+    date!: DateTime;
+    companyName!: string | undefined;
+    jobSkillName!: string | undefined;
+    requiredQty!: number;
+
+    constructor(data?: IGetCompanyWiseJobDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
+            this.companyName = _data["companyName"];
+            this.jobSkillName = _data["jobSkillName"];
+            this.requiredQty = _data["requiredQty"];
+        }
+    }
+
+    static fromJS(data: any): GetCompanyWiseJobDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCompanyWiseJobDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["date"] = this.date ? this.date.toString() : <any>undefined;
+        data["companyName"] = this.companyName;
+        data["jobSkillName"] = this.jobSkillName;
+        data["requiredQty"] = this.requiredQty;
+        return data;
+    }
+}
+
+export interface IGetCompanyWiseJobDto {
+    name: string | undefined;
+    address: string | undefined;
+    date: DateTime;
+    companyName: string | undefined;
+    jobSkillName: string | undefined;
+    requiredQty: number;
+}
+
+export class GetCompanyWiseSeriesDto implements IGetCompanyWiseSeriesDto {
+    name!: string | undefined;
+    data!: number[] | undefined;
+
+    constructor(data?: IGetCompanyWiseSeriesDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            if (Array.isArray(_data["data"])) {
+                this.data = [] as any;
+                for (let item of _data["data"])
+                    this.data!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GetCompanyWiseSeriesDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetCompanyWiseSeriesDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        if (Array.isArray(this.data)) {
+            data["data"] = [];
+            for (let item of this.data)
+                data["data"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGetCompanyWiseSeriesDto {
+    name: string | undefined;
+    data: number[] | undefined;
 }
 
 export class GetCurrentLoginInformationsOutput implements IGetCurrentLoginInformationsOutput {
@@ -27123,6 +27941,54 @@ export interface IGetJobSkillForViewDto {
     name: string | undefined;
     description: string | undefined;
     id: string;
+}
+
+export class GetJobStatsDto implements IGetJobStatsDto {
+    totalCompany!: number;
+    totalJob!: number;
+    totalJobSkill!: number;
+    totalJobPost!: number;
+
+    constructor(data?: IGetJobStatsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.totalCompany = _data["totalCompany"];
+            this.totalJob = _data["totalJob"];
+            this.totalJobSkill = _data["totalJobSkill"];
+            this.totalJobPost = _data["totalJobPost"];
+        }
+    }
+
+    static fromJS(data: any): GetJobStatsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetJobStatsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCompany"] = this.totalCompany;
+        data["totalJob"] = this.totalJob;
+        data["totalJobSkill"] = this.totalJobSkill;
+        data["totalJobPost"] = this.totalJobPost;
+        return data;
+    }
+}
+
+export interface IGetJobStatsDto {
+    totalCompany: number;
+    totalJob: number;
+    totalJobSkill: number;
+    totalJobPost: number;
 }
 
 export class GetLanguageForEditOutput implements IGetLanguageForEditOutput {

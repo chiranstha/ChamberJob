@@ -1,17 +1,19 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { JobDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
+import { result } from 'lodash-es';
 
 import {
-  ChartComponent,
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
+  ChartComponent,
   ApexDataLabels,
-  ApexStroke,
+  ApexPlotOptions,
   ApexYAxis,
+  ApexAnnotations,
   ApexFill,
-  ApexLegend,
-  ApexPlotOptions
+  ApexStroke,
+  ApexGrid
 } from "ng-apexcharts";
 
 
@@ -20,12 +22,12 @@ export type ChartOptions = {
   chart: ApexChart;
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
-  stroke: ApexStroke;
-  xaxis: ApexXAxis;
   yaxis: ApexYAxis;
-  colors: string[];
+  xaxis: any; //ApexXAxis;
+  annotations: ApexAnnotations;
   fill: ApexFill;
-  legend: ApexLegend;
+  stroke: ApexStroke;
+  grid: ApexGrid;
 };
 
 @Component({
@@ -36,79 +38,72 @@ export type ChartOptions = {
 export class SectorWiseJobComponent extends AppComponentBase implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  constructor(injector: Injector) {
+  constructor(injector: Injector,private _proxy:JobDashboardServiceProxy) {
     super(injector);
   }
 
+
+  
   ngOnInit() {
+
+
+    this._proxy.getCompanyTotalJobChart().subscribe(result=>{
     this.chartOptions = {
       series: [
         {
-          name: "Q1 Budget",
-          group: "budget",
-          data: [44000, 55000, 41000, 67000, 22000, 43000]
-        },
-        {
-          name: "Q1 Actual",
-          group: "actual",
-          data: [48000, 50000, 40000, 65000, 25000, 40000]
-        },
-        {
-          name: "Q2 Budget",
-          group: "budget",
-          data: [13000, 36000, 20000, 8000, 13000, 27000]
-        },
-        {
-          name: "Q2 Actual",
-          group: "actual",
-          data: [20000, 40000, 25000, 10000, 12000, 28000]
+          name: "Company Job Demands",
+          data: result.data
         }
       ],
+   
       chart: {
-        type: "bar",
         height: 350,
-        stacked: true
-      },
-      stroke: {
-        width: 1,
-        colors: ["#fff"]
-      },
-      dataLabels: {
-        formatter: (val) => {
-          return Number(val) / 1000 + "K";
-        }
+        type: "bar"
       },
       plotOptions: {
         bar: {
-          horizontal: false
+          columnWidth: "50%",
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 2
+      },
+
+      grid: {
+        row: {
+          colors: ["#fff", "#f2f2f2"]
         }
       },
       xaxis: {
-        categories: [
-          "Online advertising",
-          "Sales Training",
-          "Print advertising",
-          "Catalogs",
-          "Meetings",
-          "Public relations"
-        ]
-      },
-      fill: {
-        opacity: 1
-      },
-      colors: ["#80c7fd", "#008FFB", "#80f1cb", "#00E396"],
-      yaxis: {
         labels: {
-          formatter: (val) => {
-            return val / 1000 + "K";
-          }
+          rotate: -45
+        },
+        categories:result.category,
+        tickPlacement: "on"
+      },
+      yaxis: {
+        title: {
+          text: "Company Job Demand"
         }
       },
-      legend: {
-        position: "top",
-        horizontalAlign: "left"
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: "light",
+          type: "horizontal",
+          shadeIntensity: 0.25,
+          gradientToColors: undefined,
+          inverseColors: true,
+          opacityFrom: 0.85,
+          opacityTo: 0.85,
+          stops: [50, 0, 100,150,500,1000,1500,2000,5000]
+        }
       }
     };
+  });
+  }
   }
 
-}

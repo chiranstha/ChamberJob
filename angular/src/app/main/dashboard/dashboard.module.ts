@@ -9,9 +9,10 @@ import { CompanyWiseJobComponent } from './companyWiseJob/companyWiseJob.compone
 import { SectorWiseJobComponent } from './sectorWiseJob/sectorWiseJob.component';
 import { TopJobDemandComponent } from './topJobDemand/topJobDemand.component';
 import { CompanyStatsComponent } from './companyStats/companyStats.component';
+import { AddressWiseJobDemandComponent } from './addressWiseJobDemand/addressWiseJobDemand.component';
 
 @NgModule({
-    declarations: [DashboardComponent,CompanyWiseJobComponent,SectorWiseJobComponent,TopJobDemandComponent,CompanyStatsComponent],
+    declarations: [DashboardComponent,CompanyWiseJobComponent,SectorWiseJobComponent,TopJobDemandComponent,CompanyStatsComponent,AddressWiseJobDemandComponent],
     imports: [AppSharedModule, AdminSharedModule, DashboardRoutingModule, CustomizableDashboardModule,NgApexchartsModule],
 })
 export class DashboardModule {}

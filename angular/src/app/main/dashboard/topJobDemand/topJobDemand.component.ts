@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/common/app-component-base';
+import { GetCompanyWiseJobChartDto, JobDashboardServiceProxy } from '@shared/service-proxies/service-proxies';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -37,80 +38,77 @@ export type ChartOptions = {
 export class TopJobDemandComponent extends AppComponentBase implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  constructor(injector: Injector) {
+  getJobChart: GetCompanyWiseJobChartDto=new GetCompanyWiseJobChartDto();
+  constructor(injector: Injector,private _proxy: JobDashboardServiceProxy) {
     super(injector);
   }
 
-  ngOnInit() {
-    this.chartOptions = {
-      series: [
-        {
-          name: "Marine Sprite",
-          data: [44, 55, 41, 37, 22, 43, 21]
+
+  getAlljobDemandSeries()
+  {
+    this._proxy.getCompanyWiseJobChart().subscribe(result=>{ 
+      this.getJobChart=result;
+
+
+
+      this.chartOptions = {
+        series: this.getJobChart.series,
+        chart: {
+          type: "bar",
+          height: 950,
+          stacked: true
         },
-        {
-          name: "Striking Calf",
-          data: [53, 32, 33, 52, 13, 43, 32]
-        },
-        {
-          name: "Tank Picture",
-          data: [12, 17, 11, 9, 15, 11, 20]
-        },
-        {
-          name: "Bucket Slope",
-          data: [9, 7, 5, 8, 6, 9, 4]
-        },
-        {
-          name: "Reborn Kid",
-          data: [25, 12, 19, 32, 25, 24, 10]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 350,
-        stacked: true
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true
-        }
-      },
-      stroke: {
-        width: 1,
-        colors: ["#fff"]
-      },
-      title: {
-        text: "Fiction Books Sales"
-      },
-      xaxis: {
-        categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
-        labels: {
-          formatter: function(val) {
-            return val + "K";
+        plotOptions: {
+          bar: {
+            horizontal: true
           }
-        }
-      },
-      yaxis: {
+        },
+        stroke: {
+          width: 1,
+          colors: ["#fff"]
+        },
         title: {
-          text: undefined
-        }
-      },
-      tooltip: {
-        y: {
-          formatter: function(val) {
-            return val + "K";
+          text: "Job Sector Wise Company"
+        },
+        xaxis: {
+          categories:  this.getJobChart.category,
+          labels: {
+            formatter: function(val) {
+              return val + " Demand";
+            }
           }
+        },
+        yaxis: {
+          title: {
+            text: undefined
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val + " Required";
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          position: "top",
+          horizontalAlign: "left",
+          offsetX: 40
         }
-      },
-      fill: {
-        opacity: 1
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left",
-        offsetX: 40
-      }
-    };
+      };
+     });
+  }
+
+  ngOnInit() {
+
+    this.getAlljobDemandSeries();
+
+    
+
+   
   }
 
 }
