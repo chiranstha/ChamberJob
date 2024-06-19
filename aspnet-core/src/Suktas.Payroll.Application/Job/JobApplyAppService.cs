@@ -73,6 +73,7 @@ namespace Suktas.Payroll.Job
                                  o.Salary,
                                  o.ExpiredDate,
                                  o.Id,
+                                 o.RequiredQty,
                                  CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
                                  JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name
                              };
@@ -88,6 +89,7 @@ namespace Suktas.Payroll.Job
                     Salary = o.Salary,
                     ExpiredDate = o.ExpiredDate,
                     Id = o.Id,
+                    RequiredQty = o.RequiredQty,
                     CompanyName = o.CompanyName,
                     JobSkillName = o.JobSkillName
                 })

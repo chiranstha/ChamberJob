@@ -34,6 +34,7 @@ export class JobdemandComponent extends AppComponentBase {
   constructor(
       injector: Injector,
       private _jobDemandsServiceProxy: JobApplyServiceProxy,
+      private _proxyProxy: JobDemandsServiceProxy,
       private _notifyService: NotifyService,
       private _tokenAuth: TokenAuthServiceProxy,
       private _activatedRoute: ActivatedRoute,
@@ -96,4 +97,16 @@ export class JobdemandComponent extends AppComponentBase {
 
       this.getJobDemands();
   }
+
+  exportToExcelAuditLogs(): void {
+    const self = this;
+    self._proxyProxy
+        .getJobDemandsToExcel( this.filterText,
+            this.companyNameFilter,
+            this.jobSkillNameFilter,
+        )
+        .subscribe((result) => {
+            self._fileDownloadService.downloadTempFile(result);
+        });
+}
 }

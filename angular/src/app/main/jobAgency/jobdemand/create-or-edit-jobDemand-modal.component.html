@@ -1,0 +1,179 @@
+﻿<div bsModal #createOrEditModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="createOrEditModal" aria-hidden="true" [config]="{ backdrop: 'static' }">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form *ngIf="active" [formGroup]="form" novalidate (ngSubmit)="save()" autocomplete="off">
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <span *ngIf="id">{{ l('EditJobDemand') }}</span>
+                        <span *ngIf="!id">{{ l('CreateNewJobDemand') }}</span>
+                    </h4>
+
+                    <button type="button" class="btn-close" (click)="close()" aria-label="Close" [disabled]="saving">
+
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group m-form__group">
+                        <label for="CompanyName">{{ l('Company') }}</label>
+                        <ng-select #CompanyName [items]="allCompanys" bindLabel="displayName" bindValue="id"
+                            formControlName="companyId" id="companyId" placeholder="Select an item"
+                            required></ng-select>
+                        <div *ngIf="
+                          this.form.get('companyId').invalid &&
+                          (this.form.get('companyId').dirty || this.form.get('companyId').touched)
+                        ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">Company is required!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-form__group">
+                        <label for="JobSkillName">{{ l('JobSkill') }}</label>
+
+                        <ng-select #jobSkillId [items]="allJobSkills" bindLabel="displayName" bindValue="id"
+                            formControlName="jobSkillId" id="jobSkillId" placeholder="Select an item"
+                            required></ng-select>
+                        <div *ngIf="
+                          this.form.get('jobSkillId').invalid &&
+                          (this.form.get('jobSkillId').dirty || this.form.get('jobSkillId').touched)
+                        ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">JobSkill is required!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Name">{{ l('JobTitle') }}</label>
+                        <input type="text" id="JobDemand_Name" class="form-control" formControlName="name"
+                            name="Name" />
+                        <div *ngIf="
+                          this.form.get('name').invalid &&
+                          (this.form.get('name').dirty || this.form.get('name').touched)
+                        ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">name is required!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Address">{{ l('JobLocation') }}</label>
+                        <input type="text" #JobDemand_Address id="JobDemand_Address" class="form-control"
+                            formControlName="address" name="Address" />
+                        <div *ngIf="
+                          this.form.get('address').invalid &&
+                          (this.form.get('address').dirty || this.form.get('address').touched)
+                        ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">address is required!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Date">{{ l('EntryDate') }}</label>
+                        <npdual-datepicker [dateFormat]="'yyyy/MM/dd'" [formControl]="form.controls['dateMiti']"
+                            [isfinancialYear]="false" [npDatePickerId]="'dateMiti'"
+                            [placeholder]="'yyyy/MM/dd'"></npdual-datepicker>
+
+                        <div *ngIf="
+                        this.form.get('dateMiti').invalid &&
+                        (this.form.get('dateMiti').dirty || this.form.get('dateMiti').touched)
+                      ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">DateMiti is required!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Salary">{{ l('SalaryRange') }}</label>
+                        <input type="text" #JobDemand_Salary id="JobDemand_Salary" class="form-control"
+                            formControlName="salary" name="Salary" />
+                        <validation-messages [formCtrl]="JobDemand_Salary"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_InterviewDate">{{ l('InterviewDate') }}</label>
+                        <npdual-datepicker [dateFormat]="'yyyy/MM/dd'"
+                            [formControl]="form.controls['interviewDateMiti']" [isfinancialYear]="false"
+                            [npDatePickerId]="'interviewDateMiti'" [placeholder]="'yyyy/MM/dd'"></npdual-datepicker>
+
+                        <div *ngIf="
+                        this.form.get('interviewDateMiti').invalid &&
+                        (this.form.get('interviewDateMiti').dirty || this.form.get('interviewDateMiti').touched)
+                      ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">interviewDateMiti is required!</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_ExperienceLevel">{{ l('ExperienceLevel') }}</label>
+                        <select class="form-select" #JobDemand_ExperienceLevel name="ExperienceLevel"
+                            id="JobDemand_ExperienceLevel" formControlName="experienceLevel">
+                            <option value="0">{{ l('EntryLevel') }}</option>
+
+                            <option value="1">{{ l('Intermediate') }}</option>
+
+                            <option value="3">{{ l('MidLevel') }}</option>
+
+                            <option value="4">{{ l('Senior') }}</option>
+                        </select>
+                        <validation-messages [formCtrl]="JobDemand_ExperienceLevel"></validation-messages>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_ExpiredDate">{{ l('ExpiredDate') }}</label>
+                        <npdual-datepicker [dateFormat]="'yyyy/MM/dd'" [formControl]="form.controls['expiredDateMiti']"
+                            [isfinancialYear]="false" [npDatePickerId]="'expiredDateMiti'"
+                            [placeholder]="'yyyy/MM/dd'"></npdual-datepicker>
+
+                        <div *ngIf="
+                        this.form.get('expiredDateMiti').invalid &&
+                        (this.form.get('expiredDateMiti').dirty || this.form.get('expiredDateMiti').touched)
+                      ">
+                            <div class="alert alert-danger alert-height mt-1" role="alert">
+                                <div class="alert-div">expiredDateMiti is required!</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_JobSpecification">{{ l('JobSpecification') }}</label>
+
+                        <p-editor formControlName="jobSpecification" [style]="{ height: '120px' }" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="JobDemand_Description">{{ l('JobSkill') }}</label>
+
+                        <p-editor formControlName="description" [style]="{ height: '120px' }" />
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">
+                        {{ l('Cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="form.invalid" [buttonBusy]="saving"
+                    (click)="save()"
+                        [busyText]="l('SavingWithThreeDot')">
+                       
+                        <i class="fa fa-save"></i>
+                        <span>{{ l('Save') }}</span>
+                    </button>
+                </div>
+            </form>
+            {{this.form.value|json}}
+        </div>
+    </div>
+</div>

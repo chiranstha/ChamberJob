@@ -9,9 +9,10 @@ import { ViewEmployeeModalComponent } from './employee/view-employee-modal.compo
 import { JobApplyComponent } from './jobApply/jobApply.component';
 import { CreateOrEditJobApplyModalComponent } from './jobApply/create-or-edit-jobApply-modal.component';
 import { ViewJobApplyModalComponent } from './jobApply/view-jobApply-modal.component';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 @NgModule({
     declarations: [JobdemandComponent,EmployeeComponent, CreateOrEditEmployeeModalComponent, ViewEmployeeModalComponent,JobApplyComponent, CreateOrEditJobApplyModalComponent, ViewJobApplyModalComponent],
-    imports: [AppSharedModule, EmploymentRoutingModule, AdminSharedModule,],
+    imports: [AppSharedModule, EmploymentRoutingModule, AdminSharedModule,NgApexchartsModule],
 })
 export class EmploymentModule {}

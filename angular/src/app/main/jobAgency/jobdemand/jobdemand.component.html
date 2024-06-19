@@ -15,8 +15,28 @@
            
            </div>
            <div role="actions">
-             
 
+
+            <button
+            id="btn_create_jobDemand"
+            *ngIf="isGranted('Pages.JobDemands.Create')"
+            (click)="createJobDemand()"
+            class="btn btn-primary blue"
+        >
+            <i class="fa fa-plus"></i>
+            {{ l('Create') }}
+        </button>
+             
+            <button
+            type="button"
+            class="btn btn-success float-end me-1"
+            (click)="exportToExcelAuditLogs()"
+        >
+            <i class="far fa-file-excel btn-md-icon"></i>
+            <span class="d-none d-md-inline-block">
+                {{ 'ExportToExcel' | localize }}
+            </span>
+        </button>
              
            </div>
       </sub-header>
@@ -53,29 +73,25 @@
                                         <p-sortIcon field="companyName"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="jobSkillName">
-                                        {{ l('JobSkillName') }}
+                                        {{ l('JobSSector') }}
                                         <p-sortIcon field="jobSkillName"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="name">
-                                        {{ l('Name') }}
+                                        {{ l('JobSkill') }}
                                         <p-sortIcon field="name"></p-sortIcon>
                                     </th>
                                     <th style="width: 150px" pSortableColumn="address">
                                         {{ l('Address') }}
                                         <p-sortIcon field="address"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="date">
-                                        {{ l('Date') }}
-                                        <p-sortIcon field="date"></p-sortIcon>
+
+                                    <th style="width: 150px" pSortableColumn="requiredQty">
+                                        {{ l('Qty') }}
+                                        <p-sortIcon field="requiredQty"></p-sortIcon>
                                     </th>
-                                    <th style="width: 150px" pSortableColumn="salary">
-                                        {{ l('Salary') }}
-                                        <p-sortIcon field="salary"></p-sortIcon>
-                                    </th>
-                                    <th style="width: 150px" pSortableColumn="expiredDate">
-                                        {{ l('ExpiredDate') }}
-                                        <p-sortIcon field="expiredDate"></p-sortIcon>
-                                    </th>
+
+                                  
+                                  
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-record="$implicit" let-i="rowIndex">
@@ -141,24 +157,14 @@
                                         <span class="p-column-title">{{ l('Address') }}</span>
                                         {{ record.address }}
                                     </td>
+
                                     <td style="width: 150px">
-                                        <span class="p-column-title">{{ l('Date') }}</span>
-                                        <span *ngIf="record.date">
-                                            {{ record.date | luxonFormat : 'F' }}
-                                        </span>
-                                        <span *ngIf="!record.date">-</span>
+                                        <span class="p-column-title">{{ l('requiredQty') }}</span>
+                                        {{ record.requiredQty }}
                                     </td>
-                                    <td style="width: 150px">
-                                        <span class="p-column-title">{{ l('Salary') }}</span>
-                                        {{ record.salary }}
-                                    </td>
-                                    <td style="width: 150px">
-                                        <span class="p-column-title">{{ l('ExpiredDate') }}</span>
-                                        <span *ngIf="record.expiredDate">
-                                            {{ record.expiredDate | luxonFormat : 'F' }}
-                                        </span>
-                                        <span *ngIf="!record.expiredDate">-</span>
-                                    </td>
+                                   
+                                    
+                                    
                                 </tr>
                             </ng-template>
                         </p-table>

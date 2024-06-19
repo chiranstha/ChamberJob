@@ -69,6 +69,7 @@ namespace Suktas.Payroll.Job
                     o.Address,
                     o.Date,
                     o.Salary,
+                    o.RequiredQty,
                     o.ExpiredDate,
                     o.Id,
                     CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
@@ -86,6 +87,7 @@ namespace Suktas.Payroll.Job
                     Salary = o.Salary,
                     ExpiredDate = o.ExpiredDate,
                     Id = o.Id,
+                    RequiredQty=o.RequiredQty,
                     CompanyName = o.CompanyName,
                     JobSkillName = o.JobSkillName
                 })
@@ -130,6 +132,7 @@ namespace Suktas.Payroll.Job
                     o.Salary,
                     o.ExpiredDate,
                     o.Id,
+                    o.RequiredQty,
                     CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
                     JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name
                 };
@@ -143,8 +146,10 @@ namespace Suktas.Payroll.Job
                     Address = o.Address,
                     Date = o.Date,
                     Salary = o.Salary,
+                    RequiredQty = o.RequiredQty,
                     ExpiredDate = o.ExpiredDate,
                     Id = o.Id,
+                    
                     CompanyName = o.CompanyName,
                     JobSkillName = o.JobSkillName
                 })
@@ -174,6 +179,7 @@ namespace Suktas.Payroll.Job
                 Address = jobDemand.Address,
                 Date = jobDemand.Date,
                 Salary = jobDemand.Salary,
+                RequiredQty = jobDemand.RequiredQty,
                 ExpiredDate = jobDemand.ExpiredDate,
                 CompanyId = jobDemand.CompanyId,
                 JobSkillId = jobDemand.JobSkillId,
@@ -183,6 +189,9 @@ namespace Suktas.Payroll.Job
 
             return output;
         }
+
+
+
 
         [AbpAuthorize(AppPermissions.Pages_JobDemands_Edit)]
         public virtual async Task<GetJobDemandForEditOutput> GetJobDemandForEdit(EntityDto<Guid> input)
@@ -203,6 +212,7 @@ namespace Suktas.Payroll.Job
                 Address = jobDemand.Address,
                 Date = jobDemand.Date,
                 Salary = jobDemand.Salary,
+                RequiredQty = jobDemand.RequiredQty,
                 InterviewDate = jobDemand.InterviewDate,
                 ExperienceLevel = jobDemand.ExperienceLevel,
                 ExpiredDate = jobDemand.ExpiredDate,
@@ -233,15 +243,16 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_JobDemands_Create)]
         protected virtual async Task Create(CreateOrEditJobDemandDto input)
         {
+
+           
             var jobDemand = new JobDemand
             {
                 Name = input.Name,
                 Description = input.Description,
                 Address = input.Address,
-                
                 DateMiti = input.DateMiti,
                 Salary = input.Salary,
-               
+                RequiredQty = input.RequiredQty,
                 ExperienceLevel = input.ExperienceLevel,
                 InterviewDate = DateConverter.ConvertToEnglish(input.InterviewDateMiti),
                 Date = DateConverter.ConvertToEnglish(input.DateMiti),
@@ -267,6 +278,7 @@ namespace Suktas.Payroll.Job
                 jobDemand.Description = input.Description;
                 jobDemand.Address = input.Address;
                 jobDemand.Salary = input.Salary;
+                jobDemand.RequiredQty = input.RequiredQty;
                 jobDemand.ExperienceLevel = input.ExperienceLevel;
                 jobDemand.JobSpecification = input.JobSpecification;
                 jobDemand.CompanyId = input.CompanyId;
@@ -314,7 +326,8 @@ namespace Suktas.Payroll.Job
                     ExpiredDate = o.ExpiredDate,
                     Id = o.Id,
                     CompanyName = s1 == null || s1.Name == null ? "" : s1.Name,
-                    JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name
+                    JobSkillName = s2 == null || s2.Name == null ? "" : s2.Name,
+                    RequiredQty = o.RequiredQty
                 });
 
             var jobDemandListDtos = await query.ToListAsync();

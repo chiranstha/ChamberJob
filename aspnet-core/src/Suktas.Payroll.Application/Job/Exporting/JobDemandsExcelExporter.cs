@@ -2,70 +2,53 @@
 using Abp.Runtime.Session;
 using Abp.Timing.Timezone;
 using Suktas.Payroll.DataExporting.Excel.NPOI;
-using Suktas.Payroll.Job.Dtos;
 using Suktas.Payroll.Dto;
+using Suktas.Payroll.Job.Dtos;
 using Suktas.Payroll.Storage;
 
-namespace Suktas.Payroll.Job.Exporting
+namespace Suktas.Payroll.Job.Exporting;
+
+public class JobDemandsExcelExporter : NpoiExcelExporterBase, IJobDemandsExcelExporter
 {
-    public class JobDemandsExcelExporter : NpoiExcelExporterBase, IJobDemandsExcelExporter
+    private readonly IAbpSession _abpSession;
+
+    private readonly ITimeZoneConverter _timeZoneConverter;
+
+    public JobDemandsExcelExporter(
+        ITimeZoneConverter timeZoneConverter,
+        IAbpSession abpSession,
+        ITempFileCacheManager tempFileCacheManager) :
+        base(tempFileCacheManager)
     {
+        _timeZoneConverter = timeZoneConverter;
+        _abpSession = abpSession;
+    }
 
-        private readonly ITimeZoneConverter _timeZoneConverter;
-        private readonly IAbpSession _abpSession;
+    public FileDto ExportToFile(List<GetJobDemandForViewDto> jobDemands)
+    {
+        return CreateExcelPackage(
+            "JobDemands.xlsx",
+            excelPackage =>
+            {
+                var sheet = excelPackage.CreateSheet(L("JobDemands"));
 
-        public JobDemandsExcelExporter(
-            ITimeZoneConverter timeZoneConverter,
-            IAbpSession abpSession,
-            ITempFileCacheManager tempFileCacheManager) :
-    base(tempFileCacheManager)
-        {
-            _timeZoneConverter = timeZoneConverter;
-            _abpSession = abpSession;
-        }
+                AddHeader(
+                    sheet,
+                    L("CompanyName"),
+                    L("JobSector"),
+                    L("JobSkill"),
+                    L("Address"),
+                    L("Qty")
+                );
 
-        public FileDto ExportToFile(List<GetJobDemandForViewDto> jobDemands)
-        {
-            return CreateExcelPackage(
-                    "JobDemands.xlsx",
-                    excelPackage =>
-                    {
-
-                        var sheet = excelPackage.CreateSheet(L("JobDemands"));
-
-                        AddHeader(
-                            sheet,
-                        L("Name"),
-                        L("Address"),
-                        L("Date"),
-                        L("Salary"),
-                        L("ExpiredDate"),
-                        (L("Company")) + L("Name"),
-                        (L("JobSkill")) + L("Name")
-                            );
-
-                        AddObjects(
-                            sheet,  jobDemands,
-                        _ => _.Name,
-                        _ => _.Address,
-                        _ => _timeZoneConverter.Convert(_.Date, _abpSession.TenantId, _abpSession.GetUserId()),
-                        _ => _.Salary,
-                        _ => _timeZoneConverter.Convert(_.ExpiredDate, _abpSession.TenantId, _abpSession.GetUserId()),
-                        _ => _.CompanyName,
-                        _ => _.JobSkillName
-                            );
-
-                        for (var i = 1; i <= jobDemands.Count; i++)
-                        {
-                            SetCellDataFormat(sheet.GetRow(i).Cells[3 - 1], "yyyy-mm-dd");
-                        }
-                        sheet.AutoSizeColumn(3 - 1); for (var i = 1; i <= jobDemands.Count; i++)
-                        {
-                            SetCellDataFormat(sheet.GetRow(i).Cells[5 - 1], "yyyy-mm-dd");
-                        }
-                        sheet.AutoSizeColumn(5 - 1);
-                    });
-
-        }
+                AddObjects(
+                    sheet, jobDemands,
+                    d => d.CompanyName,
+                    d => d.Name,
+                    d => d.JobSkillName,
+                    d => d.Address,
+                    d => d.RequiredQty
+                );
+            });
     }
 }

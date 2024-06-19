@@ -6,7 +6,7 @@
 
         public const string ConnectionStringName = "Default";
 
-        public const bool MultiTenancyEnabled = true;
+        public const bool MultiTenancyEnabled = false;
         
         /// <summary>
         /// Redirects users to host URL when using subdomain as tenancy name for not existing tenants
@@ -15,9 +15,9 @@
 
         public const bool AllowTenantsToChangeEmailSettings = false;
 
-        public const string Currency = "USD";
+        public const string Currency = "Rs";
 
-        public const string CurrencySign = "$";
+        public const string CurrencySign = "Nrs";
 
         public const string AbpApiClientUserAgent = "AbpApiClient";
 

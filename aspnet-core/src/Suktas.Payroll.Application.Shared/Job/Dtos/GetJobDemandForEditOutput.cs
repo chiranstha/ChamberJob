@@ -16,6 +16,8 @@ namespace Suktas.Payroll.Job.Dtos
 
         public string Salary { get; set; }
 
+        public int RequiredQty { get; set; }
+
         public DateTime InterviewDate { get; set; }
 
         public ExperienceLevelEnum ExperienceLevel { get; set; }

@@ -12,7 +12,7 @@ using Suktas.Payroll.EntityFrameworkCore;
 namespace Suktas.Payroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    [Migration("20240520032608_intalizations")]
+    [Migration("20240526024631_intalizations")]
     partial class intalizations
     {
         /// <inheritdoc />
@@ -1949,6 +1949,9 @@ namespace Suktas.Payroll.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DateMiti")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -1958,7 +1961,13 @@ namespace Suktas.Payroll.Migrations
                     b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ExpiredDateMiti")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("InterviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InterviewDateMiti")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("JobSkillId")

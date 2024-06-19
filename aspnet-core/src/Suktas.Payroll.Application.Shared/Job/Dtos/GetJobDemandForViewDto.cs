@@ -22,6 +22,6 @@ namespace Suktas.Payroll.Job.Dtos
         public string CompanyName { get; set; }
 
         public string JobSkillName { get; set; }
-
+        public int RequiredQty { get; set; }
     }
 }

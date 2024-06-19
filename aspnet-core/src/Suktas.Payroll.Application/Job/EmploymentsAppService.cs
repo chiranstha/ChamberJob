@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Abp.Runtime.Session;
 
 namespace Suktas.Payroll.Job
 {
@@ -32,6 +33,7 @@ namespace Suktas.Payroll.Job
 
             var filteredEmployments = _employmentRepository.GetAll()
                         .Include(e => e.CompanyFk)
+                        
                         .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => false)
                         .WhereIf(input.MinMaleFilter != null, e => e.Male >= input.MinMaleFilter)
                         .WhereIf(input.MaxMaleFilter != null, e => e.Male <= input.MaxMaleFilter)
@@ -318,7 +320,7 @@ namespace Suktas.Payroll.Job
         [AbpAuthorize(AppPermissions.Pages_Employments)]
         public async Task<List<EmploymentCompanyLookupTableDto>> GetAllCompanyForTableDropdown()
         {
-            return await _lookupCompanyRepository.GetAll()
+            return await _lookupCompanyRepository.GetAll().Where(e=>e.UserId==AbpSession.GetUserId())
                 .Select(company => new EmploymentCompanyLookupTableDto
                 {
                     Id = company.Id,

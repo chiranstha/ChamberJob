@@ -9,7 +9,6 @@ import {
     JobApplyEmployeeLookupTableDto,
 } from '@shared/service-proxies/service-proxies';
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { DateTime } from 'luxon';
 
 import { DateTimeService } from '@app/shared/common/timing/date-time.service';
 import { FileUploader, FileUploaderOptions } from '@node_modules/ng2-file-upload';

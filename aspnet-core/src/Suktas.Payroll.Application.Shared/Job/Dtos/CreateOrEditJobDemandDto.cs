@@ -30,6 +30,6 @@ namespace Suktas.Payroll.Job.Dtos
         public int CompanyId { get; set; }
 
         public Guid JobSkillId { get; set; }
-
+        public int RequiredQty { get; set; }
     }
 }

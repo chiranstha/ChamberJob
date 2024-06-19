@@ -3,27 +3,43 @@
 <div [@routerTransition]>
     <sub-header [title]="'Dashboard' | localize" [description]="'DashboardHeaderInfo' | localize">
         <div role="actions" class="d-flex align-items-center">
-           
+
         </div>
     </sub-header>
 
     <div [class]="containerClass">
+        <app-companyStats></app-companyStats>
+        </div>
+    <div [class]="containerClass">
         <div class="card card-custom gutter-b">
             <div class="card-body">
-                
-                <button type="button" class="btn btn-primary" (click)="openCreateOrEditModal()">
-                   
-                    <span>{{ l('CreateEmployee') }}</span>
-                </button>
 
-
-
+                <div id="chart">
+                    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart"
+                        [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions"
+                        [yaxis]="chartOptions.yaxis" [xaxis]="chartOptions.xaxis" [fill]="chartOptions.fill"
+                        [title]="chartOptions.title"></apx-chart>
                 </div>
-        </div>
+
+
+
+
+            </div>
         </div>
 
-    
+        <hr />
+
+
+        <div class="card card-custom gutter-b">
+            <app-topJobDemand></app-topJobDemand>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="card card-custom gutter-b">
+        <app-sectorWiseJob></app-sectorWiseJob>
+    </div>
+
+
 </div>
-
-
-

@@ -18,6 +18,8 @@ namespace Suktas.Payroll.Job
 
         public virtual string Address { get; set; }
 
+        public virtual int RequiredQty { get; set; }
+
         public virtual DateTime Date { get; set; }
         public virtual string DateMiti { get; set; }
 

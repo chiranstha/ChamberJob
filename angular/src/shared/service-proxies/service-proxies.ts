@@ -21312,7 +21312,7 @@ export interface ICompanyCompanyCategoryLookupTableDto {
 }
 
 export class CompanyCompanyTypeLookupTableDto implements ICompanyCompanyTypeLookupTableDto {
-    id!: string | undefined;
+    id!: string;
     displayName!: string | undefined;
 
     constructor(data?: ICompanyCompanyTypeLookupTableDto) {
@@ -21347,7 +21347,7 @@ export class CompanyCompanyTypeLookupTableDto implements ICompanyCompanyTypeLook
 }
 
 export interface ICompanyCompanyTypeLookupTableDto {
-    id: string | undefined;
+    id: string;
     displayName: string | undefined;
 }
 
@@ -22103,6 +22103,7 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
     description!: string | undefined;
     companyId!: number;
     jobSkillId!: string;
+    requiredQty!: number;
     id!: string | undefined;
 
     constructor(data?: ICreateOrEditJobDemandDto) {
@@ -22127,6 +22128,7 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
             this.description = _data["description"];
             this.companyId = _data["companyId"];
             this.jobSkillId = _data["jobSkillId"];
+            this.requiredQty = _data["requiredQty"];
             this.id = _data["id"];
         }
     }
@@ -22151,6 +22153,7 @@ export class CreateOrEditJobDemandDto implements ICreateOrEditJobDemandDto {
         data["description"] = this.description;
         data["companyId"] = this.companyId;
         data["jobSkillId"] = this.jobSkillId;
+        data["requiredQty"] = this.requiredQty;
         data["id"] = this.id;
         return data;
     }
@@ -22168,6 +22171,7 @@ export interface ICreateOrEditJobDemandDto {
     description: string | undefined;
     companyId: number;
     jobSkillId: string;
+    requiredQty: number;
     id: string | undefined;
 }
 
@@ -23670,7 +23674,7 @@ export interface IEmailSettingsEditDto {
 }
 
 export class EmployeeJobSkillLookupTableDto implements IEmployeeJobSkillLookupTableDto {
-    id!: string | undefined;
+    id!: string;
     displayName!: string | undefined;
 
     constructor(data?: IEmployeeJobSkillLookupTableDto) {
@@ -23705,7 +23709,7 @@ export class EmployeeJobSkillLookupTableDto implements IEmployeeJobSkillLookupTa
 }
 
 export interface IEmployeeJobSkillLookupTableDto {
-    id: string | undefined;
+    id: string;
     displayName: string | undefined;
 }
 
@@ -26870,6 +26874,7 @@ export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
     address!: string | undefined;
     date!: DateTime;
     salary!: string | undefined;
+    requiredQty!: number;
     interviewDate!: DateTime;
     experienceLevel!: ExperienceLevelEnum;
     expiredDate!: DateTime;
@@ -26896,6 +26901,7 @@ export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
             this.address = _data["address"];
             this.date = _data["date"] ? DateTime.fromISO(_data["date"].toString()) : <any>undefined;
             this.salary = _data["salary"];
+            this.requiredQty = _data["requiredQty"];
             this.interviewDate = _data["interviewDate"] ? DateTime.fromISO(_data["interviewDate"].toString()) : <any>undefined;
             this.experienceLevel = _data["experienceLevel"];
             this.expiredDate = _data["expiredDate"] ? DateTime.fromISO(_data["expiredDate"].toString()) : <any>undefined;
@@ -26922,6 +26928,7 @@ export class GetJobDemandForEditOutput implements IGetJobDemandForEditOutput {
         data["address"] = this.address;
         data["date"] = this.date ? this.date.toString() : <any>undefined;
         data["salary"] = this.salary;
+        data["requiredQty"] = this.requiredQty;
         data["interviewDate"] = this.interviewDate ? this.interviewDate.toString() : <any>undefined;
         data["experienceLevel"] = this.experienceLevel;
         data["expiredDate"] = this.expiredDate ? this.expiredDate.toString() : <any>undefined;
@@ -26941,6 +26948,7 @@ export interface IGetJobDemandForEditOutput {
     address: string | undefined;
     date: DateTime;
     salary: string | undefined;
+    requiredQty: number;
     interviewDate: DateTime;
     experienceLevel: ExperienceLevelEnum;
     expiredDate: DateTime;
@@ -26963,6 +26971,7 @@ export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
     jobSkillId!: string;
     companyName!: string | undefined;
     jobSkillName!: string | undefined;
+    requiredQty!: number;
     id!: string;
 
     constructor(data?: IGetJobDemandForViewDto) {
@@ -26985,6 +26994,7 @@ export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
             this.jobSkillId = _data["jobSkillId"];
             this.companyName = _data["companyName"];
             this.jobSkillName = _data["jobSkillName"];
+            this.requiredQty = _data["requiredQty"];
             this.id = _data["id"];
         }
     }
@@ -27007,6 +27017,7 @@ export class GetJobDemandForViewDto implements IGetJobDemandForViewDto {
         data["jobSkillId"] = this.jobSkillId;
         data["companyName"] = this.companyName;
         data["jobSkillName"] = this.jobSkillName;
+        data["requiredQty"] = this.requiredQty;
         data["id"] = this.id;
         return data;
     }
@@ -27022,6 +27033,7 @@ export interface IGetJobDemandForViewDto {
     jobSkillId: string;
     companyName: string | undefined;
     jobSkillName: string | undefined;
+    requiredQty: number;
     id: string;
 }
 
@@ -29301,7 +29313,7 @@ export interface IJobApplyCompanyLookupTableDto {
 }
 
 export class JobApplyEmployeeLookupTableDto implements IJobApplyEmployeeLookupTableDto {
-    id!: string | undefined;
+    id!: string;
     displayName!: string | undefined;
 
     constructor(data?: IJobApplyEmployeeLookupTableDto) {
@@ -29336,12 +29348,12 @@ export class JobApplyEmployeeLookupTableDto implements IJobApplyEmployeeLookupTa
 }
 
 export interface IJobApplyEmployeeLookupTableDto {
-    id: string | undefined;
+    id: string;
     displayName: string | undefined;
 }
 
 export class JobApplyJobDemandLookupTableDto implements IJobApplyJobDemandLookupTableDto {
-    id!: string | undefined;
+    id!: string;
     displayName!: string | undefined;
 
     constructor(data?: IJobApplyJobDemandLookupTableDto) {
@@ -29376,7 +29388,7 @@ export class JobApplyJobDemandLookupTableDto implements IJobApplyJobDemandLookup
 }
 
 export interface IJobApplyJobDemandLookupTableDto {
-    id: string | undefined;
+    id: string;
     displayName: string | undefined;
 }
 
@@ -29421,7 +29433,7 @@ export interface IJobDemandCompanyLookupTableDto {
 }
 
 export class JobDemandJobSkillLookupTableDto implements IJobDemandJobSkillLookupTableDto {
-    id!: string | undefined;
+    id!: string;
     displayName!: string | undefined;
 
     constructor(data?: IJobDemandJobSkillLookupTableDto) {
@@ -29456,7 +29468,7 @@ export class JobDemandJobSkillLookupTableDto implements IJobDemandJobSkillLookup
 }
 
 export interface IJobDemandJobSkillLookupTableDto {
-    id: string | undefined;
+    id: string;
     displayName: string | undefined;
 }
 
