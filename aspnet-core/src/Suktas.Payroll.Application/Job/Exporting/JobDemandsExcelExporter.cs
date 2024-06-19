@@ -31,9 +31,10 @@ public class JobDemandsExcelExporter : NpoiExcelExporterBase, IJobDemandsExcelEx
             excelPackage =>
             {
                 var sheet = excelPackage.CreateSheet(L("JobDemands"));
-
+                int count = 1;
                 AddHeader(
                     sheet,
+                    L("S.N"),
                     L("CompanyName"),
                     L("JobSector"),
                     L("JobSkill"),
@@ -43,6 +44,7 @@ public class JobDemandsExcelExporter : NpoiExcelExporterBase, IJobDemandsExcelEx
 
                 AddObjects(
                     sheet, jobDemands,
+                    d => count++,
                     d => d.CompanyName,
                     d => d.Name,
                     d => d.JobSkillName,

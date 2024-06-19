@@ -46,6 +46,9 @@ public class JobDashboardAppService : PayrollAppServiceBase
     [AbpAuthorize]
     public virtual async Task<GetJobStatsDto> GetJobStats()
     {
+
+        var companyTotal = await _lookupCompanyRepository.CountAsync();
+
         var filteredJobDemands = await _jobDemandRepository.GetAll()
             .Include(e => e.CompanyFk)
             .Include(e => e.JobSkillFk)
@@ -61,7 +64,7 @@ public class JobDashboardAppService : PayrollAppServiceBase
 
         return new GetJobStatsDto
         {
-            TotalCompany = filteredJobDemands.DistinctBy(e => e.CompanyId).Count(),
+            TotalCompany = companyTotal,
             TotalJob = filteredJobDemands.Sum(e => e.RequiredQty),
             TotalJobSkill = filteredJobDemands.DistinctBy(e => e.JobSkillId).Count(),
             TotalJobPost = filteredJobDemands.DistinctBy(e => e.Id).Count()

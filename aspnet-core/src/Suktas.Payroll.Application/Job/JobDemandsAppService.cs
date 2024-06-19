@@ -300,6 +300,11 @@ namespace Suktas.Payroll.Job
 
         public virtual async Task<FileDto> GetJobDemandsToExcel(GetAllJobDemandsForExcelInput input)
         {
+
+
+
+
+
             var filteredJobDemands = _jobDemandRepository.GetAll()
                 .Include(e => e.CompanyFk)
                 .Include(e => e.JobSkillFk)

@@ -18,8 +18,8 @@ export class AccountComponent extends AppComponentBase implements OnInit {
     currentYear: number = this._dateTimeService.getYear();
     remoteServiceBaseUrl: string = AppConsts.remoteServiceBaseUrl;
     skin = this.appSession.theme.baseSettings.layout.darkMode ? 'dark' : 'light';
-    defaultLogo = AppConsts.appBaseUrl + '/assets/common/images/app-logo.png';
-    backgroundImageName = this.appSession.theme.baseSettings.layout.darkMode ? 'login-dark' : 'login';
+    defaultLogo = AppConsts.appBaseUrl + '/assets/common/images/app-logo.jpg';
+    backgroundImageName = AppConsts.appBaseUrl + '/assets/common/images/background.png';
 
     tenantChangeDisabledRoutes: string[] = [
         'select-edition',

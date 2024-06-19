@@ -24,7 +24,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "preserveSymlinks": false,
+            "preserveSymlinks": true,
             "assets": [
               "src/assets",
               "src/metronic",
@@ -97,12 +97,12 @@
               "src/assets/metronic/common/js/components/util.js",
               "node_modules/apexcharts/dist/apexcharts.min.js"
             ],
-            "vendorChunk": false,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": false,
-            "optimization": false,
-            "namedChunks": false
+            "vendorChunk": true,
+            "extractLicenses": true,
+            "buildOptimizer": true,
+            "sourceMap": true,
+            "optimization": true,
+            "namedChunks": true
           },
           "configurations": {
             "hmr": {
@@ -126,13 +126,13 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": false,
-              "vendorChunk": false,
-              "buildOptimizer": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -147,13 +147,13 @@
                   "maximumWarning": "6kb"
                 }
               ],
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": false,
-              "vendorChunk": false,
-              "buildOptimizer": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
