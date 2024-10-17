@@ -167,24 +167,24 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "suktasPayroll:build"
+            "buildTarget": "suktasPayroll:build"
           },
           "configurations": {
             "hmr": {
-              "browserTarget": "suktasPayroll:build:hmr"
+              "buildTarget": "suktasPayroll:build:hmr"
             },
             "production": {
-              "browserTarget": "suktasPayroll:build:production"
+              "buildTarget": "suktasPayroll:build:production"
             },
             "k8s": {
-              "browserTarget": "suktasPayroll:build:k8s"
+              "buildTarget": "suktasPayroll:build:k8s"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "suktasPayroll:build"
+            "buildTarget": "suktasPayroll:build"
           }
         },
         "test": {
