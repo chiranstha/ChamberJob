@@ -1,5 +1,5 @@
 ﻿import { AfterViewInit, Component, Injector, OnDestroy, OnInit } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { ReCaptchaV3WrapperService } from '@account/shared/recaptchav3-wrapper.s
     styleUrls: ['./validate-two-factor-code.component.less'],
     animations: [accountModuleAnimation()],
 })
-export class ValidateTwoFactorCodeComponent extends AppComponentBase implements CanActivate, OnInit, OnDestroy, AfterViewInit {
+export class ValidateTwoFactorCodeComponent extends AppComponentBase  implements OnInit, OnDestroy, AfterViewInit {
     code: string;
     submitting = false;
     remainingSeconds = 90;

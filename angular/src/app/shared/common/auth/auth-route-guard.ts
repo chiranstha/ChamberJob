@@ -1,20 +1,13 @@
 ﻿import { PermissionCheckerService, RefreshTokenService } from 'abp-ng2-module';
 import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot,
-    CanActivate,
-    CanActivateChild,
-    CanLoad,
-    Router,
-    RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { AppSessionService } from '@shared/common/session/app-session.service';
 import { UrlHelper } from '@shared/helpers/UrlHelper';
 import { Observable } from 'rxjs/internal/Observable';
 import { of, Subject } from 'rxjs';
 
 @Injectable()
-export class AppRouteGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AppRouteGuard  {
     constructor(
         private _permissionChecker: PermissionCheckerService,
         private _router: Router,

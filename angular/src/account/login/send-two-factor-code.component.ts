@@ -1,5 +1,5 @@
 ﻿import { Component, Injector, OnInit } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { accountModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { SendTwoFactorAuthCodeModel, TokenAuthServiceProxy } from '@shared/service-proxies/service-proxies';
@@ -11,7 +11,7 @@ import { ValidateTwoFactorCodeComponent } from '@account/login/validate-two-fact
     templateUrl: './send-two-factor-code.component.html',
     animations: [accountModuleAnimation()],
 })
-export class SendTwoFactorCodeComponent extends AppComponentBase implements CanActivate, OnInit {
+export class SendTwoFactorCodeComponent extends AppComponentBase  implements OnInit {
     selectedTwoFactorProvider: string;
     submitting = false;
 
